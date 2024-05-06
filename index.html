@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadow Payslip</title>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  table, th, td {
+    border: 1px solid black;
+    padding: 5px;
+  }
+  th {
+    text-align: left;
+  }
+</style>
+</head>
+<body>
+  <h1>Shadow Payslip</h1>
+  <p>**Pay Date:** [Insert Pay Date Here (calculated based on Friday from 12th April)]</p>
+  <p>**Tax Year:** 2024-2025</p>
+  <table id="payslip">
+    <tbody>
+      <tr>
+        <th>Employee</th>
+        <td>[Insert Employee Name Here]</td>
+      </tr>
+      <tr>
+        <th>National Insurance Number</th>
+        <td>[Insert National Insurance Number Here]</td>
+      </tr>
+      <tr>
+        <th>Tax Code</th>
+        <td>1257L</td>
+      </tr>
+      <tr>
+        <th>National Insurance Letter</th>
+        <td>A</td>
+      </tr>
+      <tr>
+        <th>Gross Pay</th>
+        <td>£[Insert Gross Pay Here (calculated based on £672/week)]</td>
+      </tr>
+      <tr>
+        <th>Tax</th>
+        <td>£[Insert Tax Deduction Here (calculated based on gross pay and tax code)]</td>
+      </tr>
+      <tr>
+        <th>National Insurance</th>
+        <td>£[Insert National Insurance Deduction Here (calculated based on gross pay and NI letter)]</td>
+      </tr>
+      <tr>
+        <th>Net Pay</th>
+        <td>£[Insert Net Pay Here (gross pay - tax - National Insurance)]</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>**Please note:** This is a simulated payslip and may not reflect actual tax deductions.</p>
+</body>
+</html>
