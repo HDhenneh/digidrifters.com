@@ -1,15 +1,10 @@
-// Array of 10 popular websites
-const popularSites = [
-    "https://www.google.com",
-    "https://www.youtube.com",
-    "https://www.facebook.com",
-    "https://www.twitter.com",
-    "https://www.instagram.com",
-    "https://www.wikipedia.org",
-    "https://www.reddit.com",
-    "https://www.amazon.com",
-    "https://www.netflix.com",
-    "https://www.linkedin.com"
+// Array of embeddable websites (YouTube videos in this case)
+const embeddableSites = [
+    "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "https://www.youtube.com/embed/3JZ_D3ELwOQ",
+    "https://www.youtube.com/embed/tgbNymZ7vqY",
+    "https://www.youtube.com/embed/kJQP7kiw5Fk",
+    "https://www.youtube.com/embed/2Vv-BfVoq4g"
 ];
 
 // Function to shuffle an array
@@ -22,7 +17,7 @@ function shuffle(array) {
 }
 
 // Shuffle the sites array
-const shuffledSites = shuffle(popularSites);
+const shuffledSites = shuffle(embeddableSites);
 
 // Set the iframe src to a random site from the shuffled array
 document.getElementById("random-site-iframe").src = shuffledSites[0];
