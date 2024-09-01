@@ -1,28 +1,17 @@
-// Array of embeddable websites (YouTube videos in this case)
-const embeddableSites = [
-    "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    "https://www.youtube.com/embed/3JZ_D3ELwOQ",
-    "https://www.youtube.com/embed/tgbNymZ7vqY",
-    "https://www.youtube.com/embed/kJQP7kiw5Fk",
-    "https://www.youtube.com/embed/2Vv-BfVoq4g"
-];
+const sliderContainer = document.querySelector('.slider-container');
+const bubbles = document.querySelectorAll('.glass-bubble');
+let currentSlide = 0;
 
-// Function to shuffle an array
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
+function slideHero() {
+    currentSlide = (currentSlide + 1) % bubbles.length;
+    const slideWidth = bubbles[0].offsetWidth + 40; // Width + margin
+    sliderContainer.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
 }
 
-// Shuffle the sites array
-const shuffledSites = shuffle(embeddableSites);
+// Slide every 3 seconds
+setInterval(slideHero, 3000);
 
-// Set the iframe src to a random site from the shuffled array
-document.getElementById("random-site-iframe").src = shuffledSites[0];
-
-// Portal button click event to navigate to a random site from a different list
+// Random site button logic remains the same
 document.getElementById("portal-button").addEventListener("click", function() {
     const randomSites = [
         "https://www.stumbleupon.com",
