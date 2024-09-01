@@ -1,34 +1,54 @@
+/* Bubble Morph Keyframes */
+@keyframes bubbleMorph {
+    0% {
+        border-radius: 50%;
+        transform: scale(1);
+    }
+    50% {
+        border-radius: 40%;
+        transform: scale(1.2);
+    }
+    100% {
+        border-radius: 50%;
+        transform: scale(1);
+    }
+}
 
-body {
-    font-family: Arial, sans-serif;
-    background-image: url('https://github.com/HDhenneh/digidrifters.com/raw/main/Digidrifters_background3.jpg'
-);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    color: #ffffff;
+/* Glass Morph Effect */
+.glass-bubble {
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: bubbleMorph 5s infinite;
+    margin: 0 20px; /* Space between bubbles */
+}
+
+/* Hero Slider Styles */
+.hero-slider {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    height: 60vh;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.5); /* Transparent background to highlight bubbles */
 }
 
-.container {
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.5); /* Adds a slight transparency effect */
-    padding: 2rem;
-    border-radius: 10px;
+.slider-container {
+    display: flex;
+    width: 100%;
+    transform: translateX(0);
+    transition: transform 1s ease-in-out;
 }
 
-h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-p {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
+/* Button Container */
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
 }
 
 button {
@@ -43,17 +63,4 @@ button {
 
 button:hover {
     background-color: #c70039;
-}
-.hero-section {
-    width: 100%;
-    height: 500px;
-    overflow: hidden;
-    margin-bottom: 2rem;
-}
-
-iframe {
-    border: none;
-    display: block;
-    width: 100%;
-    height: 100%;
 }
