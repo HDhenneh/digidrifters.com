@@ -1,3 +1,43 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #001f3f; /* Navy Blue */
+    color: #ffffff; /* White text for better contrast */
+}
+
+/* Hero Section with Background Image */
+.hero-slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    overflow: hidden;
+    background-image: url('https://github.com/HDhenneh/digidrifters.com/blob/main/digidriftscuba.jpeg'); /* Update with your image path */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.slider-container {
+    display: flex;
+    width: 100%;
+    transform: translateX(0);
+    transition: transform 1s ease-in-out;
+}
+
+/* Glass Morph Effect for Bubbles */
+.glass-bubble {
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: bubbleMorph 5s infinite;
+    margin: 0 20px;
+}
+
 /* Bubble Morph Keyframes */
 @keyframes bubbleMorph {
     0% {
@@ -12,35 +52,6 @@
         border-radius: 50%;
         transform: scale(1);
     }
-}
-
-/* Glass Morph Effect */
-.glass-bubble {
-    width: 200px;
-    height: 200px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    animation: bubbleMorph 5s infinite;
-    margin: 0 20px; /* Space between bubbles */
-}
-
-/* Hero Slider Styles */
-.hero-slider {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60vh;
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.5); /* Transparent background to highlight bubbles */
-}
-
-.slider-container {
-    display: flex;
-    width: 100%;
-    transform: translateX(0);
-    transition: transform 1s ease-in-out;
 }
 
 /* Button Container */
@@ -63,4 +74,18 @@ button {
 
 button:hover {
     background-color: #c70039;
+}
+
+/* Navy Blue Theme for Other Elements */
+nav, footer {
+    background-color: #001f3f;
+    padding: 1rem;
+}
+
+a {
+    color: #1e90ff; /* Dodger Blue for links */
+}
+
+a:hover {
+    color: #ff5733; /* Hover color for links */
 }
