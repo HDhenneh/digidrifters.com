@@ -1,3 +1,4 @@
+
 /* General Styles */
 body {
     margin: 0;
@@ -19,14 +20,7 @@ body {
     position: relative;
 }
 
-.slider-container {
-    display: flex;
-    width: 100%;
-    transform: translateX(0);
-    transition: transform 1s ease-in-out;
-}
-
-/* Glass Morph Effect for Bubbles */
+/* Glass Bubbles */
 .glass-bubble {
     width: 200px;
     height: 200px;
@@ -34,8 +28,8 @@ body {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    animation: bubbleMorph 5s infinite;
-    margin: 0 20px;
+    position: absolute;
+    animation: floatAround 10s infinite ease-in-out;
 }
 
 /* Bubble Morph Keyframes */
@@ -52,6 +46,61 @@ body {
         border-radius: 50%;
         transform: scale(1);
     }
+}
+
+/* Floating Effect */
+@keyframes floatAround {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    25% {
+        transform: translate(30px, -40px) scale(1.1);
+    }
+    50% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+    75% {
+        transform: translate(-30px, -10px) scale(1.05);
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+/* Randomize Floating Animations */
+.glass-bubble:nth-child(1) {
+    left: 20%;
+    top: 20%;
+    animation-duration: 12s;
+    animation-delay: 0s;
+}
+
+.glass-bubble:nth-child(2) {
+    left: 60%;
+    top: 30%;
+    animation-duration: 14s;
+    animation-delay: -2s;
+}
+
+.glass-bubble:nth-child(3) {
+    left: 40%;
+    top: 70%;
+    animation-duration: 10s;
+    animation-delay: -4s;
+}
+
+.glass-bubble:nth-child(4) {
+    left: 80%;
+    top: 50%;
+    animation-duration: 15s;
+    animation-delay: -1s;
+}
+
+.glass-bubble:nth-child(5) {
+    left: 10%;
+    top: 60%;
+    animation-duration: 18s;
+    animation-delay: -3s;
 }
 
 /* Button Container */
