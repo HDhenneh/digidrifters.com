@@ -1,29 +1,18 @@
-const sliderContainer = document.querySelector('.slider-container');
-const bubbles = document.querySelectorAll('.glass-bubble');
-let currentSlide = 0;
-
-function slideHero() {
-    currentSlide = (currentSlide + 1) % bubbles.length;
-    const slideWidth = bubbles[0].offsetWidth + 40; // Width + margin
-    sliderContainer.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
-}
-
-// Slide every 3 seconds
-setInterval(slideHero, 3000);
-
-// Random site button logic remains the same
-document.getElementById("portal-button").addEventListener("click", function() {
-    const randomSites = [
-        "https://www.stumbleupon.com",
-        "https://www.reddit.com/r/random",
-        "https://en.wikipedia.org/wiki/Special:Random",
-        "https://www.boredpanda.com/",
-        "https://www.randomwebsite.com/cgi-bin/random.pl",
-        "https://theuselessweb.com/",
-        "https://www.thisiscolossal.com/"
+document.getElementById('random-btn').addEventListener('click', function() {
+    const websites = [
+        'https://www.google.com',
+        'https://www.facebook.com',
+        'https://www.youtube.com',
+        'https://www.twitter.com',
+        'https://www.reddit.com',
+        'https://www.wikipedia.org',
+        'https://www.instagram.com',
+        'https://www.amazon.com',
+        'https://www.linkedin.com',
+        'https://www.netflix.com'
     ];
 
-    const randomIndex = Math.floor(Math.random() * randomSites.length);
-    const randomSite = randomSites[randomIndex];
-    window.location.href = randomSite;
+    // Select a random website from the array
+    const randomSite = websites[Math.floor(Math.random() * websites.length)];
+    window.location.href = randomSite; // Redirect to the random website
 });
