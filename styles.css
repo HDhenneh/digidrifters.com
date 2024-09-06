@@ -1,140 +1,89 @@
-
 /* General Styles */
-body {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     font-family: Arial, sans-serif;
     background-color: #001f3f; /* Navy Blue */
-    color: #ffffff; /* White text for better contrast */
+    color: #ffffff;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-/* Hero Section with Background Image */
-.hero-slider {
+/* Navbar */
+.navbar {
+    background-color: #001f3f; /* Navy Blue */
+    padding: 1rem;
+    text-align: center;
+}
+
+.navbar h1 {
+    color: #ffffff;
+    font-size: 2rem;
+}
+
+/* Hero Section */
+.hero {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60vh;
-    overflow: hidden;
-    background-image: url('https://github.com/HDhenneh/digidrifters.com/raw/main/digidriftscuba.jpeg'); /* Update with your image path */
-    background-size: cover;
-    background-position: center;
-    position: relative;
-}
-
-/* Glass Bubbles */
-.glass-bubble {
-    width: 200px;
-    height: 200px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    position: absolute;
-    animation: floatAround 10s infinite ease-in-out;
-}
-
-/* Bubble Morph Keyframes */
-@keyframes bubbleMorph {
-    0% {
-        border-radius: 50%;
-        transform: scale(1);
-    }
-    50% {
-        border-radius: 40%;
-        transform: scale(1.2);
-    }
-    100% {
-        border-radius: 50%;
-        transform: scale(1);
-    }
-}
-
-/* Floating Effect */
-@keyframes floatAround {
-    0% {
-        transform: translate(0, 0) scale(1);
-    }
-    25% {
-        transform: translate(30px, -40px) scale(1.1);
-    }
-    50% {
-        transform: translate(-20px, 20px) scale(0.9);
-    }
-    75% {
-        transform: translate(-30px, -10px) scale(1.05);
-    }
-    100% {
-        transform: translate(0, 0) scale(1);
-    }
-}
-
-/* Randomize Floating Animations */
-.glass-bubble:nth-child(1) {
-    left: 20%;
-    top: 20%;
-    animation-duration: 12s;
-    animation-delay: 0s;
-}
-
-.glass-bubble:nth-child(2) {
-    left: 60%;
-    top: 30%;
-    animation-duration: 14s;
-    animation-delay: -2s;
-}
-
-.glass-bubble:nth-child(3) {
-    left: 40%;
-    top: 70%;
-    animation-duration: 10s;
-    animation-delay: -4s;
-}
-
-.glass-bubble:nth-child(4) {
-    left: 80%;
-    top: 50%;
-    animation-duration: 15s;
-    animation-delay: -1s;
-}
-
-.glass-bubble:nth-child(5) {
-    left: 10%;
-    top: 60%;
-    animation-duration: 18s;
-    animation-delay: -3s;
-}
-
-/* Button Container */
-.button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 2rem;
-}
-
-button {
-    background-color: #ff5733;
+    text-align: center;
+    padding: 2rem;
+    background-color: #007bff; /* Accent Blue */
     color: white;
+    background-size: cover;
+}
+
+.hero-content h2 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+}
+
+.hero-content button {
+    background-color: #001f3f;
+    color: #ffffff;
     border: none;
     padding: 1rem 2rem;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     cursor: pointer;
     border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #c70039;
+.hero-content button:hover {
+    background-color: #343a40; /* Dark Gray */
 }
 
-/* Navy Blue Theme for Other Elements */
-nav, footer {
+/* Footer */
+.footer {
     background-color: #001f3f;
+    text-align: center;
     padding: 1rem;
+    color: #f8f9fa; /* Light Gray */
+    font-size: 0.9rem;
 }
 
-a {
-    color: #1e90ff; /* Dodger Blue for links */
-}
-
-a:hover {
-    color: #ff5733; /* Hover color for links */
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-content h2 {
+        font-size: 2.5rem;
+    }
+    .hero-content p {
+        font-size: 1.2rem;
+    }
+    .hero-content button {
+        font-size: 1rem;
+    }
 }
