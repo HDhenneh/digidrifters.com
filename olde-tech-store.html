@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Olde Tech Store</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --white: #FAFAF8;
+    --cream: #F2F0EB;
+    --warm-grey: #E8E4DC;
+    --mid: #C4BEB4;
+    --text: #1A1916;
+    --text-soft: #6B6660;
+    --accent: #D4502A;
+    --accent-soft: #E8C4B8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--white);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--warm-grey);
+  }
+
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .nav-logo span {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .nav-links li { cursor: pointer; transition: color 0.2s; }
+  .nav-links li:hover { color: var(--text); }
+
+  .nav-tag {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    border: 1px solid var(--mid);
+    padding: 6px 14px;
+    border-radius: 2px;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 180px 48px 100px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(52px, 7vw, 88px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    line-height: 1.7;
+    color: var(--text-soft);
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: var(--text);
+    padding: 16px 32px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .hero-cta:hover { background: var(--accent); }
+
+  .hero-stat-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--warm-grey);
+    border: 1px solid var(--warm-grey);
+  }
+
+  .hero-stat {
+    background: var(--white);
+    padding: 32px;
+  }
+
+  .hero-stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .hero-stat-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  /* ERA STRIP */
+  .era-strip {
+    background: var(--text);
+    color: var(--white);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .era-strip::-webkit-scrollbar { display: none; }
+
+  .era-tab {
+    flex-shrink: 0;
+    padding: 20px 48px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    transition: background 0.2s, color 0.2s;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .era-tab:hover, .era-tab.active {
+    background: var(--accent);
+    color: var(--white);
+  }
+
+  /* COLLECTION GRID */
+  .collection {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 48px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 56px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--warm-grey);
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-count {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--warm-grey);
+  }
+
+  .product-card {
+    background: var(--white);
+    padding: 48px 40px 36px;
+    cursor: pointer;
+    transition: background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .product-card:hover { background: var(--cream); }
+  .product-card:hover::before { transform: scaleX(1); }
+
+  .product-era {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+
+  .product-display {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+    position: relative;
+  }
+
+  /* Device illustrations using pure CSS */
+  .device {
+    position: relative;
+  }
+
+  /* Nokia 3310 */
+  .nokia {
+    width: 60px;
+    height: 110px;
+    background: #2A3A2A;
+    border-radius: 12px 12px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 6px;
+    box-shadow: 
+      inset 0 2px 4px rgba(255,255,255,0.15),
+      0 8px 40px rgba(0,0,0,0.2),
+      0 2px 8px rgba(0,0,0,0.15);
+  }
+  .nokia-screen {
+    width: 44px;
+    height: 36px;
+    background: #8BA880;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    border: 2px solid #1A2A1A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5px;
+    color: #2A4A2A;
+    letter-spacing: 0.05em;
+  }
+  .nokia-keys {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    width: 44px;
+  }
+  .nokia-key {
+    height: 8px;
+    background: #3A4A3A;
+    border-radius: 2px;
+    border-bottom: 1px solid #1A2A1A;
+  }
+  .nokia-key.wide { grid-column: span 3; }
+  .nokia-key.nav {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #4A5A4A;
+    grid-column: span 3;
+    margin: 0 auto;
+  }
+
+  /* Original iMac G3 */
+  .imac-g3 {
+    width: 120px;
+    height: 140px;
+    background: linear-gradient(135deg, rgba(100,180,220,0.9), rgba(60,140,190,0.95));
+    border-radius: 20px 20px 8px 8px;
+    position: relative;
+    box-shadow: 
+      inset 0 4px 8px rgba(255,255,255,0.3),
+      0 16px 48px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 16px;
+  }
+  .imac-g3-screen {
+    width: 90px;
+    height: 70px;
+    background: #1a1a2e;
+    border-radius: 4px;
+    border: 3px solid rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: #00ff88;
+    letter-spacing: 0.05em;
+  }
+  .imac-g3-base {
+    width: 60px;
+    height: 16px;
+    background: linear-gradient(135deg, rgba(80,160,200,0.9), rgba(40,120,170,0.95));
+    border-radius: 0 0 8px 8px;
+    margin-top: auto;
+  }
+
+  /* iPod Classic */
+  .ipod {
+    width: 70px;
+    height: 110px;
+    background: linear-gradient(180deg, #f5f5f0 0%, #e8e8e0 100%);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 8px;
+    box-shadow: 
+      inset 0 2px 4px rgba(255,255,255,0.9),
+      0 8px 40px rgba(0,0,0,0.15),
+      0 2px 8px rgba(0,0,0,0.1);
+  }
+  .ipod-screen {
+    width: 52px;
+    height: 44px;
+    background: #1a1a2e;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5px;
+    color: #4488ff;
+  }
+  .ipod-wheel {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ddd, #c8c8c0);
+    border: 1px solid #bbb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.8);
+  }
+  .ipod-wheel-center {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f0f0e8, #e0e0d8);
+    border: 1px solid #ccc;
+  }
+
+  /* Walkman */
+  .walkman {
+    width: 80px;
+    height: 110px;
+    background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+    gap: 6px;
+  }
+  .walkman-window {
+    width: 100%;
+    height: 44px;
+    background: linear-gradient(135deg, #111, #1a1a1a);
+    border-radius: 4px;
+    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .walkman-reel {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #333;
+    border: 2px solid #555;
+    position: relative;
+  }
+  .walkman-reel::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #888;
+  }
+  .walkman-tape {
+    width: 30px;
+    height: 2px;
+    background: #555;
+    position: absolute;
+  }
+  .walkman-buttons {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+  }
+  .walkman-btn {
+    width: 12px;
+    height: 8px;
+    background: linear-gradient(180deg, #555, #333);
+    border-radius: 2px;
+    border-bottom: 1px solid #222;
+  }
+  .walkman-btn.play {
+    background: linear-gradient(180deg, #CC6600, #AA4400);
+    width: 16px;
+  }
+  .walkman-label {
+    color: #FF8C00;
+    font-size: 6px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* GameBoy */
+  .gameboy {
+    width: 75px;
+    height: 120px;
+    background: linear-gradient(180deg, #8B8B8B 0%, #7A7A7A 100%);
+    border-radius: 8px 8px 20px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 8px 8px;
+    box-shadow: 
+      inset 0 2px 4px rgba(255,255,255,0.3),
+      0 8px 40px rgba(0,0,0,0.25);
+    gap: 6px;
+  }
+  .gameboy-screen-bezel {
+    width: 58px;
+    height: 50px;
+    background: #6A6A6A;
+    border-radius: 4px;
+    border: 2px solid #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+  }
+  .gameboy-screen {
+    width: 100%;
+    height: 100%;
+    background: #8BAA6A;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5px;
+    color: #3A5A2A;
+  }
+  .gameboy-brand {
+    font-size: 6px;
+    color: #555;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    align-self: flex-start;
+    margin-left: 4px;
+  }
+  .gameboy-controls {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px;
+  }
+  .gameboy-dpad {
+    width: 28px;
+    height: 28px;
+    position: relative;
+  }
+  .gameboy-dpad::before, .gameboy-dpad::after {
+    content: '';
+    position: absolute;
+    background: #555;
+    border-radius: 2px;
+  }
+  .gameboy-dpad::before { width: 100%; height: 34%; top: 33%; left: 0; }
+  .gameboy-dpad::after { height: 100%; width: 34%; left: 33%; top: 0; }
+  .gameboy-ab {
+    display: flex;
+    gap: 4px;
+  }
+  .gameboy-a, .gameboy-b {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #8B2252;
+    border-bottom: 2px solid #5A1030;
+    font-size: 5px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Pager/Beeper */
+  .pager {
+    width: 60px;
+    height: 90px;
+    background: linear-gradient(180deg, #1C1C1C, #2C2C2C);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 8px;
+    gap: 8px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
+  }
+  .pager-screen {
+    width: 44px;
+    height: 28px;
+    background: #4A7A4A;
+    border-radius: 2px;
+    border: 1px solid #2A4A2A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6px;
+    color: #8ACA8A;
+    letter-spacing: 0.05em;
+  }
+  .pager-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3px;
+    width: 44px;
+  }
+  .pager-btn {
+    height: 8px;
+    background: #3C3C3C;
+    border-radius: 2px;
+    border-bottom: 1px solid #1C1C1C;
+  }
+  .pager-clip {
+    width: 16px;
+    height: 30px;
+    background: #444;
+    border-radius: 4px;
+    position: absolute;
+    right: -8px;
+    top: 10px;
+    border: 1px solid #555;
+  }
+
+  /* Floppy disk */
+  .floppy {
+    width: 80px;
+    height: 80px;
+    background: #1A1A1A;
+    border-radius: 4px 4px 8px 4px;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .floppy::before {
+    content: '';
+    position: absolute;
+    top: 8px; left: 8px; right: 8px;
+    height: 22px;
+    background: #C8C0A8;
+    border-radius: 2px;
+  }
+  .floppy::after {
+    content: '';
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 20px;
+    background: #888;
+    border-radius: 2px;
+    border: 2px solid #666;
+  }
+  .floppy-label {
+    position: absolute;
+    top: 8px; left: 8px; right: 8px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5px;
+    color: #555;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    z-index: 1;
+  }
+
+  .product-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    line-height: 1.1;
+  }
+
+  .product-year {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 16px;
+  }
+
+  .product-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-soft);
+    font-weight: 300;
+  }
+
+  .product-tag {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent-soft);
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  /* RENEW SERVICE */
+  .renew {
+    background: var(--text);
+    color: var(--white);
+    padding: 100px 48px;
+  }
+
+  .renew-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 120px;
+    align-items: center;
+  }
+
+  .renew-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .renew-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 52px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+  }
+
+  .renew-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .renew-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.65);
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+
+  .renew-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .renew-step {
+    background: var(--text);
+    padding: 28px 32px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    transition: background 0.2s;
+  }
+  .renew-step:hover { background: rgba(255,255,255,0.04); }
+
+  .renew-step-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--accent);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 32px;
+  }
+
+  .renew-step-content h4 {
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .renew-step-content p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .renew-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: var(--white);
+    padding: 16px 32px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .renew-btn:hover { background: var(--accent); color: var(--white); }
+
+  /* DONATE STRIP */
+  .donate-strip {
+    background: var(--accent);
+    color: var(--white);
+    padding: 64px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 100%;
+  }
+
+  .donate-strip-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .donate-text h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .donate-text p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    opacity: 0.8;
+    font-weight: 300;
+  }
+
+  .donate-btn {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--white);
+    padding: 18px 40px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+  }
+  .donate-btn:hover { opacity: 0.9; }
+
+  /* FOOTER */
+  footer {
+    background: var(--cream);
+    padding: 60px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--warm-grey);
+  }
+
+  .footer-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+
+  .footer-logo span { font-style: italic; color: var(--accent); }
+
+  .footer-note {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .product-card {
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .product-card:nth-child(1) { animation-delay: 0.1s; }
+  .product-card:nth-child(2) { animation-delay: 0.2s; }
+  .product-card:nth-child(3) { animation-delay: 0.3s; }
+  .product-card:nth-child(4) { animation-delay: 0.4s; }
+  .product-card:nth-child(5) { animation-delay: 0.5s; }
+  .product-card:nth-child(6) { animation-delay: 0.6s; }
+
+  /* PLINTHS */
+  .product-display::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 1px;
+    background: var(--warm-grey);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,25,22,0.85);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--white);
+    max-width: 560px;
+    width: 90%;
+    padding: 56px;
+    position: relative;
+    animation: fadeUp 0.3s ease;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 24px; right: 24px;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-soft);
+    background: none;
+    border: none;
+    line-height: 1;
+  }
+
+  .modal-era {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .modal-year {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 24px;
+  }
+
+  .modal-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--text-soft);
+    font-weight: 300;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--warm-grey);
+  }
+
+  .modal-not-for-sale {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-nfs-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .modal-nfs-badge {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--cream);
+    border: 1px solid var(--warm-grey);
+    padding: 8px 16px;
+    color: var(--text);
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">The <span>Olde</span> Tech Store</div>
+  <ul class="nav-links">
+    <li onclick="scrollToSection('collection')">Collection</li>
+    <li onclick="scrollToSection('renew')">Renew</li>
+    <li onclick="scrollToSection('donate')">Donate</li>
+    <li>Visit</li>
+  </ul>
+  <div class="nav-tag">Est. 2026</div>
+</nav>
+
+<section class="hero">
+  <div>
+    <p class="hero-eyebrow">A different kind of store</p>
+    <h1 class="hero-title">Tech you <em>remember.</em> Displayed like new.</h1>
+  </div>
+  <div>
+    <p class="hero-body">A museum that looks like a flagship store. Every piece donated, restored, and presented as if it just came out of the box. Nothing is for sale. Everything is worth seeing.</p>
+    <button class="hero-cta" onclick="scrollToSection('collection')">Explore the Collection →</button>
+  </div>
+</section>
+
+<div class="hero-stat-block" style="max-width:1200px;margin:0 auto 0;padding: 0 48px 80px;">
+  <div class="hero-stat-block" style="max-width:100%">
+    <div class="hero-stat">
+      <div class="hero-stat-num">47</div>
+      <div class="hero-stat-label">Items on Display</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">1978</div>
+      <div class="hero-stat-label">Earliest Piece</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">100%</div>
+      <div class="hero-stat-label">Donated</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">0</div>
+      <div class="hero-stat-label">Items For Sale</div>
+    </div>
+  </div>
+</div>
+
+<div class="era-strip" id="collection">
+  <div class="era-tab active" onclick="setEra(this, '80s')">1980s</div>
+  <div class="era-tab" onclick="setEra(this, '90s')">1990s</div>
+  <div class="era-tab" onclick="setEra(this, '00s')">2000s</div>
+  <div class="era-tab" onclick="setEra(this, '10s')">2010s</div>
+  <div class="era-tab" onclick="setEra(this, 'all')">All Eras</div>
+</div>
+
+<div class="collection">
+  <div class="section-header">
+    <h2 class="section-title">Current Collection</h2>
+    <span class="section-count">6 of 47 items shown</span>
+  </div>
+
+  <div class="product-grid" id="product-grid">
+    <!-- Cards rendered by JS -->
+  </div>
+</div>
+
+<!-- RENEW SERVICE -->
+<section class="renew" id="renew">
+  <div class="renew-inner">
+    <div>
+      <p class="renew-eyebrow">A service for living tech</p>
+      <h2 class="renew-title">Your device. <em>Renewed.</em></h2>
+      <p class="renew-body">Send us your current tech and we'll return it looking and feeling like the day it was unboxed. Deep cleaned, repackaged, and ready for another chapter.</p>
+      <button class="renew-btn">Book a Renewal →</button>
+    </div>
+    <div class="renew-steps">
+      <div class="renew-step">
+        <div class="renew-step-num">01</div>
+        <div class="renew-step-content">
+          <h4>You send it in</h4>
+          <p>Drop it off in-store or post it to us safely. We handle everything from there.</p>
+        </div>
+      </div>
+      <div class="renew-step">
+        <div class="renew-step-num">02</div>
+        <div class="renew-step-content">
+          <h4>We restore it</h4>
+          <p>Deep clean, screen polish, port clearing, cable refresh. Inside and out.</p>
+        </div>
+      </div>
+      <div class="renew-step">
+        <div class="renew-step-num">03</div>
+        <div class="renew-step-content">
+          <h4>We rebox it</h4>
+          <p>Repackaged as if it just left the factory. Fresh tissue, cable wrap, everything.</p>
+        </div>
+      </div>
+      <div class="renew-step">
+        <div class="renew-step-num">04</div>
+        <div class="renew-step-content">
+          <h4>It comes home</h4>
+          <p>Returned to you within 5 working days. The unboxing experience, again.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DONATE -->
+<div class="donate-strip" id="donate">
+  <div class="donate-strip-inner">
+    <div class="donate-text">
+      <h3>Got old tech gathering dust?</h3>
+      <p>Donate it to the collection. Every piece gets the treatment it deserves.</p>
+    </div>
+    <button class="donate-btn">Donate a Piece</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">The <span>Olde</span> Tech Store</div>
+  <div class="footer-note">A museum that looks like a store. Nothing for sale.</div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <div class="modal-era" id="modal-era"></div>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-year" id="modal-year"></div>
+    <div class="modal-desc" id="modal-desc"></div>
+    <div class="modal-not-for-sale">
+      <div>
+        <div class="modal-nfs-label">Status</div>
+      </div>
+      <div class="modal-nfs-badge">Not For Sale</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const products = [
+  {
+    era: '80s',
+    name: 'Sony Walkman TPS-L2',
+    year: '1979 — Donated 2024',
+    desc: 'The device that moved music from rooms into lives. This first-generation Walkman arrived in near-mint condition and has been restored to showroom finish.',
+    device: 'walkman',
+    tag: 'Portable Audio'
+  },
+  {
+    era: '80s',
+    name: '3.5" Floppy Disk',
+    year: '1982 — Donated 2023',
+    desc: 'The humble successor to its limp predecessor. 1.44MB of pure possibility. This sealed box of ten arrived still in its original shrink wrap.',
+    device: 'floppy',
+    tag: 'Storage'
+  },
+  {
+    era: '90s',
+    name: 'Nokia 3310',
+    year: '2000 — Donated 2025',
+    desc: 'A cultural icon. Nearly indestructible, deeply beloved. This graphite black model arrived missing only its case — which we sourced and fitted from matching stock.',
+    device: 'nokia',
+    tag: 'Mobile Phone'
+  },
+  {
+    era: '90s',
+    name: 'Motorola PageWriter',
+    year: '1996 — Donated 2024',
+    desc: 'When a message meant a number. The pager was the original notification — discrete, urgent, and now beautifully obsolete. Belt clip intact.',
+    device: 'pager',
+    tag: 'Communications'
+  },
+  {
+    era: '90s',
+    name: 'Game Boy Original',
+    year: '1989 — Donated 2024',
+    desc: 'The grey brick that launched a thousand journeys. This unit was found in its original box in a loft in Manchester. Batteries corroded but spirit intact.',
+    device: 'gameboy',
+    tag: 'Handheld Gaming'
+  },
+  {
+    era: '90s',
+    name: 'iMac G3 Bondi Blue',
+    year: '1998 — Donated 2023',
+    desc: 'The computer that made people fall in love with computers. Translucent, round, and wildly optimistic about the future. Fully restored, boots to OS 9.',
+    device: 'imac',
+    tag: 'Personal Computer'
+  },
+  {
+    era: '00s',
+    name: 'iPod Classic 1st Gen',
+    year: '2001 — Donated 2025',
+    desc: '1,000 songs in your pocket changed everything. This original 5GB model still holds a charge and its mechanical scroll wheel remains one of the finest interfaces ever designed.',
+    device: 'ipod',
+    tag: 'Portable Audio'
+  }
+];
+
+let currentEra = '80s';
+
+function renderCards(era) {
+  const grid = document.getElementById('product-grid');
+  const filtered = era === 'all' ? products : products.filter(p => p.era === era);
+  const shown = filtered.slice(0, 6);
+
+  grid.innerHTML = shown.map((p, i) => `
+    <div class="product-card" onclick="openModal(${products.indexOf(p)})">
+      <div class="product-era">${p.era} · ${p.tag}</div>
+      <div class="product-display">
+        ${getDeviceHTML(p.device)}
+      </div>
+      <div class="product-name">${p.name}</div>
+      <div class="product-year">${p.year}</div>
+      <div class="product-desc">${p.desc.substring(0, 90)}…</div>
+      <span class="product-tag">View Item →</span>
+    </div>
+  `).join('');
+}
+
+function getDeviceHTML(type) {
+  switch(type) {
+    case 'nokia': return `
+      <div class="device nokia">
+        <div class="nokia-screen">NOKIA</div>
+        <div class="nokia-keys">
+          <div class="nokia-key nav"></div>
+          <div class="nokia-key"></div><div class="nokia-key"></div><div class="nokia-key"></div>
+          <div class="nokia-key"></div><div class="nokia-key"></div><div class="nokia-key"></div>
+          <div class="nokia-key"></div><div class="nokia-key"></div><div class="nokia-key"></div>
+          <div class="nokia-key wide" style="height:6px;background:#2A3A2A;"></div>
+        </div>
+      </div>`;
+    case 'imac': return `
+      <div class="device imac-g3">
+        <div class="imac-g3-screen">hello</div>
+        <div class="imac-g3-base"></div>
+      </div>`;
+    case 'ipod': return `
+      <div class="device ipod">
+        <div class="ipod-screen" style="font-size:6px;color:#8888ff">♫ 1000 songs</div>
+        <div class="ipod-wheel"><div class="ipod-wheel-center"></div></div>
+      </div>`;
+    case 'walkman': return `
+      <div class="device walkman">
+        <div class="walkman-label">SONY WALKMAN</div>
+        <div class="walkman-window">
+          <div class="walkman-reel"></div>
+          <div style="width:20px;height:1px;background:#333"></div>
+          <div class="walkman-reel"></div>
+        </div>
+        <div class="walkman-buttons">
+          <div class="walkman-btn"></div>
+          <div class="walkman-btn play"></div>
+          <div class="walkman-btn"></div>
+          <div class="walkman-btn"></div>
+        </div>
+      </div>`;
+    case 'gameboy': return `
+      <div class="device gameboy">
+        <div class="gameboy-screen-bezel"><div class="gameboy-screen">▶</div></div>
+        <div class="gameboy-brand">Game Boy</div>
+        <div class="gameboy-controls">
+          <div class="gameboy-dpad"></div>
+          <div class="gameboy-ab">
+            <div class="gameboy-b">B</div>
+            <div class="gameboy-a">A</div>
+          </div>
+        </div>
+      </div>`;
+    case 'pager': return `
+      <div class="device" style="position:relative">
+        <div class="pager">
+          <div class="pager-screen">555-0192</div>
+          <div class="pager-buttons">
+            <div class="pager-btn"></div><div class="pager-btn"></div><div class="pager-btn"></div>
+            <div class="pager-btn"></div><div class="pager-btn"></div><div class="pager-btn"></div>
+          </div>
+        </div>
+        <div class="pager-clip"></div>
+      </div>`;
+    case 'floppy': return `
+      <div class="device floppy">
+        <div class="floppy-label">HD 1.44MB</div>
+      </div>`;
+    default: return `<div style="width:80px;height:80px;background:var(--warm-grey);border-radius:4px;"></div>`;
+  }
+}
+
+function setEra(el, era) {
+  document.querySelectorAll('.era-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentEra = era;
+  renderCards(era);
+}
+
+function openModal(index) {
+  const p = products[index];
+  document.getElementById('modal-era').textContent = `${p.era} · ${p.tag}`;
+  document.getElementById('modal-title').textContent = p.name;
+  document.getElementById('modal-year').textContent = p.year;
+  document.getElementById('modal-desc').textContent = p.desc;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+// Init
+renderCards('80s');
+</script>
+</body>
+</html>

@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archive of Dress</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0D0C0A;
+    --deep: #161410;
+    --surface: #1E1B17;
+    --panel: #252118;
+    --border: #3A3428;
+    --gold: #C8A96E;
+    --gold-dim: #8A7248;
+    --cream: #F0E8D8;
+    --cream-dim: #A89880;
+    --text: #E8DEC8;
+    --text-soft: #7A6E5E;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    cursor: default;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 56px;
+    height: 72px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13,12,10,0.9);
+    backdrop-filter: blur(24px);
+  }
+
+  .nav-wordmark {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .nav-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    letter-spacing: 0.05em;
+    color: var(--cream);
+  }
+
+  .nav-subtitle {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-top: 3px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 48px;
+    list-style: none;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+  .nav-links li { cursor: pointer; transition: color 0.2s; }
+  .nav-links li:hover { color: var(--gold); }
+
+  .nav-era-badge {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    padding: 7px 16px;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 480px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 120px 56px 80px;
+    position: relative;
+  }
+
+  .hero-left::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--border) 20%, var(--border) 80%, transparent);
+  }
+
+  .hero-overline {
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-overline::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(60px, 8vw, 110px);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    margin-bottom: 48px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+    display: block;
+  }
+
+  .hero-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    line-height: 1.8;
+    color: var(--cream-dim);
+    font-weight: 300;
+    max-width: 520px;
+    margin-bottom: 56px;
+  }
+
+  .hero-scroll-hint {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-scroll-hint::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--text-soft), transparent);
+  }
+
+  /* HERO RIGHT - Model showcase */
+  .hero-right {
+    background: var(--deep);
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(200,169,110,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* Featured model - CSS illustrated */
+  .model-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .model-figure {
+    position: relative;
+    width: 200px;
+    height: 480px;
+    margin-bottom: 0;
+    cursor: pointer;
+    transition: filter 0.4s;
+  }
+
+  .model-figure:hover { filter: brightness(1.1); }
+
+  /* Elegant silhouette illustration */
+  .model-silhouette {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Period label on model */
+  .model-period-label {
+    position: absolute;
+    top: 72px;
+    left: -120px;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+
+  .model-tap-hint {
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    white-space: nowrap;
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* Floating accent lines */
+  .hero-line-1 {
+    position: absolute;
+    top: 20%;
+    left: 24px;
+    width: 1px;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--border), transparent);
+  }
+
+  .hero-line-2 {
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent);
+  }
+
+  /* GALLERY SECTION */
+  .gallery-section {
+    padding: 0 0 120px;
+  }
+
+  .gallery-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 72px 56px 56px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+
+  .gallery-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+  }
+
+  .gallery-title span {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .era-filter {
+    display: flex;
+    gap: 0;
+  }
+
+  .era-btn {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    border-right: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: none;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .era-btn:last-child { border-right: 1px solid var(--border); }
+  .era-btn:hover { color: var(--gold); border-color: var(--gold-dim); }
+  .era-btn.active { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+
+  /* COLLECTION GRID */
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border);
+  }
+
+  .outfit-card {
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .outfit-card:nth-child(3n) { border-right: none; }
+  .outfit-card:hover { background: var(--surface); }
+
+  .outfit-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+  }
+
+  .outfit-card:hover::after { transform: scaleX(1); }
+
+  .outfit-visual {
+    height: 320px;
+    background: var(--deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .outfit-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 80%, rgba(200,169,110,0.04) 0%, transparent 70%);
+  }
+
+  .outfit-info {
+    padding: 28px 32px 32px;
+  }
+
+  .outfit-era-tag {
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .outfit-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .outfit-date {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 16px;
+  }
+
+  .outfit-excerpt {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--cream-dim);
+    font-weight: 300;
+  }
+
+  .outfit-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  /* CSS FIGURE ILLUSTRATIONS */
+
+  /* Victorian Bustle Gown */
+  .fig-victorian {
+    position: relative;
+    width: 130px;
+    height: 260px;
+  }
+  .fig-victorian .head {
+    width: 28px; height: 34px;
+    background: #C8AA8A;
+    border-radius: 50% 50% 40% 40%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .fig-victorian .hair {
+    position: absolute;
+    top: -4px; left: 2px; right: 2px;
+    height: 20px;
+    background: #3A2A1A;
+    border-radius: 50% 50% 0 0;
+  }
+  .fig-victorian .neck {
+    width: 10px; height: 12px;
+    background: #C8AA8A;
+    margin: 0 auto;
+  }
+  .fig-victorian .bodice {
+    width: 54px;
+    height: 80px;
+    background: linear-gradient(180deg, #2A1A3A 0%, #3A2A4A 100%);
+    margin: 0 auto;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+  }
+  .fig-victorian .bodice::before {
+    content: '';
+    position: absolute;
+    top: 8px; left: 50%; transform: translateX(-50%);
+    width: 2px; height: 60px;
+    background: rgba(200,169,110,0.4);
+  }
+  .fig-victorian .sleeves {
+    position: absolute;
+    top: 0; left: -22px; right: -22px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .fig-victorian .sleeve {
+    width: 20px; height: 50px;
+    background: linear-gradient(180deg, #3A2A4A, #2A1A3A);
+    border-radius: 8px 8px 4px 4px;
+  }
+  .fig-victorian .skirt {
+    width: 90px;
+    height: 100px;
+    background: linear-gradient(180deg, #2A1A3A 0%, #3A2A4A 50%, #4A3A5A 100%);
+    margin: 0 auto;
+    border-radius: 0 0 20px 20px;
+    clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%);
+    position: relative;
+  }
+  .fig-victorian .bustle {
+    position: absolute;
+    right: -20px;
+    top: 0;
+    width: 40px;
+    height: 60px;
+    background: linear-gradient(135deg, #4A3A5A, #3A2A4A);
+    border-radius: 0 40px 40px 0;
+  }
+  .fig-victorian .train {
+    width: 110px;
+    height: 30px;
+    background: linear-gradient(180deg, #3A2A4A, #2A1A3A);
+    margin: 0 auto;
+    border-radius: 0 0 50% 50%;
+    margin-left: 10px;
+  }
+
+  /* 1920s Flapper */
+  .fig-flapper {
+    position: relative;
+    width: 100px;
+    height: 250px;
+  }
+  .fig-flapper .head {
+    width: 26px; height: 30px;
+    background: #D4B896;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+  .fig-flapper .cloche {
+    width: 34px; height: 18px;
+    background: #1A2A1A;
+    border-radius: 50% 50% 0 0;
+    margin: 0 auto;
+    margin-bottom: -4px;
+    position: relative;
+    z-index: 2;
+  }
+  .fig-flapper .neck { width: 8px; height: 10px; background: #D4B896; margin: 0 auto; }
+  .fig-flapper .dress {
+    width: 60px;
+    height: 140px;
+    background: linear-gradient(180deg, #1A1A2A 0%, #2A2A3A 60%, #1A1A2A 100%);
+    margin: 0 auto;
+    border-radius: 2px 2px 8px 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .fig-flapper .fringe {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 50px;
+    display: flex;
+    gap: 2px;
+    padding: 0 4px;
+  }
+  .fig-flapper .fringe-strand {
+    flex: 1;
+    background: linear-gradient(to bottom, rgba(200,169,110,0.6), rgba(200,169,110,0.2));
+    border-radius: 0 0 4px 4px;
+  }
+  .fig-flapper .beads {
+    position: absolute;
+    top: 16px; left: 50%; transform: translateX(-50%);
+    width: 2px;
+    height: 60px;
+    background: repeating-linear-gradient(to bottom, var(--gold) 0px, var(--gold) 3px, transparent 3px, transparent 7px);
+  }
+  .fig-flapper .arms {
+    position: absolute;
+    top: 10px; left: -18px; right: -18px;
+    display: flex;
+    justify-content: space-between;
+    height: 40px;
+  }
+  .fig-flapper .arm {
+    width: 14px; height: 70px;
+    background: #D4B896;
+    border-radius: 6px;
+    transform: rotate(15deg);
+  }
+  .fig-flapper .arm.right { transform: rotate(-15deg); }
+  .fig-flapper .shoes {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 4px;
+  }
+  .fig-flapper .shoe {
+    width: 12px; height: 20px;
+    background: #1A1A1A;
+    border-radius: 0 0 4px 0;
+    position: relative;
+  }
+  .fig-flapper .shoe::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 3px;
+    width: 2px; height: 10px;
+    background: #333;
+  }
+
+  /* Medieval Kirtle */
+  .fig-medieval {
+    position: relative;
+    width: 110px;
+    height: 260px;
+  }
+  .fig-medieval .head {
+    width: 26px; height: 32px;
+    background: #C8A880;
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+  }
+  .fig-medieval .veil {
+    position: absolute;
+    top: -6px; left: -10px; right: -10px;
+    height: 40px;
+    background: #F0E8D8;
+    border-radius: 50% 50% 0 0;
+    opacity: 0.9;
+    z-index: -1;
+  }
+  .fig-medieval .wimple {
+    width: 44px; height: 12px;
+    background: rgba(240,232,216,0.8);
+    margin: 0 auto;
+    border-radius: 0 0 50% 50%;
+  }
+  .fig-medieval .neck { width: 10px; height: 8px; background: #C8A880; margin: 0 auto; }
+  .fig-medieval .kirtle {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(180deg, #8B2252 0%, #6B1032 100%);
+    margin: 0 auto;
+    border-radius: 2px;
+    position: relative;
+  }
+  .fig-medieval .sleeves-wide {
+    position: absolute;
+    top: 4px; left: -28px; right: -28px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .fig-medieval .sleeve-wide {
+    width: 28px; height: 60px;
+    background: #8B2252;
+    border-radius: 4px 4px 12px 12px;
+  }
+  .fig-medieval .overdress {
+    width: 80px;
+    height: 140px;
+    background: linear-gradient(180deg, #4A3A1A 0%, #6A5A2A 100%);
+    margin: 0 auto;
+    clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
+    border-radius: 0 0 8px 8px;
+    position: relative;
+  }
+  .fig-medieval .belt {
+    position: absolute;
+    top: 20px; left: 50%; transform: translateX(-50%);
+    width: 50px; height: 8px;
+    background: linear-gradient(90deg, #C8A96E, #A88A4E, #C8A96E);
+    border-radius: 2px;
+  }
+
+  /* Regency Empire Waist */
+  .fig-regency {
+    position: relative;
+    width: 100px;
+    height: 260px;
+  }
+  .fig-regency .head {
+    width: 24px; height: 30px;
+    background: #D4B090;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+  .fig-regency .upsweep {
+    width: 30px; height: 16px;
+    background: #4A3020;
+    border-radius: 50% 50% 0 0;
+    margin: 0 auto;
+    margin-bottom: -3px;
+  }
+  .fig-regency .neck { width: 8px; height: 10px; background: #D4B090; margin: 0 auto; }
+  .fig-regency .bodice {
+    width: 40px; height: 28px;
+    background: linear-gradient(180deg, #F0E8D8 0%, #E0D4C0 100%);
+    margin: 0 auto;
+    border-radius: 2px;
+    position: relative;
+  }
+  .fig-regency .empire-sash {
+    width: 50px; height: 10px;
+    background: linear-gradient(90deg, #7A9A6A, #9ABA8A, #7A9A6A);
+    margin: 0 auto;
+  }
+  .fig-regency .regency-skirt {
+    width: 72px;
+    height: 150px;
+    background: linear-gradient(180deg, #F0E8D8 0%, #E8DCC8 100%);
+    margin: 0 auto;
+    clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%);
+    border-radius: 0 0 10px 10px;
+    position: relative;
+  }
+  .fig-regency .regency-skirt::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(to bottom, transparent 0px, transparent 18px, rgba(0,0,0,0.04) 18px, rgba(0,0,0,0.04) 20px);
+  }
+  .fig-regency .puff-sleeve-left, .fig-regency .puff-sleeve-right {
+    position: absolute;
+    top: 0;
+    width: 18px; height: 18px;
+    background: #F0E8D8;
+    border-radius: 50%;
+  }
+  .fig-regency .puff-sleeve-left { left: -16px; }
+  .fig-regency .puff-sleeve-right { right: -16px; }
+
+  /* 1950s New Look */
+  .fig-newlook {
+    position: relative;
+    width: 120px;
+    height: 260px;
+  }
+  .fig-newlook .head {
+    width: 26px; height: 32px;
+    background: #C8A070;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+  .fig-newlook .chignon {
+    width: 24px; height: 18px;
+    background: #2A1A0A;
+    border-radius: 50% 50% 0 0;
+    margin: 0 auto;
+    margin-bottom: -2px;
+  }
+  .fig-newlook .neck { width: 8px; height: 10px; background: #C8A070; margin: 0 auto; }
+  .fig-newlook .jacket {
+    width: 56px; height: 70px;
+    background: linear-gradient(180deg, #1A1A2A 0%, #2A2A3A 100%);
+    margin: 0 auto;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+  }
+  .fig-newlook .lapels {
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 14px solid #3A3A4A;
+    border-right: 14px solid #3A3A4A;
+    border-bottom: 28px solid transparent;
+  }
+  .fig-newlook .nip-waist {
+    width: 36px; height: 12px;
+    background: #1A1A2A;
+    margin: 0 auto;
+  }
+  .fig-newlook .full-skirt {
+    width: 100px;
+    height: 120px;
+    background: radial-gradient(ellipse at 50% 0%, #3A1A4A 0%, #2A0A3A 60%, #1A0A2A 100%);
+    margin: 0 auto;
+    border-radius: 0 0 50% 50%;
+    clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
+    position: relative;
+  }
+  .fig-newlook .full-skirt::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.04), transparent 70%);
+  }
+  .fig-newlook .heels {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 6px;
+  }
+  .fig-newlook .heel {
+    width: 14px; height: 22px;
+    background: #1A0A2A;
+    border-radius: 2px 2px 0 0;
+    position: relative;
+  }
+  .fig-newlook .heel::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 2px;
+    width: 3px; height: 12px;
+    background: #0A0A1A;
+    border-radius: 0 0 1px 1px;
+  }
+
+  /* Ancient Egyptian */
+  .fig-egyptian {
+    position: relative;
+    width: 100px;
+    height: 250px;
+  }
+  .fig-egyptian .head {
+    width: 28px; height: 34px;
+    background: #C09060;
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+  }
+  .fig-egyptian .nemes {
+    position: absolute;
+    top: -4px; left: -12px; right: -12px;
+    height: 28px;
+    background: linear-gradient(90deg, #C8A96E 0%, #E8C98E 30%, #E8C98E 70%, #C8A96E 100%);
+    border-radius: 50% 50% 0 0;
+  }
+  .fig-egyptian .nemes::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 20%; right: 20%;
+    height: 2px;
+    background: #A88A4E;
+  }
+  .fig-egyptian .collar {
+    width: 60px; height: 20px;
+    background: linear-gradient(180deg, #C8A96E 0%, #A88A4E 100%);
+    margin: 0 auto;
+    border-radius: 0 0 50% 50%;
+    border: 2px solid #E8C98E;
+    position: relative;
+    overflow: hidden;
+  }
+  .fig-egyptian .collar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 4px, transparent 4px, transparent 8px);
+  }
+  .fig-egyptian .kalasiris {
+    width: 52px;
+    height: 140px;
+    background: linear-gradient(180deg, #F0F0E8 0%, #E0E0D0 100%);
+    margin: 0 auto;
+    border-radius: 0 0 8px 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .fig-egyptian .kalasiris::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(to bottom, transparent 0px, transparent 8px, rgba(200,169,110,0.15) 8px, rgba(200,169,110,0.15) 10px);
+  }
+  .fig-egyptian .sash-eg {
+    position: absolute;
+    top: 10px; left: 50%; transform: translateX(-50%);
+    width: 36px; height: 6px;
+    background: linear-gradient(90deg, #C8A96E, #E8C98E, #C8A96E);
+  }
+
+  /* PANEL / DRAWER SYSTEM */
+  .panel-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    pointer-events: none;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .panel-scrim {
+    flex: 1;
+    background: rgba(0,0,0,0);
+    transition: background 0.4s ease;
+    pointer-events: none;
+  }
+
+  .panel-scrim.visible {
+    background: rgba(0,0,0,0.75);
+    pointer-events: all;
+    backdrop-filter: blur(4px);
+  }
+
+  .panel-drawer {
+    width: 480px;
+    flex-shrink: 0;
+    background: var(--deep);
+    border-left: 1px solid var(--border);
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: all;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .panel-drawer.open {
+    transform: translateX(0);
+  }
+
+  .panel-header {
+    padding: 32px 36px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .panel-era-tag {
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .panel-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+
+  .panel-date {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-top: 8px;
+  }
+
+  .panel-close {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    width: 36px; height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-left: 16px;
+    margin-top: 4px;
+    transition: all 0.2s;
+  }
+  .panel-close:hover { border-color: var(--gold); color: var(--gold); }
+
+  .panel-body {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .panel-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .panel-tab {
+    flex: 1;
+    padding: 16px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    color: var(--text-soft);
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+
+  .panel-tab.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  .panel-tab:hover:not(.active) { color: var(--cream-dim); }
+
+  .panel-content {
+    padding: 32px 36px;
+  }
+
+  .panel-view { display: none; }
+  .panel-view.active { display: block; }
+
+  /* ACCESSORIES VIEW */
+  .accessories-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--cream-dim);
+    font-weight: 300;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .accessories-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    margin-bottom: 32px;
+  }
+
+  .accessory-item {
+    background: var(--panel);
+    padding: 20px;
+    transition: background 0.2s;
+  }
+  .accessory-item:hover { background: var(--surface); }
+
+  .accessory-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+    filter: sepia(40%) saturate(60%);
+  }
+
+  .accessory-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+
+  .accessory-detail {
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--text-soft);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+  }
+
+  /* PERIOD VIEW */
+  .period-intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--cream-dim);
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+
+  .period-photos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    margin-bottom: 28px;
+  }
+
+  .period-photo {
+    aspect-ratio: 3/4;
+    display: flex;
+    align-items: flex-end;
+    padding: 12px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: filter 0.3s;
+  }
+
+  .period-photo:hover { filter: brightness(1.1); }
+
+  .period-photo-label {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(240,232,216,0.7);
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  }
+
+  .period-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .period-fact {
+    background: var(--panel);
+    padding: 18px 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .period-fact-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--gold);
+    flex-shrink: 0;
+    width: 48px;
+    padding-top: 2px;
+  }
+
+  .period-fact-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--cream-dim);
+  }
+
+  /* OUTFIT VIEW (description) */
+  .outfit-full-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    line-height: 1.85;
+    color: var(--cream-dim);
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+
+  .detail-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .detail-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .detail-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: var(--cream);
+    text-align: right;
+    max-width: 220px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 60px 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--cream);
+  }
+
+  .footer-mark span { font-style: italic; color: var(--gold); }
+
+  .footer-note {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .outfit-card {
+    animation: fadeIn 0.7s ease both;
+  }
+  .outfit-card:nth-child(1) { animation-delay: 0.05s; }
+  .outfit-card:nth-child(2) { animation-delay: 0.15s; }
+  .outfit-card:nth-child(3) { animation-delay: 0.25s; }
+  .outfit-card:nth-child(4) { animation-delay: 0.35s; }
+  .outfit-card:nth-child(5) { animation-delay: 0.45s; }
+  .outfit-card:nth-child(6) { animation-delay: 0.55s; }
+
+  @keyframes heroReveal {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-left > * {
+    animation: heroReveal 1s ease both;
+  }
+  .hero-left > *:nth-child(1) { animation-delay: 0.2s; }
+  .hero-left > *:nth-child(2) { animation-delay: 0.4s; }
+  .hero-left > *:nth-child(3) { animation-delay: 0.6s; }
+  .hero-left > *:nth-child(4) { animation-delay: 0.8s; }
+
+  @keyframes modelRise {
+    from { opacity: 0; transform: translateY(60px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .model-figure { animation: modelRise 1.2s ease 0.5s both; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-wordmark">
+    <div class="nav-title">Archive of Dress</div>
+    <div class="nav-subtitle">A Museum of Historic Fashion</div>
+  </div>
+  <ul class="nav-links">
+    <li>Collection</li>
+    <li>By Era</li>
+    <li>Materials</li>
+    <li>Visit</li>
+  </ul>
+  <div class="nav-era-badge">Est. 1200 — Present</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-overline">The Living Archive</div>
+    <h1 class="hero-title">
+      Dressed<br>by <em>history.</em>
+    </h1>
+    <p class="hero-desc">Every silhouette tells a century. Explore the garments, accessories and worlds of those who wore them — from medieval courts to Mayfair salons.</p>
+    <div class="hero-scroll-hint">Explore the Collection</div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-line-1"></div>
+    <div class="hero-line-2"></div>
+    <div class="model-stage">
+      <div class="model-figure" onclick="openPanel(4)">
+        <div class="model-period-label">1950s · New Look</div>
+        <!-- 1950s New Look CSS Figure -->
+        <div style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%)">
+          <div class="fig-newlook">
+            <div class="chignon"></div>
+            <div class="head"></div>
+            <div class="neck"></div>
+            <div style="position:relative">
+              <div class="jacket">
+                <div style="position:absolute;top:4px;left:50%;transform:translateX(-50%);width:16px;height:0;border-left:8px solid #3A3A4A;border-right:8px solid #3A3A4A;border-bottom:20px solid transparent;"></div>
+                <div class="arms">
+                  <div class="arm"></div>
+                  <div class="arm right"></div>
+                </div>
+              </div>
+            </div>
+            <div class="nip-waist"></div>
+            <div class="full-skirt"></div>
+            <div class="heels"><div class="heel"></div><div class="heel"></div></div>
+          </div>
+        </div>
+        <div class="model-tap-hint">Tap to explore</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+  <div class="gallery-header">
+    <h2 class="gallery-title">The <span>Collection</span></h2>
+    <div class="era-filter">
+      <button class="era-btn active" onclick="filterEra(this,'all')">All</button>
+      <button class="era-btn" onclick="filterEra(this,'ancient')">Ancient</button>
+      <button class="era-btn" onclick="filterEra(this,'medieval')">Medieval</button>
+      <button class="era-btn" onclick="filterEra(this,'18th')">18th C</button>
+      <button class="era-btn" onclick="filterEra(this,'19th')">19th C</button>
+      <button class="era-btn" onclick="filterEra(this,'20th')">20th C</button>
+    </div>
+  </div>
+
+  <div class="collection-grid" id="collection-grid">
+    <!-- Rendered by JS -->
+  </div>
+</section>
+
+<footer>
+  <div class="footer-mark">Archive <span>of Dress</span></div>
+  <div class="footer-note">A museum of historic fashion · Nothing replicated, everything restored</div>
+</footer>
+
+<!-- PANEL OVERLAY -->
+<div class="panel-overlay" id="panel-overlay">
+  <div class="panel-scrim" id="panel-scrim" onclick="closePanel()"></div>
+  <div class="panel-drawer" id="panel-drawer">
+    <div class="panel-header">
+      <div>
+        <div class="panel-era-tag" id="panel-era-tag"></div>
+        <div class="panel-title" id="panel-title"></div>
+        <div class="panel-date" id="panel-date"></div>
+      </div>
+      <button class="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <div class="panel-tabs">
+      <div class="panel-tab active" onclick="switchTab(this,'outfit')">The Outfit</div>
+      <div class="panel-tab" onclick="switchTab(this,'accessories')">Accessories</div>
+      <div class="panel-tab" onclick="switchTab(this,'period')">The Period</div>
+    </div>
+    <div class="panel-body">
+      <div class="panel-content">
+        <div class="panel-view active" id="view-outfit"></div>
+        <div class="panel-view" id="view-accessories"></div>
+        <div class="panel-view" id="view-period"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const outfits = [
+  {
+    era: 'ancient',
+    eraLabel: 'Ancient Egypt · c.1350 BCE',
+    name: 'Royal Kalasiris',
+    date: 'New Kingdom Period · c.1350 BCE',
+    excerpt: 'The draped linen of a noble lady, pleated with extraordinary refinement across two millennia of tradition.',
+    figure: 'egyptian',
+    materials: 'Fine linen', origin: 'Thebes, Egypt', context: 'Court dress',
+    desc: 'The kalasiris — a close-fitting sheath of finely pleated white linen — was the defining garment of Egyptian aristocracy. This reconstruction draws from tomb paintings at Amarna, where noble women are depicted in diaphanous fabric so fine it required weavers of extraordinary skill. The pleating was set using starch from flax and retained through careful storage in cedar chests.',
+    accessories: [
+      { icon: '📿', name: 'Broad Collar (Wesekh)', detail: 'Multi-strand necklace of faience beads, gold spacers and cornelian drops. Worn to protect the wearer spiritually and signal rank.' },
+      { icon: '💛', name: 'Gold Armlets', detail: 'Solid gold cuffs at the upper arm, engraved with cartouche and lotus motifs. Reserved for the royal household.' },
+      { icon: '👁️', name: 'Kohl Eye Liner', detail: 'Ground malachite and galena applied with an ivory stick. Both cosmetic and believed to ward off the evil eye.' },
+      { icon: '🌿', name: 'Floral Headpiece', detail: 'Fresh lotus blooms woven into a circlet of gilded wire. Worn at banquets and significant ceremonies.' },
+    ],
+    periodIntro: 'The New Kingdom (c.1550–1070 BCE) was Egypt\'s imperial zenith — an age of conquest, monumental building and extraordinary refinement in the arts, including dress.',
+    periodPhotos: [
+      { bg: 'linear-gradient(180deg,#2A1A0A,#4A3010)', label: 'Tomb painting, Thebes' },
+      { bg: 'linear-gradient(180deg,#1A2A0A,#3A4010)', label: 'Detail, Amarna relief' },
+      { bg: 'linear-gradient(180deg,#0A1A2A,#103040)', label: 'Gold collar, Cairo Mus.' },
+      { bg: 'linear-gradient(180deg,#2A0A1A,#4A1030)', label: 'Linen fragment, c.1300 BCE' },
+    ],
+    periodFacts: [
+      { year: 'c.1550', text: 'New Kingdom begins. Egypt becomes the wealthiest empire in the ancient world.' },
+      { year: 'c.1353', text: 'Akhenaten moves capital to Amarna. Art becomes naturalistic; dress more transparent.' },
+      { year: 'c.1323', text: 'Death of Tutankhamun. His tomb preserves examples of royal linen and jewellery intact.' },
+    ]
+  },
+  {
+    era: 'medieval',
+    eraLabel: 'Medieval Europe · c.1350',
+    name: 'Houppelande & Kirtle',
+    date: 'Late Gothic Period · c.1380–1410',
+    excerpt: 'Deep dagged sleeves and crimson wool mark this as the height of Gothic court fashion, layered over a fitted kirtle.',
+    figure: 'medieval',
+    materials: 'Crimson wool, silk lining', origin: 'Burgundian Court', context: 'Court dress',
+    desc: 'The houppelande was the most fashionable outer garment of late 14th century European courts — voluminous, dramatically sleeved, and often lined with costly fur. This example in deep crimson would have been constructed from woven wool from Florence, traded at the great Flemish cloth fairs. Beneath it, a close-fitted kirtle of contrasting colour creates the layered silhouette visible at the neckline and cuffs.',
+    accessories: [
+      { icon: '💍', name: 'Jewelled Girdle Belt', detail: 'A long decorative belt of linked goldsmith work worn low on the hips, often set with stones or enamelled plaques. A key status marker.' },
+      { icon: '🎭', name: 'Barbette & Fillet', detail: 'A band of white linen wrapped under the chin with a circlet of gold or embroidered linen at the brow. Mature women\'s headdress of the period.' },
+      { icon: '🧤', name: 'Embroidered Gloves', detail: 'Gauntlet-style gloves in kidskin, embroidered at the cuff in silk thread with foliage motifs.' },
+      { icon: '👜', name: 'Aumônière Purse', detail: 'Small embroidered drawstring pouch hung from the girdle, used to carry coins or fragrant herbs.' },
+    ],
+    periodIntro: 'The late 14th century was an age of extraordinary extravagance in dress — and equally severe sumptuary laws attempting to restrain it. The Burgundian court set fashions that spread across Europe.',
+    periodPhotos: [
+      { bg: 'linear-gradient(180deg,#1A0A2A,#2A1A3A)', label: 'Illuminated MS, c.1385' },
+      { bg: 'linear-gradient(180deg,#2A1010,#3A2020)', label: 'Burgundian court, 1395' },
+      { bg: 'linear-gradient(180deg,#0A1020,#1A2030)', label: 'Très Riches Heures detail' },
+      { bg: 'linear-gradient(180deg,#101A0A,#202A1A)', label: 'Embroidered purse, V&A' },
+    ],
+    periodFacts: [
+      { year: '1347', text: 'Black Death sweeps Europe. Surviving artisans demand higher wages; luxury goods proliferate.' },
+      { year: '1380', text: 'Charles VI of France crowns. The French court becomes Europe\'s fashion arbiter.' },
+      { year: '1409', text: 'Sumptuary laws in England attempt to restrict dagged sleeves and fur trimming to nobility.' },
+    ]
+  },
+  {
+    era: '18th',
+    eraLabel: 'Regency England · c.1813',
+    name: 'Empire Waist Muslin Gown',
+    date: 'Regency Period · 1811–1820',
+    excerpt: 'The radical simplicity of the Empire line — a deliberate rejection of 18th century artifice — rendered in finest Indian muslin.',
+    figure: 'regency',
+    materials: 'Indian muslin, silk ribbon', origin: 'London', context: 'Morning dress',
+    desc: 'By 1813, the revolution in dress was complete. The rigid, structured silhouettes of the 18th century had dissolved into this — a column of near-transparent white muslin gathered just below the bust, falling straight to the ankle. The look was inspired by classical antiquity and carried revolutionary political undertones. This particular gown, in sprigged white-on-white, would have been worn for morning visits or promenading in the park.',
+    accessories: [
+      { icon: '☂️', name: 'Parasol', detail: 'Silk-covered parasol with carved ivory handle. Protection from sun was essential — a pale complexion denoted leisure class and indoor refinement.' },
+      { icon: '🧤', name: 'Long Kid Gloves', detail: 'White or pale kid leather reaching to above the elbow. Never removed in company; a second skin of propriety.' },
+      { icon: '💛', name: 'Coral or Amber Beads', detail: 'Simple bead necklace in natural materials was considered more chaste than the heavy gemstone sets of the previous era.' },
+      { icon: '👜', name: 'Reticule', detail: 'The small drawstring bag that replaced hidden pockets when skirts became too narrow to accommodate them. Beaded, embroidered, or made of silk.' },
+    ],
+    periodIntro: 'The Regency era of Jane Austen coincided with Europe\'s most radical reimagining of the female form in two centuries. Fashion became political — and for the first time, deliberately simple.',
+    periodPhotos: [
+      { bg: 'linear-gradient(180deg,#1A1A0A,#2A2A1A)', label: 'Lawrence portrait, 1815' },
+      { bg: 'linear-gradient(180deg,#0A0A1A,#1A1A2A)', label: 'Ackermann\'s Repository, 1813' },
+      { bg: 'linear-gradient(180deg,#1A0A0A,#2A1010)', label: 'Muslin detail, Bath' },
+      { bg: 'linear-gradient(180deg,#0A1A1A,#1A2A2A)', label: 'Reticule, c.1810, V&A' },
+    ],
+    periodFacts: [
+      { year: '1811', text: 'Prince of Wales becomes Regent. The Regency period officially begins; society culture intensifies.' },
+      { year: '1813', text: 'Jane Austen publishes Pride & Prejudice. The muslin gown is central to its social world.' },
+      { year: '1815', text: 'Waterloo ends the Napoleonic Wars. French fashion influence reasserts itself in London.' },
+    ]
+  },
+  {
+    era: '19th',
+    eraLabel: 'Victorian England · c.1885',
+    name: 'Bustle Gown in Jet & Silk',
+    date: 'Late Victorian Period · 1883–1889',
+    excerpt: 'The extreme drama of the second bustle period — a jutting shelf of silk extending from the back — reaches its audacious peak.',
+    figure: 'victorian',
+    materials: 'Silk, jet beading, horsehair', origin: 'London / Paris', context: 'Evening dress',
+    desc: 'By 1885 the bustle had returned — and returned with renewed ferocity. This second bustle period produced the most architecturally extreme silhouette in fashion history, with the skirt protruding almost horizontally from the lower back. This evening gown, in deep aubergine silk weighted with jet beading, would have been made by a skilled London dressmaker working from a Worth paper pattern. The bodice is boned, the sleeves fitted, and the train some four feet in length.',
+    accessories: [
+      { icon: '🖤', name: 'Jet Mourning Jewellery', detail: 'True Whitby jet — fossilised wood carved into brooches, eardrops and necklaces. Popularised by Queen Victoria; by 1885 fashionable regardless of mourning status.' },
+      { icon: '🧤', name: 'Elbow-Length Evening Gloves', detail: 'White or pearl-grey suede, buttoned at the wrist. Always worn to any formal evening engagement, removed only for dinner.' },
+      { icon: '🪭', name: 'Carved Fan', detail: 'Ivory or tortoiseshell sticks with painted silk or lace leaf. An active language of gesture in ballrooms and reception rooms.' },
+      { icon: '💎', name: 'Diamond Aigrette', detail: 'A jewelled pin worn in an upswept coiffure. The aigrette signalled wealth unmistakably — real diamonds, real feathers.' },
+    ],
+    periodIntro: 'The 1880s were a period of extraordinary industrial prosperity and rigid social stratification. Dress was an armour of status, its construction as complex as architecture.',
+    periodPhotos: [
+      { bg: 'linear-gradient(180deg,#1A0A1A,#2A1A2A)', label: 'Studio portrait, 1887' },
+      { bg: 'linear-gradient(180deg,#0A1A0A,#1A2A1A)', label: 'Worth gown detail, Paris' },
+      { bg: 'linear-gradient(180deg,#1A1A0A,#2A2A10)', label: 'Jet jewellery, Whitby' },
+      { bg: 'linear-gradient(180deg,#0A0A1A,#101020)', label: 'Bustle construction, V&A' },
+    ],
+    periodFacts: [
+      { year: '1883', text: 'The second bustle period begins. Silhouettes become increasingly architectural and extreme.' },
+      { year: '1885', text: 'Charles Worth dominates Paris couture. London dressmakers work from his paper patterns.' },
+      { year: '1889', text: 'The bustle disappears almost overnight, replaced by a smoother, slightly puffed sleeve.' },
+    ]
+  },
+  {
+    era: '20th',
+    eraLabel: 'Jazz Age · c.1926',
+    name: 'Beaded Flapper Dress',
+    date: 'Roaring Twenties · 1924–1929',
+    excerpt: 'The dropped waist, the hem above the knee, the fringe that moved as its wearer danced — a garment built for liberation.',
+    figure: 'flapper',
+    materials: 'Silk chiffon, glass beads', origin: 'New York', context: 'Evening dress',
+    desc: 'The flapper dress was a revolution sewn in silk and glass. For the first time in the modern era, women\'s legs were visible. The dropped waist erased the hourglass; the fringe caught every footstep. This dress — black silk chiffon with rows of glass beads and fringing that begins above the knee — would have been worn to a Manhattan supper club in 1926, moving under electric chandeliers to the sound of a jazz orchestra.',
+    accessories: [
+      { icon: '📿', name: 'Long Rope of Pearls', detail: 'Cultured or imitation pearls worn in a single, very long strand, often wrapped twice and swinging freely — the definitive Jazz Age necklace.' },
+      { icon: '🎩', name: 'Cloche Hat', detail: 'Deep, bell-shaped hat pulled low to the brow. Usually felt or wool for day, silk for evening. Demanded the new short hair to be worn correctly.' },
+      { icon: '💄', name: 'Cupid\'s Bow Lip', detail: 'Deep red or crimson lipstick in an exaggerated bow shape. Combined with kohl-darkened eyes and powdered face. Cosmetics became publicly acceptable.' },
+      { icon: '👜', name: 'Beaded Evening Bag', detail: 'Tiny drawstring or clasp bag in fully beaded silk. Just large enough for a powder compact, cigarettes and lipstick — the modern woman\'s arsenal.' },
+    ],
+    periodIntro: 'The 1920s reinvented what a woman\'s body could mean in public. After the carnage of the First World War, youth, movement and pleasure became radical acts.',
+    periodPhotos: [
+      { bg: 'linear-gradient(180deg,#0A0A0A,#1A1A1A)', label: 'Speakeasy, New York 1926' },
+      { bg: 'linear-gradient(180deg,#1A1A0A,#2A2A10)', label: 'Josephine Baker, Paris 1925' },
+      { bg: 'linear-gradient(180deg,#0A0A1A,#10101A)', label: 'Vogue, October 1927' },
+      { bg: 'linear-gradient(180deg,#1A0A0A,#2A1010)', label: 'Beaded detail, Met Museum' },
+    ],
+    periodFacts: [
+      { year: '1920', text: '19th Amendment: American women gain the right to vote. Fashion reflects new freedoms.' },
+      { year: '1925', text: 'Hemlines rise to the knee for the first time in Western fashion history.' },
+      { year: '1929', text: 'Wall Street Crash. The flapper era ends almost overnight; hemlines fall again.' },
+    ]
+  },
+  {
+    era: '20th',
+    eraLabel: 'Post-War London · c.1953',
+    name: 'New Look Bar Suit',
+    date: 'Post-War · 1947–1957',
+    excerpt: 'Dior\'s Bar jacket with its nipped waist and full black skirt announced the return of unapologetic femininity to a grey world.',
+    figure: 'newlook',
+    materials: 'Ivory shantung, black crepe', origin: 'Paris / London', context: 'Day suit',
+    desc: 'When Christian Dior unveiled his "New Look" in February 1947, it was an act of deliberate extravagance in an age of rationing. The Bar jacket — ivory shantung, padded at the hips — sat above a billowing black crepe skirt using metres of fabric that wartime production had forbidden. By 1953, this silhouette had filtered from Paris couture into the aspirational wardrobes of women across Britain and America, often made by skilled home dressmakers from Butterick patterns.',
+    accessories: [
+      { icon: '🎩', name: 'Structured Hat', detail: 'Small sculptural hat tilted at a precise angle — a cartwheel, pillbox, or toque. Worn with a hatpin. No outfit was complete without it.' },
+      { icon: '🧤', name: 'Wrist-Length Gloves', detail: 'White or cream cotton for day, silk for occasion. A woman would not enter a formal space without them.' },
+      { icon: '💎', name: 'Single Strand Pearls', detail: 'Cultured pearls in a single strand at the throat — the default jewellery of the respectable fifties woman. Paired invariably with pearl clip earrings.' },
+      { icon: '👠', name: 'Stiletto Courts', detail: 'The stiletto heel was new — made possible by a steel rod within the heel. Roger Vivier for Dior refined it to an art form.' },
+    ],
+    periodIntro: 'Post-war Britain emerged into the 1950s hungry for beauty after years of austerity. The New Look arrived as fantasy — extravagant, feminine, and controversial from the first moment.',
+    periodPhotos: [
+      { bg: 'linear-gradient(180deg,#1A1A2A,#0A0A1A)', label: 'Dior atelier, Paris 1947' },
+      { bg: 'linear-gradient(180deg,#0A0A0A,#1A1A1A)', label: 'Vogue UK, Spring 1953' },
+      { bg: 'linear-gradient(180deg,#1A0A1A,#2A1A2A)', label: 'Roger Vivier heel detail' },
+      { bg: 'linear-gradient(180deg,#0A1A0A,#1A2A1A)', label: 'Coronation year, London' },
+    ],
+    periodFacts: [
+      { year: '1947', text: 'Dior\'s New Look debuts. Critics call it irresponsible; women queue around the block.' },
+      { year: '1952', text: 'Queen Elizabeth II accession year. The coronation in 1953 fuels a surge in elegant dress.' },
+      { year: '1957', text: 'The sack dress arrives from Balenciaga. The nipped waist begins to lose its dominance.' },
+    ]
+  }
+];
+
+let currentFilter = 'all';
+
+function renderGrid(filter) {
+  const grid = document.getElementById('collection-grid');
+  const shown = filter === 'all' ? outfits : outfits.filter(o => o.era === filter);
+  grid.innerHTML = shown.map((o, i) => {
+    const idx = outfits.indexOf(o);
+    return `
+    <div class="outfit-card" onclick="openPanel(${idx})">
+      <div class="outfit-visual">
+        ${getFigureHTML(o.figure)}
+      </div>
+      <div class="outfit-info">
+        <div class="outfit-era-tag">${o.eraLabel}</div>
+        <div class="outfit-name">${o.name}</div>
+        <div class="outfit-date">${o.date}</div>
+        <div class="outfit-excerpt">${o.excerpt}</div>
+        <div class="outfit-cta">
+          <span>Explore outfit</span>
+          <span>→</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function getFigureHTML(type) {
+  const figs = {
+    victorian: `<div class="fig-victorian">
+      <div class="hair"></div><div class="head"></div><div class="neck"></div>
+      <div style="position:relative"><div class="bodice"><div class="sleeves"><div class="sleeve"></div><div class="sleeve"></div></div></div></div>
+      <div style="position:relative"><div class="skirt"><div class="bustle"></div></div></div>
+      <div class="train"></div>
+    </div>`,
+    flapper: `<div class="fig-flapper">
+      <div class="cloche"></div><div class="head"></div><div class="neck"></div>
+      <div style="position:relative">
+        <div class="dress">
+          <div class="fringe">${Array(10).fill('<div class="fringe-strand"></div>').join('')}</div>
+          <div class="beads"></div>
+        </div>
+        <div class="arms"><div class="arm"></div><div class="arm right"></div></div>
+      </div>
+      <div class="shoes"><div class="shoe"></div><div class="shoe"></div></div>
+    </div>`,
+    medieval: `<div class="fig-medieval">
+      <div style="position:relative"><div class="head"><div class="veil"></div></div></div>
+      <div class="wimple"></div><div class="neck"></div>
+      <div style="position:relative">
+        <div class="kirtle">
+          <div class="sleeves-wide"><div class="sleeve-wide"></div><div class="sleeve-wide"></div></div>
+        </div>
+      </div>
+      <div style="position:relative"><div class="overdress"><div class="belt"></div></div></div>
+    </div>`,
+    regency: `<div class="fig-regency">
+      <div class="upsweep"></div><div class="head"></div><div class="neck"></div>
+      <div style="position:relative">
+        <div class="bodice">
+          <div class="puff-sleeve-left"></div>
+          <div class="puff-sleeve-right"></div>
+        </div>
+      </div>
+      <div class="empire-sash"></div>
+      <div class="regency-skirt"></div>
+    </div>`,
+    newlook: `<div class="fig-newlook">
+      <div class="chignon"></div><div class="head"></div><div class="neck"></div>
+      <div style="position:relative">
+        <div class="jacket">
+          <div class="arms"><div class="arm"></div><div class="arm right"></div></div>
+        </div>
+      </div>
+      <div class="nip-waist"></div>
+      <div class="full-skirt"></div>
+      <div class="heels"><div class="heel"></div><div class="heel"></div></div>
+    </div>`,
+    egyptian: `<div class="fig-egyptian">
+      <div style="position:relative"><div class="head"><div class="nemes"></div></div></div>
+      <div class="collar"></div>
+      <div style="position:relative"><div class="kalasiris"><div class="sash-eg"></div></div></div>
+    </div>`
+  };
+  return figs[type] || '';
+}
+
+function filterEra(el, era) {
+  document.querySelectorAll('.era-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter = era;
+  renderGrid(era);
+}
+
+let currentOutfit = null;
+let currentTab = 'outfit';
+
+function openPanel(index) {
+  const o = outfits[index];
+  currentOutfit = o;
+
+  document.getElementById('panel-era-tag').textContent = o.eraLabel;
+  document.getElementById('panel-title').textContent = o.name;
+  document.getElementById('panel-date').textContent = o.date;
+
+  renderOutfitView(o);
+  renderAccessoriesView(o);
+  renderPeriodView(o);
+
+  // Reset to first tab
+  document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.panel-tab')[0].classList.add('active');
+  document.getElementById('view-outfit').classList.add('active');
+
+  document.getElementById('panel-scrim').classList.add('visible');
+  document.getElementById('panel-drawer').classList.add('open');
+}
+
+function renderOutfitView(o) {
+  const el = document.getElementById('view-outfit');
+  el.innerHTML = `
+    <p class="outfit-full-desc">${o.desc}</p>
+    <div class="detail-row"><span class="detail-label">Materials</span><span class="detail-value">${o.materials}</span></div>
+    <div class="detail-row"><span class="detail-label">Origin</span><span class="detail-value">${o.origin}</span></div>
+    <div class="detail-row"><span class="detail-label">Context</span><span class="detail-value">${o.context}</span></div>
+    <div class="detail-row"><span class="detail-label">Period</span><span class="detail-value">${o.date}</span></div>
+    <div class="detail-row"><span class="detail-label">Archive Status</span><span class="detail-value" style="color:var(--gold)">On Display</span></div>
+  `;
+}
+
+function renderAccessoriesView(o) {
+  const el = document.getElementById('view-accessories');
+  el.innerHTML = `
+    <p class="accessories-desc">A complete outfit was always more than its garment. These are the objects that completed the look — each one carrying its own social language.</p>
+    <div class="accessories-grid">
+      ${o.accessories.map(a => `
+        <div class="accessory-item">
+          <span class="accessory-icon">${a.icon}</span>
+          <div class="accessory-name">${a.name}</div>
+          <div class="accessory-detail">${a.detail}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderPeriodView(o) {
+  const el = document.getElementById('view-period');
+  el.innerHTML = `
+    <p class="period-intro">${o.periodIntro}</p>
+    <div class="period-photos">
+      ${o.periodPhotos.map(p => `
+        <div class="period-photo" style="background:${p.bg};">
+          <div class="period-photo-label">${p.label}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="period-facts">
+      ${o.periodFacts.map(f => `
+        <div class="period-fact">
+          <div class="period-fact-year">${f.year}</div>
+          <div class="period-fact-text">${f.text}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function switchTab(el, tab) {
+  document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel-view').forEach(v => v.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(`view-${tab}`).classList.add('active');
+}
+
+function closePanel() {
+  document.getElementById('panel-scrim').classList.remove('visible');
+  document.getElementById('panel-drawer').classList.remove('open');
+}
+
+// Keyboard close
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+// INIT
+renderGrid('all');
+</script>
+</body>
+</html>

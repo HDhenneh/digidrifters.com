@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digidrifters — A Personal Internet Magazine</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080807;
+    --deep: #0F0E0C;
+    --ink: #161512;
+    --surface: #1E1C18;
+    --border: #2E2B24;
+    --smoke: #4A4640;
+    --text: #E8E0D0;
+    --text-dim: #7A7268;
+    --text-soft: #A89E90;
+    --white: #F5F0E8;
+
+    /* Zone accent colours */
+    --tech-accent: #00E5B4;
+    --tech-bg: #040F0C;
+    --fashion-accent: #C8A96E;
+    --fashion-bg: #0D0B08;
+    --explore-accent: #FF5C3A;
+    --explore-bg: #100804;
+    --future-accent: #8B7FFF;
+    --future-bg: #080810;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* GRAIN */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
+
+  /* ═══════════════════════════════
+     NAV
+  ═══════════════════════════════ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 500;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,8,7,0.92);
+    backdrop-filter: blur(20px);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--tech-accent); }
+
+  .nav-center {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+
+  .nav-item {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 10px 20px;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: block;
+  }
+  .nav-item:last-child { border-right: none; }
+  .nav-item:hover { background: var(--surface); color: var(--white); }
+
+  .nav-issue {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .nav-issue span { color: var(--tech-accent); }
+
+  /* ═══════════════════════════════
+     HERO — THE MASTHEAD
+  ═══════════════════════════════ */
+  .masthead {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding-top: 60px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Animated background grid */
+  .masthead-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.4;
+    mask-image: radial-gradient(ellipse at 50% 100%, black 20%, transparent 70%);
+  }
+
+  /* Drifting orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    animation: drift 20s ease-in-out infinite alternate;
+  }
+
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,229,180,0.08) 0%, transparent 70%);
+    top: -200px; right: -100px;
+    animation-duration: 25s;
+  }
+
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(200,169,110,0.07) 0%, transparent 70%);
+    bottom: 0; left: 10%;
+    animation-duration: 18s;
+    animation-delay: -8s;
+  }
+
+  .orb-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(139,127,255,0.06) 0%, transparent 70%);
+    top: 40%; left: 40%;
+    animation-duration: 22s;
+    animation-delay: -4s;
+  }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(40px, -30px) scale(1.1); }
+  }
+
+  .masthead-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 40px 60px;
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .masthead-kicker {
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--tech-accent);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+
+  .masthead-kicker::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--tech-accent);
+  }
+
+  /* THE BIG TITLE */
+  .masthead-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 200px);
+    line-height: 0.88;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 0;
+    position: relative;
+    animation: fadeUp 1s ease 0.4s both;
+  }
+
+  .masthead-title .line-2 {
+    display: block;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(248,240,232,0.3);
+    padding-left: clamp(40px, 8vw, 120px);
+  }
+
+  .masthead-title .accent-word {
+    position: relative;
+    display: inline-block;
+  }
+
+  .masthead-title .accent-word::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    left: 0; right: 0;
+    height: 4px;
+    background: var(--tech-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: slideIn 0.8s ease 1.2s both;
+  }
+
+  @keyframes slideIn {
+    to { transform: scaleX(1); }
+  }
+
+  .masthead-tagline {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text-soft);
+    margin-top: 40px;
+    max-width: 600px;
+    line-height: 1.6;
+    padding-left: clamp(40px, 8vw, 120px);
+    animation: fadeUp 1s ease 0.8s both;
+  }
+
+  .masthead-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 60px;
+    padding-left: clamp(40px, 8vw, 120px);
+    animation: fadeUp 1s ease 1s both;
+  }
+
+  .btn-primary {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--void);
+    background: var(--tech-accent);
+    padding: 16px 32px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s;
+    font-family: 'DM Mono', monospace;
+  }
+  .btn-primary:hover { background: #00ffcc; }
+
+  .btn-ghost {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    background: none;
+    padding: 16px 32px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s;
+    font-family: 'DM Mono', monospace;
+  }
+  .btn-ghost:hover { border-color: var(--text-soft); color: var(--white); }
+
+  /* Ticker at bottom of masthead */
+  .masthead-ticker {
+    border-top: 1px solid var(--border);
+    height: 44px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+  }
+
+  .ticker-label {
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--tech-accent);
+    padding: 0 24px;
+    border-right: 1px solid var(--border);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background: var(--void);
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 0;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+
+  .ticker-item {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 0 40px;
+    border-right: 1px solid var(--border);
+    height: 44px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+
+  .ticker-item:hover { color: var(--white); }
+  .ticker-dot { color: var(--tech-accent); margin-right: 12px; }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════
+     SECTION LABEL
+  ═══════════════════════════════ */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 8px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 40px 40px 32px;
+    border-bottom: 1px solid var(--border);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .section-label::before {
+    content: attr(data-num);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    color: var(--border);
+    letter-spacing: 0;
+  }
+
+  /* ═══════════════════════════════
+     EXHIBITS — THE MAIN ZONES
+  ═══════════════════════════════ */
+  .exhibits-section {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .exhibits-header {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 64px 40px 48px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .exhibits-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .exhibits-subtitle {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  /* BIG FEATURE CARDS */
+  .exhibits-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: none;
+  }
+
+  .exhibit-card {
+    position: relative;
+    min-height: 560px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 48px;
+    cursor: pointer;
+    overflow: hidden;
+    text-decoration: none;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.4s ease;
+  }
+
+  .exhibit-card:nth-child(2n) { border-right: none; }
+
+  /* Tech Store card */
+  .exhibit-tech {
+    background: var(--tech-bg);
+  }
+
+  .exhibit-tech::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 20%, rgba(0,229,180,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 20% 80%, rgba(0,229,180,0.05) 0%, transparent 40%);
+    transition: opacity 0.4s;
+  }
+
+  .exhibit-tech:hover::before {
+    opacity: 1.5;
+  }
+
+  /* Fashion Archive card */
+  .exhibit-fashion {
+    background: var(--fashion-bg);
+  }
+
+  .exhibit-fashion::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(200,169,110,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(200,169,110,0.05) 0%, transparent 40%);
+    transition: opacity 0.4s;
+  }
+
+  .exhibit-fashion:hover::before { opacity: 1.5; }
+
+  /* Scan line effect on hover */
+  .exhibit-card::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0; right: 0;
+    height: 100%;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(255,255,255,0.015) 50%,
+      transparent 100%
+    );
+    transition: top 0.6s ease;
+    pointer-events: none;
+  }
+
+  .exhibit-card:hover::after { top: 100%; }
+
+  /* Big background letter */
+  .exhibit-bg-letter {
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 320px;
+    line-height: 1;
+    color: transparent;
+    pointer-events: none;
+    letter-spacing: 0;
+    transition: opacity 0.4s, transform 0.4s;
+    opacity: 0.07;
+  }
+
+  .exhibit-tech .exhibit-bg-letter { -webkit-text-stroke: 1px var(--tech-accent); }
+  .exhibit-fashion .exhibit-bg-letter { -webkit-text-stroke: 1px var(--fashion-accent); }
+
+  .exhibit-card:hover .exhibit-bg-letter {
+    opacity: 0.12;
+    transform: scale(1.05) translateY(-10px);
+  }
+
+  /* Grid decoration */
+  .exhibit-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .exhibit-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .exhibit-zone-tag {
+    font-size: 8px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .exhibit-tech .exhibit-zone-tag { color: var(--tech-accent); }
+  .exhibit-fashion .exhibit-zone-tag { color: var(--fashion-accent); }
+
+  .exhibit-zone-tag::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .exhibit-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 5vw, 72px);
+    letter-spacing: 0.04em;
+    color: var(--white);
+    line-height: 0.95;
+    margin-bottom: 20px;
+  }
+
+  .exhibit-desc {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-soft);
+    font-weight: 300;
+    font-style: italic;
+    max-width: 420px;
+    margin-bottom: 32px;
+  }
+
+  .exhibit-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .exhibit-stats {
+    display: flex;
+    gap: 32px;
+  }
+
+  .exhibit-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .exhibit-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .exhibit-tech .exhibit-stat-num { color: var(--tech-accent); }
+  .exhibit-fashion .exhibit-stat-num { color: var(--fashion-accent); }
+
+  .exhibit-stat-label {
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .exhibit-enter {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: gap 0.3s;
+  }
+
+  .exhibit-tech .exhibit-enter { color: var(--tech-accent); }
+  .exhibit-fashion .exhibit-enter { color: var(--fashion-accent); }
+  .exhibit-card:hover .exhibit-enter { gap: 18px; }
+
+  /* COMING SOON CARDS */
+  .exhibit-coming {
+    background: var(--deep);
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  .exhibit-coming::before { display: none; }
+  .exhibit-coming .exhibit-zone-tag { color: var(--text-dim); }
+  .exhibit-coming .exhibit-zone-tag::before { background: var(--text-dim); animation: none; }
+  .exhibit-coming .exhibit-stat-num { color: var(--text-dim); }
+  .exhibit-coming .exhibit-enter { color: var(--text-dim); }
+
+  .coming-badge {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+  }
+
+  /* ═══════════════════════════════
+     RANDOM DRIFT FEATURE
+  ═══════════════════════════════ */
+  .drift-section {
+    background: var(--explore-bg);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .drift-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(255,92,58,0.08) 0%, transparent 60%);
+  }
+
+  .drift-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 100px 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .drift-left {}
+
+  .drift-eyebrow {
+    font-size: 8px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--explore-accent);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .drift-eyebrow::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--explore-accent);
+  }
+
+  .drift-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 6vw, 88px);
+    letter-spacing: 0.04em;
+    color: var(--white);
+    line-height: 0.9;
+    margin-bottom: 32px;
+  }
+
+  .drift-title em {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--explore-accent);
+    font-size: 0.7em;
+    display: block;
+    margin-top: 8px;
+    letter-spacing: 0;
+  }
+
+  .drift-body {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    line-height: 1.75;
+    color: var(--text-soft);
+    font-weight: 300;
+    margin-bottom: 48px;
+  }
+
+  /* The big drift button */
+  .drift-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.1em;
+    color: var(--void);
+    background: var(--explore-accent);
+    padding: 20px 48px;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+
+  .drift-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+
+  .drift-btn:hover::before { transform: translateX(0); }
+  .drift-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,92,58,0.3); }
+
+  /* Destination preview on right */
+  .drift-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+  }
+
+  .drift-dest {
+    background: var(--ink);
+    padding: 24px;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .drift-dest:hover { background: var(--surface); }
+
+  .drift-dest-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+    filter: grayscale(30%);
+  }
+
+  .drift-dest-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .drift-dest-desc {
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ═══════════════════════════════
+     ABOUT / MANIFESTO
+  ═══════════════════════════════ */
+  .manifesto-section {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .manifesto-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    border-left: none;
+  }
+
+  .manifesto-left {
+    padding: 80px 48px 80px 40px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .manifesto-issue {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    line-height: 0.9;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border);
+    letter-spacing: 0;
+  }
+
+  .manifesto-date {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: auto;
+  }
+
+  .manifesto-right {
+    padding: 80px 40px 80px 60px;
+  }
+
+  .manifesto-label {
+    font-size: 8px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--future-accent);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .manifesto-label::before { content: ''; width: 20px; height: 1px; background: var(--future-accent); }
+
+  .manifesto-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    line-height: 1.15;
+    color: var(--white);
+    font-weight: 700;
+    margin-bottom: 40px;
+    letter-spacing: -0.02em;
+  }
+
+  .manifesto-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--future-accent);
+  }
+
+  .manifesto-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 48px;
+  }
+
+  .manifesto-para {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--text-soft);
+    font-weight: 300;
+  }
+
+  .manifesto-para strong {
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  /* ═══════════════════════════════
+     COMING SOON STRIP
+  ═══════════════════════════════ */
+  .coming-section {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .coming-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 64px 40px;
+  }
+
+  .coming-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .coming-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 0.05em;
+    color: var(--white);
+  }
+
+  .coming-note {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .coming-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border);
+  }
+
+  .coming-item {
+    background: var(--ink);
+    padding: 32px 28px;
+    transition: background 0.2s;
+  }
+  .coming-item:hover { background: var(--surface); }
+
+  .coming-item-accent {
+    width: 24px;
+    height: 2px;
+    margin-bottom: 20px;
+  }
+
+  .coming-item-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .coming-item-desc {
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--text-dim);
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 300;
+  }
+
+  .coming-item-status {
+    margin-top: 20px;
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════
+     FOOTER
+  ═══════════════════════════════ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 0;
+  }
+
+  .footer-top {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .footer-col {
+    padding: 56px 40px;
+    border-right: 1px solid var(--border);
+  }
+
+  .footer-col:last-child { border-right: none; }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .footer-logo span { color: var(--tech-accent); }
+
+  .footer-tagline {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .footer-col-title {
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-links a {
+    font-size: 12px;
+    color: var(--text-soft);
+    text-decoration: none;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  .footer-links a:hover { color: var(--white); }
+  .footer-links a::before { content: '→'; font-size: 10px; opacity: 0.5; }
+
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 40px;
+  }
+
+  .footer-copy {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+
+  .footer-copy span { color: var(--tech-accent); }
+
+  .footer-github {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    transition: all 0.2s;
+  }
+  .footer-github:hover { border-color: var(--tech-accent); color: var(--tech-accent); }
+
+  /* ═══════════════════════════════
+     UTILITIES & ANIMATIONS
+  ═══════════════════════════════ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--void); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--smoke); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .exhibits-grid { grid-template-columns: 1fr; }
+    .exhibit-card:nth-child(2n) { border-right: 1px solid var(--border); }
+    .drift-inner { grid-template-columns: 1fr; }
+    .manifesto-inner { grid-template-columns: 1fr; }
+    .manifesto-left { display: none; }
+    .manifesto-body { grid-template-columns: 1fr; }
+    .coming-list { grid-template-columns: 1fr 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .nav-center { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">DIGI<span>DRIFTERS</span></a>
+  <div class="nav-center">
+    <a class="nav-item" href="#exhibits">Exhibits</a>
+    <a class="nav-item" href="#drift">Random Drift</a>
+    <a class="nav-item" href="#manifesto">About</a>
+    <a class="nav-item" href="#coming">Coming Soon</a>
+  </div>
+  <div class="nav-issue">Issue <span>#001</span> · Est. 2024</div>
+</nav>
+
+<!-- ═══ MASTHEAD ═══ -->
+<section class="masthead">
+  <div class="masthead-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="masthead-inner">
+    <div class="masthead-kicker">A Personal Internet Magazine</div>
+
+    <h1 class="masthead-title">
+      DIGI<span class="accent-word">DRIFTERS</span>
+      <span class="line-2">MAGAZINE</span>
+    </h1>
+
+    <p class="masthead-tagline">
+      Curiosity-driven explorations across tech, history, fashion and the internet's forgotten corners. No algorithm. No agenda. Just drift.
+    </p>
+
+    <div class="masthead-actions">
+      <a href="#exhibits" class="btn-primary">Enter the Exhibits →</a>
+      <a href="#drift" class="btn-ghost">Take a Random Drift</a>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="masthead-ticker">
+    <div class="ticker-label">Now Showing</div>
+    <div style="overflow:hidden;flex:1;">
+      <div class="ticker-track" id="ticker">
+        <!-- Duplicated for seamless loop -->
+        <div class="ticker-item"><span class="ticker-dot">◆</span> The Olde Tech Store — A Museum of Digital Nostalgia</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> Archive of Dress — Historic Fashion from Egypt to the 1950s</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> Random Drift — Let the internet surprise you</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> Coming Soon: The Sound Archive · The Recipe Vault · The Map Room</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> The Olde Tech Store — A Museum of Digital Nostalgia</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> Archive of Dress — Historic Fashion from Egypt to the 1950s</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> Random Drift — Let the internet surprise you</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> Coming Soon: The Sound Archive · The Recipe Vault · The Map Room</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EXHIBITS ═══ -->
+<section class="exhibits-section" id="exhibits">
+  <div class="exhibits-header">
+    <h2 class="exhibits-title">THE EXHIBITS</h2>
+    <p class="exhibits-subtitle">Two worlds, fully explorable. More arriving.</p>
+  </div>
+
+  <div class="exhibits-grid">
+
+    <!-- TECH STORE -->
+    <a class="exhibit-card exhibit-tech reveal" href="tech-store.html">
+      <div class="exhibit-grid-overlay"></div>
+      <div class="exhibit-bg-letter">T</div>
+      <div class="exhibit-content">
+        <div class="exhibit-zone-tag">Zone 01 · Technology</div>
+        <h3 class="exhibit-name">The Olde<br>Tech Store</h3>
+        <p class="exhibit-desc">A museum that looks like a flagship store. Donated tech, restored to showroom condition — nothing for sale, everything worth seeing.</p>
+        <div class="exhibit-meta">
+          <div class="exhibit-stats">
+            <div class="exhibit-stat">
+              <div class="exhibit-stat-num">47</div>
+              <div class="exhibit-stat-label">Items</div>
+            </div>
+            <div class="exhibit-stat">
+              <div class="exhibit-stat-num">1978</div>
+              <div class="exhibit-stat-label">Earliest</div>
+            </div>
+            <div class="exhibit-stat">
+              <div class="exhibit-stat-num">0</div>
+              <div class="exhibit-stat-label">For Sale</div>
+            </div>
+          </div>
+          <div class="exhibit-enter">Enter Exhibit →</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- FASHION ARCHIVE -->
+    <a class="exhibit-card exhibit-fashion reveal" href="archive-of-dress.html" style="transition-delay:0.15s">
+      <div class="exhibit-grid-overlay"></div>
+      <div class="exhibit-bg-letter">A</div>
+      <div class="exhibit-content">
+        <div class="exhibit-zone-tag">Zone 02 · Fashion & History</div>
+        <h3 class="exhibit-name">Archive<br>of Dress</h3>
+        <p class="exhibit-desc">Six centuries of fashion, worn by CSS silhouettes. Click an outfit for the full story — accessories, context, and a glimpse into the period.</p>
+        <div class="exhibit-meta">
+          <div class="exhibit-stats">
+            <div class="exhibit-stat">
+              <div class="exhibit-stat-num">6</div>
+              <div class="exhibit-stat-label">Eras</div>
+            </div>
+            <div class="exhibit-stat">
+              <div class="exhibit-stat-num">1350</div>
+              <div class="exhibit-stat-label">BCE Start</div>
+            </div>
+            <div class="exhibit-stat">
+              <div class="exhibit-stat-num">24</div>
+              <div class="exhibit-stat-label">Outfits</div>
+            </div>
+          </div>
+          <div class="exhibit-enter">Enter Exhibit →</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- COMING: SOUND ARCHIVE -->
+    <div class="exhibit-card exhibit-coming reveal" style="transition-delay:0.3s">
+      <div class="coming-badge">Coming Soon</div>
+      <div class="exhibit-bg-letter" style="-webkit-text-stroke: 1px rgba(139,127,255,0.3)">S</div>
+      <div class="exhibit-content">
+        <div class="exhibit-zone-tag" style="color:var(--future-accent)">Zone 03 · Audio</div>
+        <h3 class="exhibit-name" style="color:var(--smoke)">The Sound<br>Archive</h3>
+        <p class="exhibit-desc" style="color:var(--text-dim)">A listening room for lost sounds, forgotten radio broadcasts, and the sonic textures of vanished decades.</p>
+        <div class="exhibit-meta">
+          <div class="exhibit-stats">
+            <div class="exhibit-stat">
+              <div class="exhibit-stat-num" style="color:var(--smoke)">—</div>
+              <div class="exhibit-stat-label">In Dev</div>
+            </div>
+          </div>
+          <div class="exhibit-enter" style="color:var(--smoke)">In Development</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMING: MAP ROOM -->
+    <div class="exhibit-card exhibit-coming reveal" style="border-right:none;transition-delay:0.45s">
+      <div class="coming-badge">Coming Soon</div>
+      <div class="exhibit-bg-letter" style="-webkit-text-stroke: 1px rgba(255,92,58,0.2)">M</div>
+      <div class="exhibit-content">
+        <div class="exhibit-zone-tag" style="color:var(--explore-accent)">Zone 04 · Cartography</div>
+        <h3 class="exhibit-name" style="color:var(--smoke)">The<br>Map Room</h3>
+        <p class="exhibit-desc" style="color:var(--text-dim)">Historical maps, reimagined as interactive exhibits. See the world as it was believed, feared, and drawn across the centuries.</p>
+        <div class="exhibit-meta">
+          <div class="exhibit-stats">
+            <div class="exhibit-stat">
+              <div class="exhibit-stat-num" style="color:var(--smoke)">—</div>
+              <div class="exhibit-stat-label">In Dev</div>
+            </div>
+          </div>
+          <div class="exhibit-enter" style="color:var(--smoke)">In Development</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ RANDOM DRIFT ═══ -->
+<section class="drift-section" id="drift">
+  <div class="drift-inner">
+    <div class="drift-left reveal">
+      <div class="drift-eyebrow">Original Feature</div>
+      <h2 class="drift-title">
+        Random
+        <em>Drift</em>
+      </h2>
+      <p class="drift-body">No algorithm. No filter bubble. Just one button that sends you somewhere interesting on the internet. It might be a Wikipedia rabbit hole, a forgotten website, or something you've never considered before.</p>
+      <a class="drift-btn" href="#" id="drift-btn">
+        <span>↝</span> Take a Drift
+      </a>
+    </div>
+    <div class="drift-right reveal" style="transition-delay:0.2s">
+      <div class="drift-dest">
+        <div class="drift-dest-icon">🌐</div>
+        <div class="drift-dest-name">Wikipedia Rabbit Hole</div>
+        <div class="drift-dest-desc">Start somewhere obscure. End somewhere extraordinary.</div>
+      </div>
+      <div class="drift-dest">
+        <div class="drift-dest-icon">📡</div>
+        <div class="drift-dest-name">Lost Websites</div>
+        <div class="drift-dest-desc">Pages that time forgot but the internet preserved.</div>
+      </div>
+      <div class="drift-dest">
+        <div class="drift-dest-icon">🗂️</div>
+        <div class="drift-dest-name">Digital Archives</div>
+        <div class="drift-dest-desc">Libraries, museums and archives that put their collections online.</div>
+      </div>
+      <div class="drift-dest">
+        <div class="drift-dest-icon">🔬</div>
+        <div class="drift-dest-name">Curious Science</div>
+        <div class="drift-dest-desc">Research, papers and discoveries that deserve more readers.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MANIFESTO ═══ -->
+<section class="manifesto-section" id="manifesto">
+  <div class="manifesto-inner">
+    <div class="manifesto-left">
+      <div class="manifesto-issue">001</div>
+      <div class="manifesto-date">Est. 2024 · digidrifters.com</div>
+    </div>
+    <div class="manifesto-right reveal">
+      <div class="manifesto-label">The Idea</div>
+      <h2 class="manifesto-title">
+        The internet is vast.<br>
+        Most of it is <em>worth exploring.</em>
+      </h2>
+      <div class="manifesto-body">
+        <p class="manifesto-para">Digidrifters started as a single button — <strong>Take a Random Journey</strong> — and a belief that the best things online aren't the things the algorithm serves you.</p>
+        <p class="manifesto-para">Now it's becoming something more: a collection of <strong>interactive exhibits</strong>, each one a handmade world exploring history, technology, fashion, sound, and whatever comes next.</p>
+        <p class="manifesto-para">Every exhibit is built from scratch — no templates, no frameworks, just <strong>vanilla code and genuine curiosity</strong>. Hosted on GitHub Pages. Run by one person.</p>
+        <p class="manifesto-para">It's a hobby that <strong>might become something more</strong>. Come back and see what's been added.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMING SOON ═══ -->
+<section class="coming-section" id="coming">
+  <div class="coming-inner">
+    <div class="coming-header">
+      <h2 class="coming-title">On the Horizon</h2>
+      <span class="coming-note">Ideas in development</span>
+    </div>
+    <div class="coming-list">
+      <div class="coming-item reveal">
+        <div class="coming-item-accent" style="background:var(--future-accent)"></div>
+        <div class="coming-item-name">The Recipe Vault</div>
+        <div class="coming-item-desc">Historical recipes from across the centuries, presented as interactive cooking cards.</div>
+        <div class="coming-item-status" style="color:var(--future-accent)">Early Design</div>
+      </div>
+      <div class="coming-item reveal" style="transition-delay:0.1s">
+        <div class="coming-item-accent" style="background:var(--explore-accent)"></div>
+        <div class="coming-item-name">The Map Room</div>
+        <div class="coming-item-desc">Historical cartography as interactive exhibit. The world as it was imagined, feared and drawn.</div>
+        <div class="coming-item-status" style="color:var(--explore-accent)">Concept Phase</div>
+      </div>
+      <div class="coming-item reveal" style="transition-delay:0.2s">
+        <div class="coming-item-accent" style="background:var(--tech-accent)"></div>
+        <div class="coming-item-name">The Sound Archive</div>
+        <div class="coming-item-desc">A listening room for lost audio — forgotten radio, field recordings and sonic history.</div>
+        <div class="coming-item-status" style="color:var(--tech-accent)">In Development</div>
+      </div>
+      <div class="coming-item reveal" style="transition-delay:0.3s">
+        <div class="coming-item-accent" style="background:var(--fashion-accent)"></div>
+        <div class="coming-item-name">The Language Lab</div>
+        <div class="coming-item-desc">Extinct languages, forgotten slang and the strange archaeology of how humans have spoken.</div>
+        <div class="coming-item-status" style="color:var(--fashion-accent)">Just an Idea</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-col">
+      <div class="footer-logo">DIGI<span>DRIFTERS</span></div>
+      <p class="footer-tagline">A personal internet magazine. Curiosity-driven, hand-built, updated whenever something new is ready.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Exhibits</div>
+      <ul class="footer-links">
+        <li><a href="tech-store.html">The Olde Tech Store</a></li>
+        <li><a href="archive-of-dress.html">Archive of Dress</a></li>
+        <li><a href="#coming">Sound Archive (Soon)</a></li>
+        <li><a href="#coming">The Map Room (Soon)</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Features</div>
+      <ul class="footer-links">
+        <li><a href="#drift">Random Drift</a></li>
+        <li><a href="#manifesto">About</a></li>
+        <li><a href="#coming">What's Coming</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">The Project</div>
+      <ul class="footer-links">
+        <li><a href="https://github.com">View on GitHub</a></li>
+        <li><a href="#">Vanilla HTML/CSS/JS</a></li>
+        <li><a href="#">GitHub Pages</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 Digidrifters · Built with curiosity · <span>No algorithm. No ads.</span></div>
+    <a href="https://github.com" class="footer-github">View Source on GitHub →</a>
+  </div>
+</footer>
+
+<script>
+  // ── SCROLL REVEAL ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  // ── RANDOM DRIFT ──
+  const driftDestinations = [
+    'https://en.wikipedia.org/wiki/Special:Random',
+    'https://archive.org/details/prelinger',
+    'https://www.gutenberg.org/browse/scores/top',
+    'https://radio.garden',
+    'https://neal.fun/internet-artifacts/',
+    'https://www.atlasobscura.com/random',
+    'https://www.loc.gov/free-to-use/',
+    'https://theuselessweb.com',
+    'https://www.openculture.com',
+    'https://archive.org/web/',
+  ];
+
+  document.getElementById('drift-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    const dest = driftDestinations[Math.floor(Math.random() * driftDestinations.length)];
+    window.open(dest, '_blank');
+  });
+
+  // ── TICKER AUTO ──
+  // Already CSS animated — just ensure it works on resize
+  window.addEventListener('resize', () => {
+    const ticker = document.getElementById('ticker');
+    ticker.style.animation = 'none';
+    ticker.offsetHeight; // reflow
+    ticker.style.animation = '';
+  });
+</script>
+</body>
+</html>
