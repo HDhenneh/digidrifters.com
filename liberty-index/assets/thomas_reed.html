@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thomas "Quill" Reed — Zone 03 · Digidrifters</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080807; --deep: #0F0E0C; --ink: #161512; --surface: #1E1C18;
+    --border: #2E2B24; --smoke: #4A4640; --text: #E8E0D0; --text-dim: #7A7268;
+    --text-soft: #A89E90; --white: #F5F0E8;
+    --liberty-accent: #B8936A; --liberty-bg: #08090C;
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--void); color: var(--text); font-family: 'DM Mono', monospace; font-weight: 300; overflow-x: hidden; }
+  body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 256px 256px; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid var(--border); background: rgba(8,8,7,0.92); backdrop-filter: blur(20px); }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.12em; color: var(--white); text-decoration: none; }
+  .nav-logo span { color: var(--liberty-accent); }
+  .nav-breadcrumb { display: flex; align-items: center; gap: 0; border: 1px solid var(--border); }
+  .nav-crumb { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); padding: 10px 20px; border-right: 1px solid var(--border); text-decoration: none; transition: all 0.2s; }
+  .nav-crumb:last-child { border-right: none; color: var(--liberty-accent); }
+  .nav-crumb:hover { background: var(--surface); color: var(--white); }
+  .nav-type { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+  .nav-type span { color: var(--liberty-accent); }
+
+  .char-hero { padding-top: 60px; min-height: 70vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; background: var(--liberty-bg); border-bottom: 1px solid var(--border); }
+  .hero-bg { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 80px 80px; opacity: 0.2; mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 70%); }
+  /* Quill: cool ink-blue — the colour of secrets written down, of documents that open locked doors */
+  .hero-orb { position: absolute; top: -80px; left: 20%; width: 700px; height: 700px; border-radius: 50%; filter: blur(120px); background: radial-gradient(circle, rgba(60,80,130,0.09) 0%, transparent 70%); pointer-events: none; }
+  .hero-orb-2 { position: absolute; bottom: -40px; right: 8%; width: 350px; height: 350px; border-radius: 50%; filter: blur(100px); background: radial-gradient(circle, rgba(60,75,120,0.05) 0%, transparent 70%); pointer-events: none; }
+
+  .hero-left { padding: 80px 56px 64px 40px; display: flex; flex-direction: column; justify-content: flex-end; border-right: 1px solid var(--border); position: relative; z-index: 2; }
+  .char-type-tag { font-size: 8px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--liberty-accent); margin-bottom: 32px; display: flex; align-items: center; gap: 16px; animation: fadeUp 0.8s ease 0.2s both; }
+  .char-type-tag::before { content: ''; width: 24px; height: 1px; background: var(--liberty-accent); }
+  .char-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 8vw, 130px); line-height: 0.88; letter-spacing: 0.04em; color: var(--white); animation: fadeUp 0.8s ease 0.3s both; }
+  .char-name .outline { display: block; color: transparent; -webkit-text-stroke: 1px rgba(184,147,106,0.3); }
+  .char-name .alias { display: block; font-size: clamp(32px, 4vw, 64px); color: var(--liberty-accent); letter-spacing: 0.08em; margin-top: 8px; }
+  .char-roles { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(16px, 2vw, 22px); color: var(--text-soft); margin-top: 24px; line-height: 1.5; animation: fadeUp 0.8s ease 0.45s both; }
+  .char-status { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 40px; animation: fadeUp 0.8s ease 0.6s both; }
+  .status-badge { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; padding: 8px 14px; border: 1px solid var(--border); color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
+  .status-badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--liberty-accent); animation: blink 2s ease-in-out infinite; }
+  .status-badge.active { border-color: var(--liberty-accent); color: var(--liberty-accent); }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  .hero-right { padding: 80px 40px 64px 48px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; z-index: 2; animation: fadeUp 0.8s ease 0.5s both; }
+  .profile-label { font-size: 7px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--liberty-accent); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .profile-label::before { content: ''; width: 14px; height: 1px; background: var(--liberty-accent); }
+  .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); }
+  .profile-cell { padding: 16px 20px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+  .profile-cell:nth-child(2n) { border-right: none; }
+  .profile-cell:nth-last-child(-n+2) { border-bottom: none; }
+  .profile-key { font-size: 7px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px; }
+  .profile-val { font-size: 11px; letter-spacing: 0.04em; color: var(--text-soft); line-height: 1.4; }
+  .profile-val strong { color: var(--liberty-accent); font-weight: 400; }
+
+  .char-body { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 340px; border-bottom: 1px solid var(--border); }
+  .char-main { padding: 64px 56px 64px 40px; border-right: 1px solid var(--border); }
+  .section-heading { display: flex; align-items: center; gap: 20px; margin: 0 0 28px; }
+  .section-num { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.25em; color: var(--liberty-accent); opacity: 0.6; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.08em; color: var(--white); }
+  .section-rule { flex: 1; height: 1px; background: var(--border); }
+  .char-section { margin-bottom: 64px; padding-bottom: 64px; border-bottom: 1px solid var(--border); }
+  .char-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .char-prose { font-family: 'Fraunces', serif; font-size: 16px; line-height: 1.85; color: var(--text-soft); font-weight: 300; }
+  .char-prose + .char-prose { margin-top: 20px; }
+  .char-prose strong { color: var(--white); font-weight: 400; }
+  .char-prose em { color: var(--liberty-accent); font-style: italic; }
+  .question-block { margin: 32px 0; padding: 28px 32px; border-left: 3px solid var(--liberty-accent); background: rgba(184,147,106,0.04); }
+  .question-block p { font-family: 'Fraunces', serif; font-size: 18px; line-height: 1.7; color: var(--white); font-weight: 300; font-style: italic; }
+
+  /* Services table — Quill's bespoke section replaces timeline */
+  .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); margin-bottom: 0; }
+  .service-card { padding: 24px 28px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); transition: background 0.2s; }
+  .service-card:nth-child(2n) { border-right: none; }
+  .service-card:nth-last-child(-n+2) { border-bottom: none; }
+  .service-card:hover { background: rgba(184,147,106,0.03); }
+  .service-name { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.06em; color: var(--white); margin-bottom: 8px; }
+  .service-price { font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--liberty-accent); margin-bottom: 10px; }
+  .service-desc { font-family: 'Fraunces', serif; font-size: 13px; line-height: 1.7; color: var(--text-dim); font-weight: 300; font-style: italic; }
+
+  .timeline { margin: 8px 0; }
+  .tl-item { display: grid; grid-template-columns: 180px 1fr; border-bottom: 1px solid var(--border); }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-date { padding: 24px 24px 24px 16px; border-right: 1px solid var(--border); position: relative; }
+  .tl-date::before { content: '●'; position: absolute; right: -5px; top: 28px; font-size: 8px; color: var(--liberty-accent); }
+  .tl-year { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.08em; color: var(--liberty-accent); line-height: 1; }
+  .tl-place { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); margin-top: 4px; line-height: 1.4; }
+  .tl-content { padding: 24px 0 24px 24px; }
+  .tl-text { font-family: 'Fraunces', serif; font-size: 14px; line-height: 1.8; color: var(--text-soft); font-weight: 300; }
+  .tl-text strong { color: var(--text); font-weight: 400; }
+
+  .status-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .status-table th { text-align: left; padding: 10px 16px; font-size: 7px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border); font-weight: 400; background: var(--deep); }
+  .status-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); color: var(--text-soft); letter-spacing: 0.03em; vertical-align: top; }
+  .status-table tr:last-child td { border-bottom: none; }
+  .status-table tr:hover td { background: rgba(184,147,106,0.03); }
+  .status-table td:first-child { color: var(--text); }
+  .status-pill { display: inline-block; padding: 3px 8px; font-size: 7px; letter-spacing: 0.2em; text-transform: uppercase; border: 1px solid; }
+  .pill-resident { border-color: var(--liberty-accent); color: var(--liberty-accent); }
+  .pill-visitor { border-color: var(--border); color: var(--text-dim); }
+  .pill-free { border-color: var(--smoke); color: var(--smoke); }
+
+  .char-sidebar { padding: 64px 32px 64px 40px; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: var(--border) var(--void); }
+  .sidebar-panel { padding-bottom: 32px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
+  .sidebar-panel:last-child { border-bottom: none; }
+  .sidebar-label { font-size: 7px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--liberty-accent); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .sidebar-label::before { content: ''; width: 14px; height: 1px; background: var(--liberty-accent); }
+  .sidebar-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.06em; color: var(--white); margin-bottom: 12px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; padding: 5px 10px; border: 1px solid var(--border); color: var(--text-dim); transition: all 0.2s; }
+  .tag:hover { border-color: var(--liberty-accent); color: var(--liberty-accent); }
+  .connection-link { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); text-decoration: none; transition: all 0.2s; }
+  .connection-link:last-child { border-bottom: none; }
+  .connection-link:hover .conn-name { color: var(--liberty-accent); }
+  .connection-link:hover .conn-arrow { transform: translateX(4px); }
+  .conn-info { display: flex; flex-direction: column; gap: 3px; }
+  .conn-name { font-size: 11px; letter-spacing: 0.05em; color: var(--text-soft); transition: color 0.2s; }
+  .conn-role { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); }
+  .conn-arrow { font-size: 10px; color: var(--border); transition: transform 0.2s; }
+
+  footer { border-top: 1px solid var(--border); max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 24px 40px; }
+  .footer-copy { font-size: 10px; letter-spacing: 0.1em; color: var(--text-dim); }
+  .footer-copy span { color: var(--liberty-accent); }
+  .footer-nav { display: flex; border: 1px solid var(--border); }
+  .footer-nav-item { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); padding: 10px 18px; border-right: 1px solid var(--border); text-decoration: none; transition: all 0.2s; }
+  .footer-nav-item:last-child { border-right: none; }
+  .footer-nav-item:hover { background: var(--surface); color: var(--white); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--void); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+  @media (max-width: 1100px) { .char-hero { grid-template-columns: 1fr; } .hero-right { border-top: 1px solid var(--border); } }
+  @media (max-width: 960px) { .char-body { grid-template-columns: 1fr; } .char-sidebar { position: static; height: auto; border-top: 1px solid var(--border); padding: 40px; } .char-main { padding: 40px; border-right: none; } nav .nav-breadcrumb { display: none; } footer { flex-direction: column; gap: 16px; align-items: flex-start; } .services-grid { grid-template-columns: 1fr; } .service-card:nth-child(2n) { border-right: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../index.html">DIGI<span>DRIFTERS</span></a>
+  <div class="nav-breadcrumb">
+    <a class="nav-crumb" href="../../index.html">All Exhibits</a>
+    <a class="nav-crumb" href="index.html">Liberty Index</a>
+    <span class="nav-crumb">Thomas Reed</span>
+  </div>
+  <div class="nav-type">Resident Register · <span>Character 04</span></div>
+</nav>
+
+<div class="char-hero">
+  <div class="hero-bg"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-orb-2"></div>
+
+  <div class="hero-left">
+    <div class="char-type-tag">Zone 03 · Resident Register · Character Profile</div>
+    <h1 class="char-name">
+      Thomas
+      <span class="outline">Reed</span>
+      <span class="alias">"Quill"</span>
+    </h1>
+    <p class="char-roles">The Scribe · The Broker · The Man Who Knows</p>
+    <div class="char-status">
+      <div class="status-badge active"><span class="dot"></span>Savoy · Duchy Scribe · Long Standing</div>
+      <div class="status-badge">Information sold. Loyalty not included.</div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="profile-label">Profile · Resident Record</div>
+    <div class="profile-grid">
+      <div class="profile-cell"><div class="profile-key">Origin</div><div class="profile-val"><strong>London</strong> · Holborn, printer's son</div></div>
+      <div class="profile-cell"><div class="profile-key">Current Role</div><div class="profile-val"><strong>Duchy Scribe</strong> · Savoy Precinct</div></div>
+      <div class="profile-cell"><div class="profile-key">Sideline</div><div class="profile-val"><strong>Information broker</strong> · Document services</div></div>
+      <div class="profile-cell"><div class="profile-key">Current Liberty</div><div class="profile-val"><strong>Savoy</strong> · The Strand, long resident</div></div>
+      <div class="profile-cell"><div class="profile-key">Known To</div><div class="profile-val">All four Liberties. Trusted by none.</div></div>
+      <div class="profile-cell"><div class="profile-key">Outstanding</div><div class="profile-val">Femi owes him. <strong>He is patient.</strong></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="char-body">
+  <div class="char-main">
+
+    <div class="char-section reveal">
+      <div class="section-heading">
+        <span class="section-num">I</span>
+        <span class="section-title">The Man Behind the Ink</span>
+        <div class="section-rule"></div>
+      </div>
+      <p class="char-prose">Thomas Reed has worked as a Duchy scribe in the Savoy for eleven years. In that time he has copied wills, witnessed depositions, filed residency claims, recorded debts, and drafted enough correspondence for the Steward's office to have a thorough picture of everyone who has ever passed through the Liberty. He has an <strong>excellent memory and no particular loyalty to anyone</strong> — qualities that, in the Savoy, make a man either very trustworthy or very dangerous depending on who is asking.</p>
+      <p class="char-prose">He acquired the name "Quill" not from his profession but from a story — reportedly involving a tavern, a disputed document, and a man twice his size who left considerably worse than he arrived. Reed has never confirmed or denied this. He keeps his own counsel on most things. He charges generously for what he does share.</p>
+      <p class="char-prose">When Femi Freeman needed a Writ of Transit to enter Havering safely, Reed produced one of extraordinary quality — indistinguishable, he claimed, from the real article. He was probably right. <em>The debt is outstanding.</em> Reed is not a man who forgets outstanding debts.</p>
+    </div>
+
+    <div class="char-section reveal">
+      <div class="section-heading">
+        <span class="section-num">II</span>
+        <span class="section-title">Services Rendered · Rate Card</span>
+        <div class="section-rule"></div>
+      </div>
+      <p class="char-prose" style="margin-bottom:28px;">Reed operates on a simple principle: <strong>every piece of information has a price, and every price is negotiable, but not twice.</strong> The following is reconstructed from accounts of those who have dealt with him.</p>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-name">Document Transcription</div>
+          <div class="service-price">Fourpence per folio · No questions</div>
+          <div class="service-desc">Wills, deeds, residency applications, court depositions. Clean hand, fast turnaround. He never reads them. He always remembers them.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">Intelligence on Persons</div>
+          <div class="service-price">Price varies · Depends on the person</div>
+          <div class="service-desc">Who has entered the Savoy. Who has left it. What they asked the Steward's office for. What they were refused. All of this is, technically, in the records.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">Writ of Transit</div>
+          <div class="service-price">Considerable · And a favour, unnamed</div>
+          <div class="service-desc">The genuine article would take weeks. Reed's version takes two days. It will pass most inspections. It will not pass the Constable of the Tower examining it personally.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-name">Duchy Records Access</div>
+          <div class="service-price">The kind of price you don't pay in coin</div>
+          <div class="service-desc">The Duchy maintains records that are not for public inspection. Reed has access. He would be ruined if it were known that he used that access. He uses it regardless.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="char-section reveal">
+      <div class="section-heading">
+        <span class="section-num">III</span>
+        <span class="section-title">How He Came to Be Here</span>
+        <div class="section-rule"></div>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date"><div class="tl-year">1740</div><div class="tl-place">Holborn, London</div></div>
+          <div class="tl-content"><p class="tl-text">Born the son of a Holborn printer — <strong>a trade built on other people's words.</strong> He learns to set type before he can write a full sentence. He learns, very early, that what people put in writing and what they mean are frequently different things.</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date"><div class="tl-year">1758</div><div class="tl-place">Inns of Court</div></div>
+          <div class="tl-content"><p class="tl-text">Apprenticed to a law clerk at Gray's Inn. Discovers that the law is, in large part, <strong>a contest between documents</strong> — who has the better paper, the more credible seal, the more persuasive hand. He finds this clarifying.</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date"><div class="tl-year">1763</div><div class="tl-place">The Savoy</div></div>
+          <div class="tl-content"><p class="tl-text">Takes a position as Duchy scribe after a dispute at Gray's Inn — the nature of which he declines to discuss, and the records of which appear to have been <strong>subsequently amended.</strong> Becomes a Savoy resident within the year. He has not left since.</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date"><div class="tl-year">1763–1774</div><div class="tl-place">The Savoy Precinct</div></div>
+          <div class="tl-content"><p class="tl-text">Eleven years of quiet accumulation. He copies the Duchy's records. He knows the Steward's secrets. He knows which debtors are hiding and who they owe. He knows which residents performed their Service of Worth honestly and which ones <strong>found a more convenient arrangement.</strong></p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date"><div class="tl-year">1774</div><div class="tl-place">The Savoy</div></div>
+          <div class="tl-content"><p class="tl-text">Femi Freeman arrives in the Savoy on a Provisional Residence and needs passage to Havering before his seven days expire. Reed produces a Writ of Transit of <strong>exceptional quality.</strong> He names his price — a favour, unspecified, to be collected at a time of his choosing. Femi accepts. Reed begins waiting.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="char-section reveal">
+      <div class="section-heading">
+        <span class="section-num">IV</span>
+        <span class="section-title">The Question He Has Never Been Asked</span>
+        <div class="section-rule"></div>
+      </div>
+      <div class="question-block">
+        <p>"You know everything that happens in this Liberty. You could have told Grace that Femi was coming. Why didn't you?"</p>
+      </div>
+      <p class="char-prose">Reed is the story's pragmatist, and pragmatists are often the most honest characters in a room full of idealists. He does not pretend to moral purpose. He sells what he knows. He charges what the market will bear. He keeps every secret he is paid to keep and <strong>sells every one he is not</strong>.</p>
+      <p class="char-prose">And yet: he made Femi a Writ. He could have warned Grace — there would have been a market for that too. He did not. He keeps his own counsel on why. When pressed, he says only that <em>a man who hunts for justice makes a better long-term client than a man who is merely trying to stay hidden</em>.</p>
+      <p class="char-prose">This may be true. It may also be the answer of a man who has spent eleven years in the Duchy's records, reading the history of what the trade did to people who passed through London's ports, and who has decided — very quietly, and entirely without sentiment — <strong>which side of a particular ledger he wishes to be on when it is eventually closed.</strong></p>
+    </div>
+
+  </div>
+
+  <aside class="char-sidebar">
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Character Tags</div>
+      <div class="sidebar-title">How to Find Him</div>
+      <div class="tags">
+        <span class="tag">Scribe</span>
+        <span class="tag">Broker</span>
+        <span class="tag">Forger</span>
+        <span class="tag">Savoy</span>
+        <span class="tag">The Duchy</span>
+        <span class="tag">Information</span>
+        <span class="tag">Debt Held</span>
+        <span class="tag">No Fixed Loyalty</span>
+      </div>
+    </div>
+
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Connections</div>
+      <div class="sidebar-title">Key Relationships</div>
+      <a class="connection-link" href="freeman_profile.html">
+        <div class="conn-info"><div class="conn-name">Femi Freeman</div><div class="conn-role">Client · Debt Outstanding · The Favour Uncollected</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+      <a class="connection-link" href="silas_grace.html">
+        <div class="conn-info"><div class="conn-name">Silas Grace</div><div class="conn-role">Known · Not Warned · Reason Undisclosed</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+      <a class="connection-link" href="#">
+        <div class="conn-info"><div class="conn-name">The Steward's Office</div><div class="conn-role">Employer · Unaware of his sideline</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+    </div>
+
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Liberties Operated</div>
+      <div class="sidebar-title">His Jurisdictions</div>
+      <a class="connection-link" href="savoy_charter.html">
+        <div class="conn-info"><div class="conn-name">Charter of the Savoy</div><div class="conn-role">Home · Long Resident · Duchy Scribe</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+      <a class="connection-link" href="charter.html">
+        <div class="conn-info"><div class="conn-name">Charter of Havering</div><div class="conn-role">Writ issued here. Not visited in person.</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+      <a class="connection-link" href="tower_charter.html">
+        <div class="conn-info"><div class="conn-name">Charter of the Tower</div><div class="conn-role">His writs don't survive Tower inspection. He knows this.</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+    </div>
+
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Historical Context</div>
+      <div class="sidebar-title">The Real World</div>
+      <p style="font-family:'Fraunces',serif;font-size:13px;line-height:1.8;color:var(--text-dim);font-weight:300;font-style:italic;">The Duchy of Lancaster's Savoy records were genuinely administered by clerks and scribes who had access to sensitive legal and financial information. Document forgery was widespread in 18th-century London — the Savoy's legal grey zone made it a natural hub. A man in Reed's position would have had extraordinary power over everyone who passed through the precinct.</p>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="footer-copy">© 2024 Digidrifters · Zone 03 · <span>Thomas "Quill" Reed · Resident Register</span></div>
+  <div class="footer-nav">
+    <a class="footer-nav-item" href="index.html">← Liberty Index</a>
+    <a class="footer-nav-item" href="savoy_charter.html">Savoy Charter</a>
+    <a class="footer-nav-item" href="../../index.html">All Exhibits</a>
+  </div>
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

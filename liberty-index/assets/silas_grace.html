@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silas Grace — Zone 03 · Digidrifters</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080807; --deep: #0F0E0C; --ink: #161512; --surface: #1E1C18;
+    --border: #2E2B24; --smoke: #4A4640; --text: #E8E0D0; --text-dim: #7A7268;
+    --text-soft: #A89E90; --white: #F5F0E8;
+    --liberty-accent: #B8936A; --liberty-bg: #09090A;
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--void); color: var(--text); font-family: 'DM Mono', monospace; font-weight: 300; overflow-x: hidden; }
+  body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 256px 256px; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid var(--border); background: rgba(8,8,7,0.92); backdrop-filter: blur(20px); }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.12em; color: var(--white); text-decoration: none; }
+  .nav-logo span { color: var(--liberty-accent); }
+  .nav-breadcrumb { display: flex; align-items: center; gap: 0; border: 1px solid var(--border); }
+  .nav-crumb { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); padding: 10px 20px; border-right: 1px solid var(--border); text-decoration: none; transition: all 0.2s; }
+  .nav-crumb:last-child { border-right: none; color: var(--liberty-accent); }
+  .nav-crumb:hover { background: var(--surface); color: var(--white); }
+  .nav-type { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+  .nav-type span { color: var(--liberty-accent); }
+
+  .char-hero { padding-top: 60px; min-height: 70vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; background: var(--liberty-bg); border-bottom: 1px solid var(--border); }
+  .hero-bg { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 80px 80px; opacity: 0.2; mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 70%); }
+  /* Grace: cold ash-grey orb — a man drained of colour by what he did */
+  .hero-orb { position: absolute; top: -60px; left: 25%; width: 700px; height: 700px; border-radius: 50%; filter: blur(120px); background: radial-gradient(circle, rgba(190,185,175,0.05) 0%, transparent 70%); pointer-events: none; }
+
+  .hero-left { padding: 80px 56px 64px 40px; display: flex; flex-direction: column; justify-content: flex-end; border-right: 1px solid var(--border); position: relative; z-index: 2; }
+  .char-type-tag { font-size: 8px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--liberty-accent); margin-bottom: 32px; display: flex; align-items: center; gap: 16px; animation: fadeUp 0.8s ease 0.2s both; }
+  .char-type-tag::before { content: ''; width: 24px; height: 1px; background: var(--liberty-accent); }
+  .char-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(72px, 10vw, 160px); line-height: 0.88; letter-spacing: 0.04em; color: var(--white); animation: fadeUp 0.8s ease 0.3s both; }
+  .char-name .outline { display: block; color: transparent; -webkit-text-stroke: 1px rgba(184,147,106,0.3); }
+  .char-roles { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(16px, 2vw, 22px); color: var(--text-soft); margin-top: 24px; line-height: 1.5; animation: fadeUp 0.8s ease 0.45s both; }
+  .char-status { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 40px; animation: fadeUp 0.8s ease 0.6s both; }
+  .status-badge { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; padding: 8px 14px; border: 1px solid var(--border); color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
+  .status-badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--liberty-accent); animation: blink 2s ease-in-out infinite; }
+  .status-badge.active { border-color: var(--liberty-accent); color: var(--liberty-accent); }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  .hero-right { padding: 80px 40px 64px 48px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; z-index: 2; animation: fadeUp 0.8s ease 0.5s both; }
+  .profile-label { font-size: 7px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--liberty-accent); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .profile-label::before { content: ''; width: 14px; height: 1px; background: var(--liberty-accent); }
+  .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); }
+  .profile-cell { padding: 16px 20px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+  .profile-cell:nth-child(2n) { border-right: none; }
+  .profile-cell:nth-last-child(-n+2) { border-bottom: none; }
+  .profile-key { font-size: 7px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px; }
+  .profile-val { font-size: 11px; letter-spacing: 0.04em; color: var(--text-soft); line-height: 1.4; }
+  .profile-val strong { color: var(--liberty-accent); font-weight: 400; }
+
+  .char-body { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 340px; border-bottom: 1px solid var(--border); }
+  .char-main { padding: 64px 56px 64px 40px; border-right: 1px solid var(--border); }
+  .section-heading { display: flex; align-items: center; gap: 20px; margin: 0 0 28px; }
+  .section-num { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.25em; color: var(--liberty-accent); opacity: 0.6; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.08em; color: var(--white); }
+  .section-rule { flex: 1; height: 1px; background: var(--border); }
+  .char-section { margin-bottom: 64px; padding-bottom: 64px; border-bottom: 1px solid var(--border); }
+  .char-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .char-prose { font-family: 'Fraunces', serif; font-size: 16px; line-height: 1.85; color: var(--text-soft); font-weight: 300; }
+  .char-prose + .char-prose { margin-top: 20px; }
+  .char-prose strong { color: var(--white); font-weight: 400; }
+  .char-prose em { color: var(--liberty-accent); font-style: italic; }
+  .question-block { margin: 32px 0; padding: 28px 32px; border-left: 3px solid var(--liberty-accent); background: rgba(184,147,106,0.04); }
+  .question-block p { font-family: 'Fraunces', serif; font-size: 18px; line-height: 1.7; color: var(--white); font-weight: 300; font-style: italic; }
+
+  .timeline { margin: 8px 0; }
+  .tl-item { display: grid; grid-template-columns: 180px 1fr; border-bottom: 1px solid var(--border); }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-date { padding: 24px 24px 24px 16px; border-right: 1px solid var(--border); position: relative; }
+  .tl-date::before { content: '●'; position: absolute; right: -5px; top: 28px; font-size: 8px; color: var(--liberty-accent); }
+  .tl-year { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.08em; color: var(--liberty-accent); line-height: 1; }
+  .tl-place { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); margin-top: 4px; line-height: 1.4; }
+  .tl-content { padding: 24px 0 24px 24px; }
+  .tl-text { font-family: 'Fraunces', serif; font-size: 14px; line-height: 1.8; color: var(--text-soft); font-weight: 300; }
+  .tl-text strong { color: var(--text); font-weight: 400; }
+
+  .status-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .status-table th { text-align: left; padding: 10px 16px; font-size: 7px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border); font-weight: 400; background: var(--deep); }
+  .status-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); color: var(--text-soft); letter-spacing: 0.03em; vertical-align: top; }
+  .status-table tr:last-child td { border-bottom: none; }
+  .status-table tr:hover td { background: rgba(184,147,106,0.03); }
+  .status-table td:first-child { color: var(--text); }
+  .status-pill { display: inline-block; padding: 3px 8px; font-size: 7px; letter-spacing: 0.2em; text-transform: uppercase; border: 1px solid; }
+  .pill-resident { border-color: var(--liberty-accent); color: var(--liberty-accent); }
+  .pill-visitor { border-color: var(--border); color: var(--text-dim); }
+  .pill-free { border-color: var(--smoke); color: var(--smoke); }
+  .pill-warning { border-color: #7A4040; color: #A06868; }
+
+  .char-sidebar { padding: 64px 32px 64px 40px; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: var(--border) var(--void); }
+  .sidebar-panel { padding-bottom: 32px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
+  .sidebar-panel:last-child { border-bottom: none; }
+  .sidebar-label { font-size: 7px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--liberty-accent); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .sidebar-label::before { content: ''; width: 14px; height: 1px; background: var(--liberty-accent); }
+  .sidebar-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.06em; color: var(--white); margin-bottom: 12px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; padding: 5px 10px; border: 1px solid var(--border); color: var(--text-dim); transition: all 0.2s; }
+  .tag:hover { border-color: var(--liberty-accent); color: var(--liberty-accent); }
+  .connection-link { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); text-decoration: none; transition: all 0.2s; }
+  .connection-link:last-child { border-bottom: none; }
+  .connection-link:hover .conn-name { color: var(--liberty-accent); }
+  .connection-link:hover .conn-arrow { transform: translateX(4px); }
+  .conn-info { display: flex; flex-direction: column; gap: 3px; }
+  .conn-name { font-size: 11px; letter-spacing: 0.05em; color: var(--text-soft); transition: color 0.2s; }
+  .conn-role { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); }
+  .conn-arrow { font-size: 10px; color: var(--border); transition: transform 0.2s; }
+
+  footer { border-top: 1px solid var(--border); max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 24px 40px; }
+  .footer-copy { font-size: 10px; letter-spacing: 0.1em; color: var(--text-dim); }
+  .footer-copy span { color: var(--liberty-accent); }
+  .footer-nav { display: flex; border: 1px solid var(--border); }
+  .footer-nav-item { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); padding: 10px 18px; border-right: 1px solid var(--border); text-decoration: none; transition: all 0.2s; }
+  .footer-nav-item:last-child { border-right: none; }
+  .footer-nav-item:hover { background: var(--surface); color: var(--white); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--void); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+  @media (max-width: 1100px) { .char-hero { grid-template-columns: 1fr; } .hero-right { border-top: 1px solid var(--border); } }
+  @media (max-width: 960px) { .char-body { grid-template-columns: 1fr; } .char-sidebar { position: static; height: auto; border-top: 1px solid var(--border); padding: 40px; } .char-main { padding: 40px; border-right: none; } nav .nav-breadcrumb { display: none; } footer { flex-direction: column; gap: 16px; align-items: flex-start; } .tl-item { grid-template-columns: 120px 1fr; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../index.html">DIGI<span>DRIFTERS</span></a>
+  <div class="nav-breadcrumb">
+    <a class="nav-crumb" href="../../index.html">All Exhibits</a>
+    <a class="nav-crumb" href="index.html">Liberty Index</a>
+    <span class="nav-crumb">Silas Grace</span>
+  </div>
+  <div class="nav-type">Resident Register · <span>Character 02</span></div>
+</nav>
+
+<div class="char-hero">
+  <div class="hero-bg"></div>
+  <div class="hero-orb"></div>
+
+  <div class="hero-left">
+    <div class="char-type-tag">Zone 03 · Resident Register · Character Profile</div>
+    <h1 class="char-name">
+      Silas
+      <span class="outline">Grace</span>
+    </h1>
+    <p class="char-roles">The Penitent · The Captain · The Quarry</p>
+    <div class="char-status">
+      <div class="status-badge active"><span class="dot"></span>Havering · Preacher in Residence</div>
+      <div class="status-badge">He knows Femi is here. He has not run.</div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="profile-label">Profile · Resident Record</div>
+    <div class="profile-grid">
+      <div class="profile-cell"><div class="profile-key">Origin</div><div class="profile-val"><strong>Bristol</strong> · Merchant family</div></div>
+      <div class="profile-cell"><div class="profile-key">Former Profession</div><div class="profile-val"><strong>Captain</strong> · Atlantic trade, 1756–1770</div></div>
+      <div class="profile-cell"><div class="profile-key">Current Role</div><div class="profile-val"><strong>Preacher</strong> · Abolitionist witness</div></div>
+      <div class="profile-cell"><div class="profile-key">Current Liberty</div><div class="profile-val"><strong>Havering</strong>-atte-Bower · schoolmaster</div></div>
+      <div class="profile-cell"><div class="profile-key">Known To</div><div class="profile-val">Femi Freeman · the man he wronged</div></div>
+      <div class="profile-cell"><div class="profile-key">Outstanding</div><div class="profile-val"><strong>No legal charge.</strong> The law has not caught up.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="char-body">
+  <div class="char-main">
+
+    <div class="char-section reveal">
+      <div class="section-heading">
+        <span class="section-num">I</span>
+        <span class="section-title">The Weight He Carries</span>
+        <div class="section-rule"></div>
+      </div>
+      <p class="char-prose">Captain Silas Grace ran his first Atlantic voyage at twenty-three. He ran his last at forty-one. In the intervening years he transported over <strong>two thousand men, women and children</strong> across the Middle Passage. His logs were meticulous. His mortality figures were, by the trade's own grim standards, low. He was considered a careful man.</p>
+      <p class="char-prose">He abandoned the trade in 1770, following what his private journals describe only as <em>a night on the Bight of Benin</em> — an event he has never spoken of publicly and about which no other account survives. He returned to Bristol, divested his holdings, and began preaching against the trade that had made him wealthy.</p>
+      <p class="char-prose">He is now, by every observable measure, <strong>a different man</strong>. He feeds the poor. He testifies before Parliament. He has given away most of his fortune. He has established a small school for the Bowerers' children in Havering. And he knows — because someone told him, and because he has been watching — that Femi Freeman is here. He has made no move to flee.</p>
+    </div>
+
+    <div class="char-section reveal">
+      <div class="section-heading">
+        <span class="section-num">II</span>
+        <span class="section-title">A Life in Two Halves</span>
+        <div class="section-rule"></div>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date"><div class="tl-year">1729</div><div class="tl-place">Bristol</div></div>
+          <div class="tl-content"><p class="tl-text">Born to a merchant family with deep ties to the Atlantic trade. <strong>The sea is the family business.</strong> He grows up understanding that the ships carry human cargo the way other ships carry cloth. It is simply what ships do.</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date"><div class="tl-year">1756–1770</div><div class="tl-place">The Atlantic</div></div>
+          <div class="tl-content"><p class="tl-text">Fourteen years. Eleven voyages. He tells himself what men in the trade tell themselves — that he is not cruel, that others are worse, that the commerce of empires requires this. He keeps careful logs. He does not look at the men in the hold. <strong>He does not permit himself to look.</strong></p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date"><div class="tl-year">1770</div><div class="tl-place">Bight of Benin</div></div>
+          <div class="tl-content"><p class="tl-text">The night Grace will not speak of. His journal reads: <em>"I have seen what I am. I cannot continue."</em> He turns the ship for home. He never commands another vessel. He does not explain to his crew what happened that night, and <strong>no one who was present has spoken of it since.</strong></p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date"><div class="tl-year">1771–1773</div><div class="tl-place">Bristol · London</div></div>
+          <div class="tl-content"><p class="tl-text">Divestment. Testimony. Preaching in Nonconformist chapels. He meets Granville Sharp, who is building the legal case that becomes <em>Somerset v Stewart</em>. Grace gives evidence about the trade's practices. <strong>He does not give evidence about specific voyages.</strong></p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date"><div class="tl-year">1774</div><div class="tl-place">Liberty of the Savoy</div></div>
+          <div class="tl-content"><p class="tl-text">Grace preaches in the Savoy chapel. Feeds the poor in the alley courts. It is here that Femi first sees him — and <strong>the encounter fractures Femi's certainty.</strong> Grace senses he is being observed. He continues to preach regardless.</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date"><div class="tl-year">1775</div><div class="tl-place">Havering-atte-Bower</div></div>
+          <div class="tl-content"><p class="tl-text">Grace retreats to Havering — whether from exhaustion, guilt, or a <strong>deliberate choice to be findable</strong>, remains unclear even to those who know him. He teaches the Bowerers' children their letters each morning. He prays alone in the ruined chapel at night. He waits.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="char-section reveal">
+      <div class="section-heading">
+        <span class="section-num">III</span>
+        <span class="section-title">Legal Standing Across the Liberties</span>
+        <div class="section-rule"></div>
+      </div>
+      <table class="status-table">
+        <thead><tr><th>Liberty</th><th>Status</th><th>Role</th><th>Key Detail</th></tr></thead>
+        <tbody>
+          <tr><td>Havering</td><td><span class="status-pill pill-resident">Resident</span></td><td>Preacher · Schoolmaster</td><td>Aware Femi is here. Has not sought Constable's protection.</td></tr>
+          <tr><td>Savoy</td><td><span class="status-pill pill-visitor">Former Visitor</span></td><td>Congregant · Alms-giver</td><td>Where Femi first observed him. Where doubt began.</td></tr>
+          <tr><td>Westminster</td><td><span class="status-pill pill-free">Petitioner</span></td><td>Parliamentary witness</td><td>Gave evidence on the trade's practices. Named no voyages.</td></tr>
+          <tr><td>City of London</td><td><span class="status-pill pill-warning">Morally Indicted</span></td><td>Former captain of record</td><td>No charge exists. The law has not found a mechanism.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="char-section reveal">
+      <div class="section-heading">
+        <span class="section-num">IV</span>
+        <span class="section-title">The Question He Has Already Asked Himself</span>
+        <div class="section-rule"></div>
+      </div>
+      <div class="question-block">
+        <p>"Can a man undo what he has done by spending the rest of his life trying? Or does the doing remain, permanent, whatever comes after?"</p>
+      </div>
+      <p class="char-prose">Grace is not this story's villain in any simple sense. He is something harder to look at — a man who did monstrous things and then, genuinely, stopped. The question his existence poses to Femi — and to anyone reading — is whether repentance cancels guilt, or whether it merely <strong>changes its shape</strong>.</p>
+      <p class="char-prose">He knows Femi is in Havering. He has not petitioned the Constable for protection. He has not fled. Those who know him say he sleeps very little. In the mornings he teaches. In the evenings, if you follow the path past the old palace ruins, <em>you can hear him speaking quietly in the chapel</em> — though there is no one else inside.</p>
+      <p class="char-prose">The Liberties can protect a body. They cannot weigh a soul. That judgment belongs to Femi. <strong>And Femi has not yet decided what justice looks like.</strong></p>
+    </div>
+
+  </div>
+
+  <aside class="char-sidebar">
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Character Tags</div>
+      <div class="sidebar-title">How to Find Him</div>
+      <div class="tags">
+        <span class="tag">Penitent</span>
+        <span class="tag">Captain</span>
+        <span class="tag">Preacher</span>
+        <span class="tag">Abolitionist</span>
+        <span class="tag">Bristol</span>
+        <span class="tag">The Quarry</span>
+        <span class="tag">The Unanswered</span>
+        <span class="tag">Waiting</span>
+      </div>
+    </div>
+
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Connections</div>
+      <div class="sidebar-title">Key Relationships</div>
+      <a class="connection-link" href="freeman_profile.html">
+        <div class="conn-info"><div class="conn-name">Femi Freeman</div><div class="conn-role">Hunter · The Man He Wronged</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+      <a class="connection-link" href="eliza_vane.html">
+        <div class="conn-info"><div class="conn-name">Eliza Vane</div><div class="conn-role">Bowerer · Watches Him Closely · Reason Unclear</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+      <a class="connection-link" href="#">
+        <div class="conn-info"><div class="conn-name">Adewale Freeman</div><div class="conn-role">Deceased · The Name He Cannot Forget</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+      <a class="connection-link" href="#">
+        <div class="conn-info"><div class="conn-name">Granville Sharp</div><div class="conn-role">Historical · Abolitionist contact</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+    </div>
+
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Liberties Inhabited</div>
+      <div class="sidebar-title">His Jurisdictions</div>
+      <a class="connection-link" href="charter.html">
+        <div class="conn-info"><div class="conn-name">Charter of Havering</div><div class="conn-role">Current Refuge · Resident · Waiting</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+      <a class="connection-link" href="savoy_charter.html">
+        <div class="conn-info"><div class="conn-name">Charter of the Savoy</div><div class="conn-role">Where Femi First Saw Him Preach</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+      <a class="connection-link" href="westminster_charter.html">
+        <div class="conn-info"><div class="conn-name">Charter of Westminster</div><div class="conn-role">Parliamentary Witness · Named No Voyages</div></div>
+        <div class="conn-arrow">→</div>
+      </a>
+    </div>
+
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Historical Context</div>
+      <div class="sidebar-title">Real Precedents</div>
+      <p style="font-family:'Fraunces',serif;font-size:13px;line-height:1.8;color:var(--text-dim);font-weight:300;font-style:italic;">Several former slave captains did join the abolitionist cause. Most famously John Newton — author of <em>Amazing Grace</em> — who gave pivotal testimony to Parliament in 1788. Grace is fictional, but his trajectory is grounded in documented reality. The question of what such men owed those they had wronged was never legally or morally resolved.</p>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <div class="footer-copy">© 2024 Digidrifters · Zone 03 · <span>Silas Grace · Resident Register</span></div>
+  <div class="footer-nav">
+    <a class="footer-nav-item" href="index.html">← Liberty Index</a>
+    <a class="footer-nav-item" href="freeman_profile.html">Femi Freeman</a>
+    <a class="footer-nav-item" href="../../index.html">All Exhibits</a>
+  </div>
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
