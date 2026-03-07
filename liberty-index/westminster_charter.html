@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charter of Westminster — Zone 03 · Digidrifters</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080807;
+    --deep: #0F0E0C;
+    --ink: #161512;
+    --surface: #1E1C18;
+    --border: #2E2B24;
+    --smoke: #4A4640;
+    --text: #E8E0D0;
+    --text-dim: #7A7268;
+    --text-soft: #A89E90;
+    --white: #F5F0E8;
+    --liberty-accent: #B8936A;
+    --liberty-bg: #080809;
+    /* Westminster tint — cool near-indigo, very subtle */
+    --zone-tint: rgba(80, 70, 120, 0.07);
+    --zone-orb: rgba(90, 80, 140, 0.08);
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--void); color: var(--text); font-family: 'DM Mono', monospace; font-weight: 300; overflow-x: hidden; }
+  body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 256px 256px; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid var(--border); background: rgba(8,8,7,0.92); backdrop-filter: blur(20px); }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.12em; color: var(--white); text-decoration: none; }
+  .nav-logo span { color: var(--liberty-accent); }
+  .nav-breadcrumb { display: flex; align-items: center; gap: 0; border: 1px solid var(--border); }
+  .nav-crumb { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); padding: 10px 20px; border-right: 1px solid var(--border); text-decoration: none; transition: all 0.2s; }
+  .nav-crumb:last-child { border-right: none; color: var(--liberty-accent); }
+  .nav-crumb:hover { background: var(--surface); color: var(--white); }
+  .nav-doc { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+  .nav-doc span { color: var(--liberty-accent); }
+  .charter-hero { padding-top: 60px; min-height: 55vh; display: flex; align-items: flex-end; position: relative; overflow: hidden; background: var(--liberty-bg); border-bottom: 1px solid var(--border); }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 80px 80px; opacity: 0.28; mask-image: radial-gradient(ellipse at 70% 100%, black 20%, transparent 70%); }
+  .hero-orb { position: absolute; top: -100px; right: 5%; width: 550px; height: 550px; border-radius: 50%; filter: blur(100px); background: radial-gradient(circle, var(--zone-orb) 0%, transparent 70%); pointer-events: none; }
+  .hero-orb-2 { position: absolute; bottom: -40px; left: 20%; width: 300px; height: 300px; border-radius: 50%; filter: blur(80px); background: radial-gradient(circle, rgba(90,80,140,0.04) 0%, transparent 70%); pointer-events: none; }
+  .hero-inner { max-width: 1400px; margin: 0 auto; width: 100%; padding: 60px 40px 48px; position: relative; z-index: 2; display: grid; grid-template-columns: 2fr 1fr; gap: 80px; align-items: end; }
+  .hero-kicker { font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--liberty-accent); margin-bottom: 24px; display: flex; align-items: center; gap: 16px; animation: fadeUp 0.8s ease 0.2s both; }
+  .hero-kicker::before { content: ''; width: 24px; height: 1px; background: var(--liberty-accent); }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 6vw, 92px); line-height: 0.92; letter-spacing: 0.04em; color: var(--white); margin-bottom: 24px; animation: fadeUp 0.8s ease 0.35s both; }
+  .hero-subtitle { font-family: 'Fraunces', serif; font-size: 16px; font-style: italic; font-weight: 300; color: var(--text-soft); line-height: 1.7; max-width: 520px; animation: fadeUp 0.8s ease 0.5s both; }
+  .hero-right { display: flex; flex-direction: column; border: 1px solid var(--border); animation: fadeUp 0.8s ease 0.6s both; }
+  .doc-meta-row { display: flex; flex-direction: column; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .doc-meta-row:last-child { border-bottom: none; }
+  .doc-meta-label { font-size: 7px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px; }
+  .doc-meta-val { font-size: 11px; letter-spacing: 0.05em; color: var(--text-soft); }
+  .doc-meta-val strong { color: var(--liberty-accent); font-weight: 400; }
+  .charter-body { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 340px; border-bottom: 1px solid var(--border); }
+  .charter-text { padding: 64px 56px 64px 40px; border-right: 1px solid var(--border); }
+  .charter-preamble { font-family: 'Fraunces', serif; font-size: 15px; line-height: 1.9; color: var(--text-soft); font-weight: 300; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--border); }
+  .charter-preamble strong { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: var(--liberty-accent); font-weight: 400; }
+  .article-heading { display: flex; align-items: center; gap: 20px; margin: 48px 0 24px; }
+  .article-num { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.25em; color: var(--liberty-accent); opacity: 0.7; white-space: nowrap; }
+  .article-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.08em; color: var(--white); }
+  .article-rule { flex: 1; height: 1px; background: var(--border); }
+  .charter-clause { margin: 16px 0; padding: 20px 24px; border-left: 3px solid var(--border); background: rgba(30,28,24,0.4); cursor: pointer; transition: all 0.25s ease; position: relative; }
+  .charter-clause:hover { border-left-color: var(--liberty-accent); background: var(--zone-tint); transform: translateX(3px); }
+  .charter-clause.active { border-left-color: var(--liberty-accent); background: var(--zone-tint); }
+  .charter-clause p { font-family: 'Fraunces', serif; font-size: 14px; line-height: 1.85; color: var(--text-soft); font-weight: 300; }
+  .charter-clause p + p { margin-top: 10px; }
+  .charter-clause strong { color: var(--liberty-accent); font-weight: 400; }
+  .clause-hint { position: absolute; top: 20px; right: 16px; font-size: 7px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--border); transition: color 0.2s; }
+  .charter-clause:hover .clause-hint { color: var(--liberty-accent); opacity: 0.7; }
+  .alert-note { margin: 32px 0; padding: 20px 24px; border: 1px solid var(--border); background: var(--deep); border-left: 3px solid var(--liberty-accent); }
+  .alert-note-label { font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--liberty-accent); margin-bottom: 8px; }
+  .alert-note p { font-family: 'Fraunces', serif; font-size: 14px; line-height: 1.7; color: var(--text-dim); font-weight: 300; font-style: italic; }
+  .alert-note strong { color: var(--text-soft); font-weight: 400; }
+  .table-section { margin: 48px 0 0; }
+  .table-label { font-size: 8px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .table-label::before { content: ''; width: 16px; height: 1px; background: var(--liberty-accent); }
+  .breaches-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .breaches-table th { text-align: left; padding: 10px 16px; font-size: 7px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--border); font-weight: 400; background: var(--deep); }
+  .breaches-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); color: var(--text-soft); letter-spacing: 0.03em; vertical-align: top; }
+  .breaches-table tr:last-child td { border-bottom: none; }
+  .breaches-table tr:hover td { background: rgba(184,147,106,0.03); color: var(--text); }
+  .breaches-table td:first-child { color: var(--text); }
+  .charter-witness { margin-top: 48px; padding: 32px; border: 1px solid var(--border); background: var(--deep); font-family: 'Fraunces', serif; font-size: 14px; line-height: 1.9; color: var(--text-dim); font-weight: 300; font-style: italic; }
+  .charter-witness strong { color: var(--liberty-accent); font-weight: 400; font-style: normal; }
+  .charter-sidebar { padding: 64px 32px 64px 40px; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: var(--border) var(--void); }
+  .sidebar-panel { padding-bottom: 32px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
+  .sidebar-panel:last-child { border-bottom: none; }
+  .sidebar-label { font-size: 7px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--liberty-accent); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .sidebar-label::before { content: ''; width: 14px; height: 1px; background: var(--liberty-accent); }
+  .sidebar-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.06em; color: var(--white); margin-bottom: 12px; }
+  .annotation-box { min-height: 140px; background: var(--deep); border: 1px solid var(--border); padding: 20px; transition: border-color 0.3s; }
+  .annotation-box.has-content { border-color: rgba(184,147,106,0.35); }
+  .annotation-type { font-size: 7px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--liberty-accent); margin-bottom: 8px; }
+  .annotation-text { font-family: 'Fraunces', serif; font-size: 13px; line-height: 1.8; color: var(--text-soft); font-weight: 300; font-style: italic; }
+  .annotation-placeholder { font-size: 10px; letter-spacing: 0.05em; color: var(--smoke); font-style: italic; padding-top: 8px; }
+  .artifact-link { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); text-decoration: none; transition: all 0.2s; }
+  .artifact-link:last-child { border-bottom: none; }
+  .artifact-link:hover .artifact-name { color: var(--liberty-accent); }
+  .artifact-link:hover .artifact-arrow { transform: translateX(4px); }
+  .artifact-info { display: flex; flex-direction: column; gap: 3px; }
+  .artifact-name { font-size: 11px; letter-spacing: 0.05em; color: var(--text-soft); transition: color 0.2s; }
+  .artifact-role { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); }
+  .artifact-arrow { font-size: 10px; color: var(--border); transition: transform 0.2s; }
+  .story-hook { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .story-hook:last-child { border-bottom: none; }
+  .story-hook p { font-family: 'Fraunces', serif; font-size: 12px; line-height: 1.7; color: var(--text-dim); font-style: italic; }
+  .story-hook p::before { content: '↝ '; color: var(--liberty-accent); font-style: normal; }
+  footer { border-top: 1px solid var(--border); max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 24px 40px; }
+  .footer-copy { font-size: 10px; letter-spacing: 0.1em; color: var(--text-dim); }
+  .footer-copy span { color: var(--liberty-accent); }
+  .footer-nav { display: flex; border: 1px solid var(--border); }
+  .footer-nav-item { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); padding: 10px 18px; border-right: 1px solid var(--border); text-decoration: none; transition: all 0.2s; }
+  .footer-nav-item:last-child { border-right: none; }
+  .footer-nav-item:hover { background: var(--surface); color: var(--white); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--void); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+  @media (max-width: 960px) { .charter-body { grid-template-columns: 1fr; } .charter-sidebar { position: static; height: auto; border-top: 1px solid var(--border); padding: 40px; } .hero-inner { grid-template-columns: 1fr; } .hero-right { display: none; } nav .nav-breadcrumb { display: none; } footer { flex-direction: column; gap: 16px; align-items: flex-start; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../../index.html">DIGI<span>DRIFTERS</span></a>
+  <div class="nav-breadcrumb">
+    <a class="nav-crumb" href="../../index.html">All Exhibits</a>
+    <a class="nav-crumb" href="index.html">Liberty Index</a>
+    <span class="nav-crumb">Charter of Westminster</span>
+  </div>
+  <div class="nav-doc">Doc <span>03</span> · Dean's Jurisdiction</div>
+</nav>
+
+<div class="charter-hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-orb-2"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-kicker">Ecclesiastical Liberty · Elizabeth I · Reaffirmed 1707</div>
+      <h1 class="hero-title">Charter of the<br>Liberty of<br>Westminster</h1>
+      <p class="hero-subtitle">The seat of Parliament, the home of the Abbey, and the last place in England where a common subject could walk to power's door and demand to be heard — protected, in theory, by the law itself.</p>
+    </div>
+    <div class="hero-right">
+      <div class="doc-meta-row"><div class="doc-meta-label">Constituted</div><div class="doc-meta-val"><strong>Medieval</strong> · Abbey charter origins</div></div>
+      <div class="doc-meta-row"><div class="doc-meta-label">Reaffirmed</div><div class="doc-meta-val"><strong>1707</strong> · Anne, Year 6 · Act of Union</div></div>
+      <div class="doc-meta-row"><div class="doc-meta-label">Jurisdiction</div><div class="doc-meta-val">Palace, Abbey, Courts of Law</div></div>
+      <div class="doc-meta-row"><div class="doc-meta-label">Dual Authority</div><div class="doc-meta-val"><strong>Dean of Westminster</strong> + Crown</div></div>
+      <div class="doc-meta-row"><div class="doc-meta-label">Unique Right</div><div class="doc-meta-val">Petition Parliament · Highest Writ</div></div>
+      <div class="doc-meta-row"><div class="doc-meta-label">Status</div><div class="doc-meta-val"><strong>Absorbed</strong> into Metropolitan Board, 1855</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="charter-body">
+
+  <div class="charter-text">
+
+    <div class="charter-preamble">
+      <p><strong>BE IT KNOWN</strong> that the City and Liberty of Westminster, containing the Palace of Westminster, the Abbey, and the Courts of Law, constitutes a <strong>jurisdiction distinct from the City of London</strong>, wherein the Dean of Westminster and the Crown hold direct authority.</p>
+      <br>
+      <p>And whereas Westminster is the seat of Parliament and the Realm's highest courts, it shall offer singular protection to <strong>those who seek the law's redress</strong> — that the subject's voice may always reach the sovereign's ear.</p>
+    </div>
+
+    <div class="alert-note">
+      <div class="alert-note-label">Archivist's Note · On Petitions</div>
+      <p>Westminster is the <strong>only Liberty where common subjects may directly petition Parliament.</strong> This right was fiercely guarded against external interference — and was used, famously, by the early abolitionist movement in the 1780s and 1790s.</p>
+    </div>
+
+    <div class="article-heading">
+      <span class="article-num">Art. I</span>
+      <span class="article-title">The Dean's Jurisdiction</span>
+      <div class="article-rule"></div>
+    </div>
+    <div class="charter-clause" data-clause="west-1">
+      <span class="clause-hint">Hover · Annotate</span>
+      <p><strong>Clause 1.</strong> The Dean of Westminster shall hold court for all matters arising within the Close and the Sanctuary grounds.</p>
+      <p><strong>Clause 2.</strong> No Sheriff of London or Middlesex shall execute warrant within the Liberty without the Dean's leave.</p>
+      <p><strong>Clause 3.</strong> The Liberty protects all Members of Parliament from arrest while Parliament is in session, extending to their servants and <strong>petitioners within the Bounds</strong>.</p>
+    </div>
+
+    <div class="article-heading">
+      <span class="article-num">Art. II</span>
+      <span class="article-title">The Petitioners' Right</span>
+      <div class="article-rule"></div>
+    </div>
+    <div class="charter-clause" data-clause="west-2">
+      <span class="clause-hint">Hover · Annotate</span>
+      <p><strong>Clause 1.</strong> Any subject of the Crown may enter the Liberty to present a <strong>Petition to Parliament</strong>, provided they do so peaceably and in proper form.</p>
+      <p><strong>Clause 2.</strong> Petitioners shall be granted provisional protection for the duration of Parliamentary Session.</p>
+      <p><strong>Clause 3.</strong> To obstruct a Petitioner is to commit Contempt of Parliament, punishable by the Serjeant-at-Arms without external warrant or delay.</p>
+    </div>
+
+    <div class="article-heading">
+      <span class="article-num">Art. III</span>
+      <span class="article-title">The Sanctuary Echo</span>
+      <div class="article-rule"></div>
+    </div>
+    <div class="charter-clause" data-clause="west-3">
+      <span class="clause-hint">Hover · Annotate</span>
+      <p><strong>Clause 1.</strong> Though formal Sanctuary was abolished in 1623, the Liberty retains the right to shelter those pursued for <strong>political offences</strong> — not common crimes, but matters of conscience and dissent.</p>
+      <p><strong>Clause 2.</strong> Debtors seeking refuge in Westminster must register with the Court of Requests within three days.</p>
+      <p><strong>Clause 3.</strong> Those who abuse the Petitioners' Right for frivolous or seditious causes shall be barred from future entry and delivered to the Serjeant.</p>
+    </div>
+
+    <div class="article-heading">
+      <span class="article-num">Art. IV</span>
+      <span class="article-title">The Writ of Transit</span>
+      <div class="article-rule"></div>
+    </div>
+    <div class="charter-clause" data-clause="west-4">
+      <span class="clause-hint">Hover · Annotate</span>
+      <p><strong>Clause 1.</strong> A Petitioner in good standing may request a <strong>Writ of Transit</strong> to pass to another Royal Liberty — being the Tower, Havering, or the Savoy.</p>
+      <p><strong>Clause 2.</strong> The Writ must bear the <strong>Parliamentary Mace Seal</strong> and the signature of the Clerk of the House.</p>
+      <p><strong>Clause 3.</strong> Westminster Writs carry the highest authority — but may be ignored by the Tower Constable in times of martial law, when the sword speaks louder than the pen.</p>
+    </div>
+
+    <div class="table-section">
+      <div class="table-label">Breaches and Penalties</div>
+      <table class="breaches-table">
+        <thead><tr><th>Breach</th><th>Penalty</th><th>Enforced By</th></tr></thead>
+        <tbody>
+          <tr><td>Obstructing Parliament</td><td>Imprisonment in Newgate</td><td>Serjeant-at-Arms</td></tr>
+          <tr><td>False Petition</td><td>Whipping and Banishment</td><td>Dean's Court</td></tr>
+          <tr><td>Arresting a Member of Parliament</td><td>Contempt of Parliament</td><td>House of Commons</td></tr>
+          <tr><td>Forged Parliamentary Seal</td><td>Traitor's Death</td><td>High Court</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="charter-witness">
+      <strong>Given at Westminster,</strong> this First Day of May, in the Sixth Year of the Reign of Queen Anne.<br><br>
+      <em>By Order of the Dean and Chapter of Westminster.</em> The Liberty's protections remain in force while Parliament shall sit, and the Abbey's shadow falls across the Bounds.
+    </div>
+
+  </div>
+
+  <aside class="charter-sidebar">
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Archivist's Notes</div>
+      <div class="sidebar-title">Clause Annotations</div>
+      <div class="annotation-box" id="annotation-box">
+        <div class="annotation-placeholder">Hover over any clause to reveal its historical context and narrative function.</div>
+      </div>
+    </div>
+
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Related Artifacts</div>
+      <div class="sidebar-title">In This Zone</div>
+      <a class="artifact-link" href="freeman_profile.html">
+        <div class="artifact-info"><div class="artifact-name">Femi Freeman</div><div class="artifact-role">The Avenger · the lawful path</div></div>
+        <div class="artifact-arrow">→</div>
+      </a>
+      <a class="artifact-link" href="#">
+        <div class="artifact-info"><div class="artifact-name">Ignatius Sancho</div><div class="artifact-role">The Petitioner · character</div></div>
+        <div class="artifact-arrow">→</div>
+      </a>
+      <a class="artifact-link" href="#">
+        <div class="artifact-info"><div class="artifact-name">Petition Scroll</div><div class="artifact-role">Legal appeal · artifact</div></div>
+        <div class="artifact-arrow">→</div>
+      </a>
+      <a class="artifact-link" href="index.html">
+        <div class="artifact-info"><div class="artifact-name">Liberty Index</div><div class="artifact-role">All Charters · Zone 03</div></div>
+        <div class="artifact-arrow">→</div>
+      </a>
+    </div>
+
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Story Hooks</div>
+      <div class="sidebar-title">Narrative Threads</div>
+      <div class="story-hook"><p>Femi joins a group petitioning Parliament against the slave trade — finding that the law might offer a justice his blade cannot</p></div>
+      <div class="story-hook"><p>An MP offers Femi protection in exchange for intelligence on Grace and those who once funded his voyages</p></div>
+      <div class="story-hook"><p>A political radical hiding in the Sanctuary Echo has information Femi desperately needs — but sharing it would end their own fragile protection</p></div>
+    </div>
+
+    <div class="sidebar-panel">
+      <div class="sidebar-label">Historical Note</div>
+      <div class="sidebar-title">Westminster and Abolition</div>
+      <p style="font-family:'Fraunces',serif;font-size:13px;line-height:1.8;color:var(--text-dim);font-weight:300;font-style:italic;">Westminster's petition rights were used extensively by the abolitionist movement. Figures like Olaudah Equiano and Ignatius Sancho (a real, remarkable man) navigated the exact intersection of Liberty protections and Parliamentary access that Femi's story explores.</p>
+    </div>
+  </aside>
+
+</div>
+
+<footer>
+  <div class="footer-copy">© 2024 Digidrifters · Zone 03 · <span>Charter of Westminster</span></div>
+  <div class="footer-nav">
+    <a class="footer-nav-item" href="index.html">← Liberty Index</a>
+    <a class="footer-nav-item" href="charter.html">Havering</a>
+    <a class="footer-nav-item" href="../../index.html">All Exhibits</a>
+  </div>
+</footer>
+
+<script>
+  const annotations = {
+    'west-1': {
+      type: 'Historical Context',
+      context: 'Westminster Abbey and the Palace were technically outside the City of London\'s jurisdiction, creating a unique legal bubble. The Dean\'s court was a genuine ecclesiastical authority with real teeth.',
+      type2: 'Narrative Function',
+      narrative: 'This is where Femi can find legal allies with actual power. MPs have immunity here — making Westminster the one place where connections matter more than force.'
+    },
+    'west-2': {
+      type: 'Historical Context',
+      context: 'The right to petition Parliament was the crucial tool used by abolitionists in the 1780s, including the Sons of Africa. Hundreds of thousands of signatures were collected and physically presented to Parliament.',
+      type2: 'Narrative Function',
+      narrative: 'This is the "lawful path" — Femi choosing justice through the system rather than vengeance outside it. It is slower, harder, and may ultimately be more powerful than his blade.'
+    },
+    'west-3': {
+      type: 'Historical Context',
+      context: 'Sanctuary was formally abolished, but Westminster retained a reputation as a refuge for political dissidents well into the Georgian era. The line between criminal and political refugee was often deliberately blurred.',
+      type2: 'Narrative Function',
+      narrative: 'The character hiding here is not a criminal but a political dissident — someone who knew Grace\'s backers in Parliament. Their intelligence could be devastating to Grace\'s remaining protectors.'
+    },
+    'west-4': {
+      type: 'Historical Context',
+      context: 'Parliamentary authority was technically supreme in English law, but military jurisdictions like the Tower regularly ignored it in practice. The tension between civil and military power ran throughout the Georgian era.',
+      type2: 'Narrative Function',
+      narrative: 'A Westminster Writ is the "Golden Ticket" of the Liberty system. Getting one requires navigating Parliament itself — nearly impossible, but with consequences that reverberate across all four Liberties.'
+    }
+  };
+
+  const annotationBox = document.getElementById('annotation-box');
+  document.querySelectorAll('.charter-clause').forEach(clause => {
+    clause.addEventListener('mouseenter', e => {
+      const a = annotations[e.currentTarget.dataset.clause];
+      if (!a) return;
+      clause.classList.add('active');
+      annotationBox.classList.add('has-content');
+      annotationBox.innerHTML = `<div class="annotation-type">${a.type}</div><p class="annotation-text">${a.context}</p><div class="annotation-type" style="margin-top:16px;">${a.type2}</div><p class="annotation-text">${a.narrative}</p>`;
+    });
+    clause.addEventListener('mouseleave', () => clause.classList.remove('active'));
+  });
+</script>
+</body>
+</html>
