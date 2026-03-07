@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zone 03 · The Liberty Index — Digidrifters</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #080807;
+    --deep: #0F0E0C;
+    --ink: #161512;
+    --surface: #1E1C18;
+    --border: #2E2B24;
+    --smoke: #4A4640;
+    --text: #E8E0D0;
+    --text-dim: #7A7268;
+    --text-soft: #A89E90;
+    --white: #F5F0E8;
+    --liberty-accent: #B8936A;
+    --liberty-accent-bright: #D4AA80;
+    --liberty-bg: #0A0804;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 500;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,8,7,0.92);
+    backdrop-filter: blur(20px);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--liberty-accent); }
+
+  .nav-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+  .nav-crumb {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 10px 20px;
+    border-right: 1px solid var(--border);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .nav-crumb:last-child { border-right: none; color: var(--liberty-accent); }
+  .nav-crumb:hover { background: var(--surface); color: var(--white); }
+
+  .nav-zone {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .nav-zone span { color: var(--liberty-accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding-top: 60px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    background: var(--liberty-bg);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.3;
+    mask-image: radial-gradient(ellipse at 50% 100%, black 20%, transparent 70%);
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    animation: drift 20s ease-in-out infinite alternate;
+  }
+  .orb-1 {
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(184,147,106,0.09) 0%, transparent 70%);
+    top: -200px; right: -100px;
+    animation-duration: 28s;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(184,147,106,0.05) 0%, transparent 70%);
+    bottom: 0; left: 10%;
+    animation-duration: 18s;
+    animation-delay: -8s;
+  }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(40px, -30px) scale(1.1); }
+  }
+
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 40px 60px;
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hero-kicker {
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--liberty-accent);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+  .hero-kicker::before {
+    content: '';
+    display: block;
+    width: 32px; height: 1px;
+    background: var(--liberty-accent);
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 180px);
+    line-height: 0.88;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    animation: fadeUp 1s ease 0.4s both;
+  }
+  .hero-title .line-2 {
+    display: block;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(184,147,106,0.35);
+    padding-left: clamp(40px, 8vw, 120px);
+  }
+
+  .hero-tagline {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(16px, 2vw, 22px);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text-soft);
+    margin-top: 40px;
+    max-width: 600px;
+    line-height: 1.7;
+    padding-left: clamp(40px, 8vw, 120px);
+    animation: fadeUp 1s ease 0.8s both;
+  }
+
+  /* STATS STRIP */
+  .hero-stats {
+    display: flex;
+    gap: 0;
+    margin-top: 60px;
+    padding-left: clamp(40px, 8vw, 120px);
+    border-top: 1px solid var(--border);
+    padding-top: 40px;
+    animation: fadeUp 1s ease 1s both;
+  }
+  .hero-stat {
+    padding-right: 48px;
+    margin-right: 48px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .hero-stat:last-child { border-right: none; }
+  .hero-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    line-height: 1;
+    color: var(--liberty-accent);
+  }
+  .hero-stat-label {
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* TICKER */
+  .hero-ticker {
+    border-top: 1px solid var(--border);
+    height: 44px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+  }
+  .ticker-label {
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--liberty-accent);
+    padding: 0 24px;
+    border-right: 1px solid var(--border);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background: var(--void);
+  }
+  .ticker-track {
+    display: flex;
+    animation: ticker 28s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-item {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 0 40px;
+    border-right: 1px solid var(--border);
+    height: 44px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .ticker-dot { color: var(--liberty-accent); margin-right: 12px; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 8px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 40px 40px 32px;
+    border-bottom: 1px solid var(--border);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .section-label::before {
+    content: attr(data-num);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    color: var(--border);
+    letter-spacing: 0;
+  }
+
+  /* CHARTERS GRID */
+  .charters-section { border-bottom: 1px solid var(--border); }
+  .charters-header {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 64px 40px 48px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .charters-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    line-height: 1;
+  }
+  .charters-subtitle {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  .charters-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* CHARTER CARD */
+  .charter-card {
+    position: relative;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 48px;
+    cursor: pointer;
+    overflow: hidden;
+    text-decoration: none;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--liberty-bg);
+    transition: all 0.4s ease;
+  }
+  .charter-card:nth-child(2n) { border-right: none; }
+
+  .charter-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 20%, rgba(184,147,106,0.10) 0%, transparent 55%),
+      radial-gradient(ellipse at 20% 80%, rgba(184,147,106,0.04) 0%, transparent 40%);
+    transition: opacity 0.4s;
+  }
+  .charter-card:hover::before { opacity: 1.6; }
+
+  /* Scan shimmer */
+  .charter-card::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0; right: 0;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.012) 50%, transparent 100%);
+    transition: top 0.6s ease;
+    pointer-events: none;
+  }
+  .charter-card:hover::after { top: 100%; }
+
+  .charter-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .charter-bg-letter {
+    position: absolute;
+    top: -20px; right: -10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 320px;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--liberty-accent);
+    pointer-events: none;
+    opacity: 0.06;
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .charter-card:hover .charter-bg-letter { opacity: 0.11; transform: scale(1.05) translateY(-10px); }
+
+  .charter-content { position: relative; z-index: 2; }
+
+  .charter-zone-tag {
+    font-size: 8px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--liberty-accent);
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .charter-zone-tag::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .charter-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(38px, 4.5vw, 64px);
+    letter-spacing: 0.04em;
+    color: var(--white);
+    line-height: 0.95;
+    margin-bottom: 20px;
+  }
+
+  .charter-desc {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-soft);
+    font-weight: 300;
+    font-style: italic;
+    max-width: 420px;
+    margin-bottom: 32px;
+  }
+
+  .charter-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .charter-stats { display: flex; gap: 32px; }
+  .charter-stat { display: flex; flex-direction: column; gap: 4px; }
+  .charter-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--liberty-accent);
+  }
+  .charter-stat-label {
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .charter-enter {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--liberty-accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: gap 0.3s;
+  }
+  .charter-card:hover .charter-enter { gap: 18px; }
+
+  /* COMING CARDS */
+  .charter-coming {
+    opacity: 0.5;
+    cursor: default;
+    background: var(--deep);
+  }
+  .charter-coming::before { display: none; }
+  .charter-coming .charter-zone-tag { color: var(--text-dim); }
+  .charter-coming .charter-zone-tag::before { background: var(--text-dim); animation: none; }
+  .charter-coming .charter-stat-num { color: var(--text-dim); }
+  .charter-coming .charter-enter { color: var(--text-dim); }
+  .charter-coming .charter-name { color: var(--smoke); }
+
+  .coming-badge {
+    position: absolute;
+    top: 32px; right: 32px;
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+  }
+
+  /* ABOUT STRIP */
+  .about-section { border-bottom: 1px solid var(--border); }
+  .about-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+  }
+  .about-left {
+    padding: 80px 48px 80px 40px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .about-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    line-height: 0.9;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border);
+    letter-spacing: 0;
+  }
+  .about-date {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: auto;
+  }
+  .about-right { padding: 80px 40px 80px 60px; }
+  .about-label {
+    font-size: 8px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--liberty-accent);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .about-label::before { content: ''; width: 20px; height: 1px; background: var(--liberty-accent); }
+  .about-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 3.5vw, 48px);
+    line-height: 1.15;
+    color: var(--white);
+    font-weight: 700;
+    margin-bottom: 40px;
+    letter-spacing: -0.02em;
+  }
+  .about-title em { font-style: italic; font-weight: 300; color: var(--liberty-accent); }
+  .about-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 48px;
+  }
+  .about-para {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text-soft);
+    font-weight: 300;
+  }
+  .about-para strong { color: var(--white); font-weight: 400; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); }
+  .footer-top {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .footer-col {
+    padding: 48px 40px;
+    border-right: 1px solid var(--border);
+  }
+  .footer-col:last-child { border-right: none; }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+  .footer-logo span { color: var(--liberty-accent); }
+  .footer-zone {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--liberty-accent);
+    margin-bottom: 16px;
+  }
+  .footer-tagline {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .footer-col-title {
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-links a {
+    font-size: 12px;
+    color: var(--text-soft);
+    text-decoration: none;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.05em;
+  }
+  .footer-links a:hover { color: var(--white); }
+  .footer-links a::before { content: '→'; font-size: 10px; opacity: 0.5; }
+  .footer-bottom {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 40px;
+  }
+  .footer-copy { font-size: 10px; letter-spacing: 0.1em; color: var(--text-dim); }
+  .footer-copy span { color: var(--liberty-accent); }
+  .footer-back {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    transition: all 0.2s;
+  }
+  .footer-back:hover { border-color: var(--liberty-accent); color: var(--liberty-accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--void); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+
+  @media (max-width: 900px) {
+    .charters-grid { grid-template-columns: 1fr; }
+    .charter-card:nth-child(2n) { border-right: 1px solid var(--border); }
+    .about-inner { grid-template-columns: 1fr; }
+    .about-left { display: none; }
+    .about-body { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    nav .nav-breadcrumb { display: none; }
+    .hero-stats { flex-wrap: wrap; gap: 24px; padding-left: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="../index.html">DIGI<span>DRIFTERS</span></a>
+  <div class="nav-breadcrumb">
+    <a class="nav-crumb" href="../index.html">← All Exhibits</a>
+    <span class="nav-crumb">Zone 03 · Liberty Index</span>
+  </div>
+  <div class="nav-zone">Zone <span>03</span> · Fiction & History</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="hero-inner">
+    <div class="hero-kicker">Zone 03 · Fiction & History · A Living Archive</div>
+
+    <h1 class="hero-title">
+      THE LIBERTY
+      <span class="line-2">INDEX</span>
+    </h1>
+
+    <p class="hero-tagline">
+      England's hidden jurisdictions — places beyond the sheriff's reach. Explore the charters that protected fugitives, meet the residents who lived beyond the law, and follow the stories that crossed the boundaries.
+    </p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">4</div>
+        <div class="hero-stat-label">Major Liberties</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">1230</div>
+        <div class="hero-stat-label">Earliest Charter</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">1892</div>
+        <div class="hero-stat-label">Final Abolition</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">∞</div>
+        <div class="hero-stat-label">Possible Stories</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="hero-ticker">
+    <div class="ticker-label">Now Showing</div>
+    <div style="overflow:hidden;flex:1;">
+      <div class="ticker-track">
+        <div class="ticker-item"><span class="ticker-dot">◆</span> The Charter of Havering — Legal Foundation of a Royal Liberty</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> The Writ of Transit — Safe Passage Between Liberties</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> Femi Freeman — The Avenger of Havering-atte-Bower</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> Coming: The Savoy · Westminster · Tower Liberties</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> The Charter of Havering — Legal Foundation of a Royal Liberty</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> The Writ of Transit — Safe Passage Between Liberties</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> Femi Freeman — The Avenger of Havering-atte-Bower</div>
+        <div class="ticker-item"><span class="ticker-dot">◆</span> Coming: The Savoy · Westminster · Tower Liberties</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHARTERS -->
+<section class="charters-section" id="charters">
+  <div class="charters-header">
+    <h2 class="charters-title">THE CHARTERS</h2>
+    <p class="charters-subtitle">The legal foundations of hidden England.</p>
+  </div>
+
+  <div class="charters-grid">
+
+    <!-- HAVERING — LIVE -->
+    <a class="charter-card reveal" href="charter.html">
+      <div class="charter-grid-overlay"></div>
+      <div class="charter-bg-letter">H</div>
+      <div class="charter-content">
+        <div class="charter-zone-tag">Royal Liberty · Est. 1230</div>
+        <h3 class="charter-name">The Charter<br>of Havering</h3>
+        <p class="charter-desc">The legal foundation of the Royal Liberty of Havering-atte-Bower — the laws that created a refuge for fugitives, debtors and those the Crown wished to keep close.</p>
+        <div class="charter-meta">
+          <div class="charter-stats">
+            <div class="charter-stat">
+              <div class="charter-stat-num">6</div>
+              <div class="charter-stat-label">Articles</div>
+            </div>
+            <div class="charter-stat">
+              <div class="charter-stat-num">1230</div>
+              <div class="charter-stat-label">Granted</div>
+            </div>
+            <div class="charter-stat">
+              <div class="charter-stat-num">1892</div>
+              <div class="charter-stat-label">Dissolved</div>
+            </div>
+          </div>
+          <div class="charter-enter">Read Charter →</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- SAVOY — Live -->
+  <a class="charter-card reveal" href="savoy_charter.html">
+      <div class="charter-grid-overlay"></div>
+      <div class="charter-bg-letter">S</div>
+      <div class="charter-content">
+        <div class="charter-zone-tag">Palatinate Liberty · Est. 1377</div>
+        <h3 class="charter-name">The Liberties<br>of the Savoy</h3>
+        <p class="charter-desc">The most dangerous of London's Liberties — a labyrinth of alleys and tenements beyond the city's reach, home to printers, forgers and dissenters.</p>
+        <div class="charter-meta">
+          <div class="charter-stats">
+            <div class="charter-stat">
+              <div class="charter-stat-num">5</div>
+              <div class="charter-stat-label">Articles</div>
+            </div>
+            <div class="charter-stat">
+              <div class="charter-stat-num">1505</div>
+              <div class="charter-stat-label">Granted</div>
+            </div>
+            <div class="charter-stat">
+              <div class="charter-stat-num">1830</div>
+              <div class="charter-stat-label">Dissolved</div>
+            </div>
+          </div>
+          <div class="charter-enter">Read Charter →</div>
+        </div>
+      </div>
+   </a>
+
+    <!-- WESTMINSTER - Live -->
+    <a class="charter-card reveal" href="westminster_charter.html">
+      <div class="charter-bg-letter">W</div>
+      <div class="charter-content">
+        <div class="charter-zone-tag">Ecclesiastical Liberty · Medieval</div>
+        <h3 class="charter-name">The Liberty<br>of Westminster</h3>
+        <p class="charter-desc">Sanctuary under the shadow of the Abbey. The church's own jurisdiction, where abbots held courts and debtors found God's protection from creditors.</p>
+        <div class="charter-meta">
+          <div class="charter-stats">
+            <div class="charter-stat">
+              <div class="charter-stat-num">4</div>
+              <div class="charter-stat-label">Articles</div>
+            </div>
+            <div class="charter-stat">
+              <div class="charter-stat-num">Medieval</div>
+              <div class="charter-stat-label">Granted</div>
+            </div>
+            <div class="charter-stat">
+              <div class="charter-stat-num">Present</div>
+              <div class="charter-stat-label">Absorbed</div>
+            </div>
+          </div>
+          <div class="charter-enter">Read Charter →</div>
+        </div>
+      </div>
+    </a>
+
+    <!-- TOWER — Live -->
+    <a class="charter-card reveal" href="tower_charter.html">
+      <div class="charter-bg-letter">T</div>
+      <div class="charter-content">
+        <div class="charter-zone-tag">Royal Franchise · Norman</div>
+        <h3 class="charter-name">The Liberty<br>of the Tower</h3>
+        <p class="charter-desc">Beyond the Tower walls, a distinct parish and jurisdiction where soldiers, merchants and the condemned lived cheek by jowl with England's most famous prison.</p>
+        <div class="charter-meta">
+          <div class="charter-stats">
+           <div class="charter-stat">
+              <div class="charter-stat-num">4</div>
+              <div class="charter-stat-label">Articles</div>
+            </div>
+            <div class="charter-stat">
+              <div class="charter-stat-num">1080</div>
+              <div class="charter-stat-label">Granted</div>
+            </div>
+            <div class="charter-stat">
+              <div class="charter-stat-num">1855</div>
+              <div class="charter-stat-label">Dissolved</div>
+            </div>
+          </div>
+          <div class="charter-enter">Read Charter →</div>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ABOUT THE ZONE -->
+<section class="about-section" id="about">
+  <div class="about-inner">
+    <div class="about-left">
+      <div class="about-num">03</div>
+      <div class="about-date">Zone 03 · Fiction & History · digidrifters.com</div>
+    </div>
+    <div class="about-right reveal">
+      <div class="about-label">The Idea</div>
+      <h2 class="about-title">
+        The law had edges.<br>
+        Some people <em>lived on them.</em>
+      </h2>
+      <div class="about-body">
+        <p class="about-para">Between the medieval and modern, England contained dozens of <strong>private jurisdictions</strong> — places where the King's writ ran thin, sheriffs had no authority, and ordinary law bent around ancient charters.</p>
+        <p class="about-para">The Liberty Index explores these hidden places through <strong>documents, characters and stories</strong>. Each Charter is a real-world legal puzzle. Each Resident is a fictional soul navigating its rules.</p>
+        <p class="about-para">This is both <strong>history and fiction</strong>: grounded in genuine legal history, animated by invented characters who reveal what it actually meant to live beyond the law.</p>
+        <p class="about-para">Start with <strong>Havering's Charter</strong> — then meet Femi Freeman, the avenger who crossed into it. More Liberties, more Residents, more stories are being written.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-col">
+      <div class="footer-logo">DIGI<span>DRIFTERS</span></div>
+      <div class="footer-zone">Zone 03 · The Liberty Index</div>
+      <p class="footer-tagline">A living archive of England's hidden jurisdictions. History and fiction, intertwined.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">In This Zone</div>
+      <ul class="footer-links">
+        <li><a href="charter.html">Charter of Havering</a></li><!--Havering charter only-->
+        <li><a href="savoy_charter.html">The Savoy </a></li>
+        <li><a href="westminster_charter.html">Westminster (Soon)</a></li>
+        <li><a href="tower_charter.html">The Tower (Soon)</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">All Exhibits</div>
+      <ul class="footer-links">
+        <li><a href="../tech-store.html">The Olde Tech Store</a></li>
+        <li><a href="../archive-of-dress.html">Archive of Dress</a></li>
+        <li><a href="../index.html">← Back to Digidrifters</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 Digidrifters · Zone 03 · <span>No algorithm. No ads.</span></div>
+    <a href="../index.html" class="footer-back">← All Exhibits</a>
+  </div>
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+
+  window.addEventListener('resize', () => {
+    const ticker = document.querySelector('.ticker-track');
+    ticker.style.animation = 'none';
+    ticker.offsetHeight;
+    ticker.style.animation = '';
+  });
+</script>
+</body>
+</html>
