@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goverlicious — Digidrifters Power Atlas</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --bg2: #111111;
+  --bg3: #161616;
+  --text: #e8e0d0;
+  --muted: #6a6460;
+  --accent: #c8a84a;
+  --accent-faint: rgba(200,168,74,0.08);
+  --border: rgba(200,168,74,0.15);
+  --border-soft: rgba(255,255,255,0.06);
+  --live: #6ada8a;
+  --live-faint: rgba(106,218,138,0.06);
+  --soon: rgba(200,168,74,0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-soft);
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem;
+}
+
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; font-weight: 900; letter-spacing: 0.02em;
+  color: var(--text); cursor: pointer; transition: color 0.2s;
+}
+.nav-logo:hover { color: var(--accent); }
+.nav-logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex; align-items: center; gap: 2rem; list-style: none;
+}
+.nav-links a {
+  font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links .active { color: var(--accent); }
+
+.nav-issue { font-size: 0.55rem; letter-spacing: 0.15em; color: var(--muted); }
+
+/* ── TICKER ── */
+.ticker-wrap {
+  margin-top: 52px;
+  border-bottom: 1px solid var(--border-soft);
+  overflow: hidden; height: 36px;
+  display: flex; align-items: center;
+  background: var(--bg2);
+}
+.ticker-label {
+  font-size: 0.48rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--accent); padding: 0 1.5rem; white-space: nowrap;
+  border-right: 1px solid var(--border-soft);
+  height: 100%; display: flex; align-items: center;
+  background: var(--bg2); z-index: 1; flex-shrink: 0;
+}
+.ticker-track { display: flex; animation: ticker 32s linear infinite; }
+.ticker-item {
+  font-size: 0.52rem; letter-spacing: 0.1em; color: var(--muted);
+  white-space: nowrap; padding: 0 2rem;
+  border-right: 1px solid var(--border-soft);
+  height: 36px; display: flex; align-items: center; gap: 0.5rem;
+}
+.ticker-item span { color: var(--text); }
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* ── HERO ── */
+.hero {
+  padding: 5rem 2.5rem 4rem;
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 4rem; align-items: end;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.hero-eyebrow {
+  font-size: 0.52rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.hero-eyebrow::before { content:''; width:20px; height:1px; background:var(--accent); opacity:0.5; }
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 900; line-height: 0.92; letter-spacing: -0.03em;
+  margin-bottom: 1.2rem;
+}
+.hero-title em { font-style: italic; color: var(--accent); }
+
+.hero-desc {
+  font-size: 0.68rem; line-height: 1.9; color: var(--muted); margin-bottom: 2rem;
+}
+
+.hero-cta {
+  display: flex; gap: 0.8rem; flex-wrap: wrap;
+}
+
+.btn-primary {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 0.7rem 1.4rem;
+  background: var(--accent); color: #0a0a0a;
+  border: none; cursor: pointer; transition: all 0.15s;
+}
+.btn-primary:hover { background: #d4b860; }
+
+.btn-secondary {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 0.7rem 1.4rem;
+  background: transparent; color: var(--muted);
+  border: 1px solid var(--border-soft); cursor: pointer; transition: all 0.15s;
+}
+.btn-secondary:hover { color: var(--text); border-color: var(--muted); }
+
+/* Hero right — live stats */
+.hero-right {
+  display: flex; flex-direction: column; gap: 0.8rem;
+}
+
+.progress-arc {
+  background: var(--bg2); border: 1px solid var(--border-soft);
+  padding: 1.5rem;
+}
+
+.arc-title {
+  font-size: 0.48rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 1.2rem; opacity: 0.6;
+}
+
+.arc-row {
+  display: flex; align-items: center; gap: 1rem; margin-bottom: 0.9rem;
+}
+.arc-row:last-child { margin-bottom: 0; }
+
+.arc-label {
+  font-size: 0.58rem; color: var(--text); width: 55px; flex-shrink: 0;
+}
+
+.arc-bar-wrap {
+  flex: 1; height: 6px; background: rgba(255,255,255,0.05); position: relative;
+}
+
+.arc-bar-fill {
+  height: 100%; transition: width 1s cubic-bezier(0.22,1,0.36,1);
+}
+
+.fill-live { background: linear-gradient(to right, #3aaa5a, var(--live)); }
+.fill-inprog { background: linear-gradient(to right, #6a5a1a, var(--accent)); }
+.fill-planned { background: rgba(255,255,255,0.1); }
+
+.arc-count {
+  font-size: 0.55rem; color: var(--muted); width: 55px; text-align: right; flex-shrink: 0;
+}
+
+.arc-count span { color: var(--text); }
+
+/* ── SECTION ── */
+.section {
+  max-width: 1200px; margin: 0 auto; padding: 4rem 2.5rem;
+}
+
+.section-header {
+  display: flex; align-items: baseline; gap: 1rem;
+  margin-bottom: 2.5rem; padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+.section-num { font-size: 0.5rem; letter-spacing: 0.3em; color: var(--accent); opacity: 0.5; text-transform: uppercase; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.01em; }
+.section-subtitle { font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-left: auto; }
+
+/* ── ARC PHASES ── */
+.phases {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: var(--border-soft); border: 1px solid var(--border-soft);
+  margin-bottom: 3rem;
+}
+
+.phase {  
+  background: var(--bg); padding: 2rem; position: relative;
+}
+
+.phase-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem; font-weight: 900;
+  color: rgba(255,255,255,0.04); line-height: 1;
+  position: absolute; top: 1rem; right: 1.2rem;
+}
+
+.phase-tag {
+  font-size: 0.48rem; letter-spacing: 0.25em; text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+.tag-active { color: var(--live); }
+.tag-next { color: var(--accent); }
+.tag-future { color: var(--muted); }
+
+.phase-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem;
+}
+
+.phase-desc { font-size: 0.6rem; line-height: 1.8; color: var(--muted); margin-bottom: 1.2rem; }
+
+.phase-countries {
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+
+.country-chip {
+  font-size: 0.5rem; letter-spacing: 0.08em;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid; border-radius: 1px;
+  display: flex; align-items: center; gap: 0.3rem;
+}
+.chip-live { border-color: rgba(106,218,138,0.3); color: var(--live); background: var(--live-faint); cursor: pointer; transition: background 0.15s; }
+.chip-live:hover { background: rgba(106,218,138,0.12); }
+.chip-soon { border-color: var(--border); color: var(--accent); background: var(--accent-faint); }
+.chip-dim { border-color: var(--border-soft); color: var(--muted); background: transparent; }
+
+/* ── COUNTRY GRID ── */
+.country-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border-soft);
+  border: 1px solid var(--border-soft);
+}
+
+.country-card {
+  background: var(--bg);
+  padding: 1.5rem;
+  display: flex; flex-direction: column; gap: 0.8rem;
+  position: relative;
+  min-height: 180px;
+  transition: background 0.15s;
+}
+
+.country-card.is-live { cursor: pointer; }
+.country-card.is-live:hover { background: var(--bg2); }
+.country-card.is-live:hover .cc-arrow { opacity: 1; }
+
+.country-card.is-coming::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 10px,
+    rgba(255,255,255,0.008) 10px, rgba(255,255,255,0.008) 11px
+  );
+  pointer-events: none;
+}
+
+.cc-flag { font-size: 1.8rem; line-height: 1; }
+
+.cc-header { display: flex; align-items: flex-start; justify-content: space-between; }
+
+.cc-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; font-weight: 700; line-height: 1.1;
+}
+
+.cc-status-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 0.3rem;
+}
+.dot-live { background: var(--live); box-shadow: 0 0 6px rgba(106,218,138,0.5); animation: pulse 2s infinite; }
+.dot-soon { background: var(--accent); opacity: 0.6; }
+.dot-dim { background: var(--muted); opacity: 0.3; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.5; }
+}
+
+.cc-system {
+  font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+}
+
+.cc-desc {
+  font-size: 0.6rem; line-height: 1.7; color: rgba(106,100,96,0.7);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.cc-footer {
+  display: flex; align-items: center; justify-content: space-between; margin-top: auto;
+}
+
+.cc-status-label {
+  font-size: 0.46rem; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 0.2rem 0.5rem; border: 1px solid;
+}
+.label-live { color: var(--live); border-color: rgba(106,218,138,0.3); background: var(--live-faint); }
+.label-soon { color: var(--accent); border-color: var(--border); background: var(--accent-faint); }
+.label-planned { color: var(--muted); border-color: var(--border-soft); background: transparent; }
+
+.cc-arrow {
+  font-size: 0.85rem; color: var(--accent); opacity: 0;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.country-card.is-live:hover .cc-arrow { transform: translateX(3px); }
+
+.cc-last-updated {
+  font-size: 0.44rem; letter-spacing: 0.1em; color: rgba(106,100,96,0.5);
+}
+
+/* ── METHODOLOGY NOTE ── */
+.method-note {
+  background: var(--bg2);
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--accent);
+  padding: 1.5rem 2rem;
+  margin-top: 3rem;
+}
+.method-note-title {
+  font-size: 0.52rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 0.6rem; opacity: 0.7;
+}
+.method-note-body {
+  font-size: 0.62rem; line-height: 1.85; color: var(--muted);
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border-soft);
+  padding: 2.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+}
+.footer-logo { font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 900; color: var(--muted); }
+.footer-logo span { color: var(--accent); }
+.footer-text { font-size: 0.5rem; letter-spacing: 0.15em; color: var(--muted); }
+.footer-link { font-size: 0.5rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; transition: color 0.2s; }
+.footer-link:hover { color: var(--text); }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; gap: 2rem; }
+  .phases { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  nav { padding: 0 1.2rem; }
+  .nav-links { display: none; }
+  .section { padding: 3rem 1.2rem; }
+  .hero { padding: 3.5rem 1.2rem 3rem; }
+  .hero-title { font-size: 2.8rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://www.digidrifters.com" class="nav-logo">DIGI<span>DRIFTERS</span></a>
+  <ul class="nav-links">
+    <li><a href="hubalicious.html">Hubalicious</a></li>
+    <li><a href="#tracker" class="active">Goverlicious</a></li>
+    <li><a href="#method">About</a></li>
+    <li><a href="https://www.digidrifters.com#manifesto">Digidrifters</a></li>
+  </ul>
+  <div class="nav-issue">Power Atlas · Est. 2025</div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-label">◆ Goverlicious</div>
+  <div class="ticker-track">
+    <div class="ticker-item">🇬🇧 <span>United Kingdom</span> — Live · Updated March 2025</div>
+    <div class="ticker-item">🇷🇺 <span>Russia</span> — Live · Updated March 2025</div>
+    <div class="ticker-item">🇺🇸 <span>USA</span> — Coming soon · G7 Arc</div>
+    <div class="ticker-item">🇩🇪 <span>Germany</span> — Coming soon</div>
+    <div class="ticker-item">🇫🇷 <span>France</span> — Coming soon</div>
+    <div class="ticker-item">🇯🇵 <span>Japan</span> — Coming soon</div>
+    <div class="ticker-item">🔄 Updates at elections · New Year's Eve</div>
+    <div class="ticker-item">🎯 Target: 196 countries · No deadline</div>
+    <!-- duplicate -->
+    <div class="ticker-item">🇬🇧 <span>United Kingdom</span> — Live · Updated March 2025</div>
+    <div class="ticker-item">🇷🇺 <span>Russia</span> — Live · Updated March 2025</div>
+    <div class="ticker-item">🇺🇸 <span>USA</span> — Coming soon · G7 Arc</div>
+    <div class="ticker-item">🇩🇪 <span>Germany</span> — Coming soon</div>
+    <div class="ticker-item">🇫🇷 <span>France</span> — Coming soon</div>
+    <div class="ticker-item">🇯🇵 <span>Japan</span> — Coming soon</div>
+    <div class="ticker-item">🔄 Updates at elections · New Year's Eve</div>
+    <div class="ticker-item">🎯 Target: 196 countries · No deadline</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Digidrifters · Power Atlas</div>
+    <h1 class="hero-title">Gover<em>licious</em></h1>
+    <p class="hero-desc">Who actually runs the world? Not just the constitutions and the org charts — but the siloviki, the oligarchs, the media barons, the intelligence services, and the old school networks that hold it all together. Country by country, power structure by power structure.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="document.getElementById('tracker').scrollIntoView({behavior:'smooth'})">Explore Countries →</button>
+      <button class="btn-secondary" onclick="document.getElementById('method').scrollIntoView({behavior:'smooth'})">How it works</button>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="progress-arc">
+      <div class="arc-title">Progress Tracker</div>
+      <div class="arc-row">
+        <div class="arc-label" style="color:var(--live)">Live</div>
+        <div class="arc-bar-wrap"><div class="arc-bar-fill fill-live" style="width:1%"></div></div>
+        <div class="arc-count"><span>2</span> / 196</div>
+      </div>
+      <div class="arc-row">
+        <div class="arc-label" style="color:var(--accent)">G7</div>
+        <div class="arc-bar-wrap"><div class="arc-bar-fill fill-inprog" style="width:22%"></div></div>
+        <div class="arc-count"><span>2</span> / 9</div>
+      </div>
+      <div class="arc-row">
+        <div class="arc-label" style="color:var(--muted)">G20</div>
+        <div class="arc-bar-wrap"><div class="arc-bar-fill fill-planned" style="width:10%"></div></div>
+        <div class="arc-count"><span>2</span> / 20</div>
+      </div>
+      <div class="arc-row">
+        <div class="arc-label" style="color:var(--muted)">World</div>
+        <div class="arc-bar-wrap"><div class="arc-bar-fill fill-planned" style="width:1%"></div></div>
+        <div class="arc-count"><span>2</span> / 196</div>
+      </div>
+    </div>
+    <div style="background:var(--bg2); border:1px solid var(--border-soft); padding:1rem 1.2rem; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="font-size:0.44rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:0.25rem;">Last Updated</div>
+        <div style="font-size:0.7rem; color:var(--text);">March 2025</div>
+      </div>
+      <div>
+        <div style="font-size:0.44rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:0.25rem;">Next Refresh</div>
+        <div style="font-size:0.7rem; color:var(--accent);">At next major election</div>
+      </div>
+      <div>
+        <div style="font-size:0.44rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:0.25rem;">Coverage</div>
+        <div style="font-size:0.7rem; color:var(--text);">1% · Growing</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ARC PHASES -->
+<section class="section" id="tracker">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">The Arc</h2>
+    <span class="section-subtitle">G7 → G20 → World</span>
+  </div>
+
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-num">01</div>
+      <div class="phase-tag tag-active">● Active Arc</div>
+      <div class="phase-title">The G7 + Russia</div>
+      <div class="phase-desc">The world's most powerful democracies plus the most instructive autocracy. Eight countries that between them account for roughly half of global GDP and two of the world's five nuclear powers — and between them represent almost every flavour of how power actually works.</div>
+      <div class="phase-countries">
+        <div class="country-chip chip-live" onclick="window.location.href='goverlicious_assets/goverlicious-uk.html'">🇬🇧 UK ✓</div>
+        <div class="country-chip chip-live" onclick="window.location.href='goverlicious_assets/goverlicious-russia.html'">🇷🇺 Russia ✓</div>
+        <div class="country-chip chip-soon">🇺🇸 USA</div>
+        <div class="country-chip chip-soon">🇩🇪 Germany</div>
+        <div class="country-chip chip-soon">🇫🇷 France</div>
+        <div class="country-chip chip-soon">🇯🇵 Japan</div>
+        <div class="country-chip chip-soon">🇮🇹 Italy</div>
+        <div class="country-chip chip-soon">🇨🇦 Canada</div>
+        <div class="country-chip chip-dim">🇪🇺 EU (bonus)</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">02</div>
+      <div class="phase-tag tag-next">◎ Next Arc</div>
+      <div class="phase-title">Expand to G20</div>
+      <div class="phase-desc">The G7 plus the rising powers, regional giants, and constitutional experiments that round out the picture. Where the interesting structural diversity really begins — theocratic monarchies, emerging democracies, military states, one-party systems.</div>
+      <div class="phase-countries">
+        <div class="country-chip chip-dim">🇨🇳 China</div>
+        <div class="country-chip chip-dim">🇮🇳 India</div>
+        <div class="country-chip chip-dim">🇧🇷 Brazil</div>
+        <div class="country-chip chip-dim">🇦🇺 Australia</div>
+        <div class="country-chip chip-dim">🇰🇷 South Korea</div>
+        <div class="country-chip chip-dim">🇸🇦 Saudi Arabia</div>
+        <div class="country-chip chip-dim">🇿🇦 South Africa</div>
+        <div class="country-chip chip-dim">+ more</div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-num">03</div>
+      <div class="phase-tag tag-future">○ Future Arc</div>
+      <div class="phase-title">The Full World</div>
+      <div class="phase-desc">All 196 recognised countries. The strange corners, the micro-states, the collapsed states, the hereditary theocracies and the Nordic social democracies. No timeline on this — just a direction of travel. Refreshed whenever an election changes the picture.</div>
+      <div class="phase-countries">
+        <div class="country-chip chip-dim">196 Countries</div>
+        <div class="country-chip chip-dim">No Deadline</div>
+        <div class="country-chip chip-dim">Living Atlas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COUNTRY GRID -->
+  <div class="section-header" style="margin-top:2rem;">
+    <span class="section-num">02</span>
+    <h2 class="section-title">All Countries</h2>
+    <span class="section-subtitle">2 Live · 6 In Progress · 188 To Come</span>
+  </div>
+
+  <div class="country-grid">
+
+    <!-- UK — LIVE -->
+    <div class="country-card is-live" onclick="window.location.href='goverlicious_assets/goverlicious-uk.html'">
+      <div class="cc-flag">🇬🇧</div>
+      <div class="cc-header">
+        <div class="cc-name">United Kingdom</div>
+        <div class="cc-status-dot dot-live"></div>
+      </div>
+      <div class="cc-system">Constitutional Monarchy · Parliamentary</div>
+      <div class="cc-desc">Crown, Cabinet, Parliament, City of London, media barons, the Establishment pipeline — ten tiers deep into who really runs Britain.</div>
+      <div class="cc-footer">
+        <div style="display:flex; flex-direction:column; gap:0.2rem;">
+          <div class="cc-status-label label-live">● Live</div>
+          <div class="cc-last-updated">Updated March 2025</div>
+        </div>
+        <div class="cc-arrow">→</div>
+      </div>
+    </div>
+
+    <!-- RUSSIA — LIVE -->
+    <div class="country-card is-live" onclick="window.location.href='goverlicious_assets/goverlicious-russia.html'">
+      <div class="cc-flag">🇷🇺</div>
+      <div class="cc-header">
+        <div class="cc-name">Russia</div>
+        <div class="cc-status-dot dot-live"></div>
+      </div>
+      <div class="cc-system">Federal Republic (De Facto Autocracy)</div>
+      <div class="cc-desc">The vertikalnaya vlast — Putin's power vertical, the siloviki, FSB, GRU, oligarchs, Kadyrov, the Orthodox Church. The constitutional structure is largely decorative.</div>
+      <div class="cc-footer">
+        <div style="display:flex; flex-direction:column; gap:0.2rem;">
+          <div class="cc-status-label label-live">● Live</div>
+          <div class="cc-last-updated">Updated March 2025</div>
+        </div>
+        <div class="cc-arrow">→</div>
+      </div>
+    </div>
+
+    <!-- USA — COMING SOON -->
+    <div class="country-card is-coming">
+      <div class="cc-flag">🇺🇸</div>
+      <div class="cc-header">
+        <div class="cc-name">United States</div>
+        <div class="cc-status-dot dot-soon"></div>
+      </div>
+      <div class="cc-system">Federal Republic · Presidential</div>
+      <div class="cc-desc">Three branches, 50 state governments, PACs, the military-industrial complex, Silicon Valley, Wall Street, evangelical networks — the most complex power map of any democracy.</div>
+      <div class="cc-footer">
+        <div class="cc-status-label label-soon">Coming Soon</div>
+      </div>
+    </div>
+
+    <!-- GERMANY -->
+    <div class="country-card is-coming">
+      <div class="cc-flag">🇩🇪</div>
+      <div class="cc-header">
+        <div class="cc-name">Germany</div>
+        <div class="cc-status-dot dot-soon"></div>
+      </div>
+      <div class="cc-system">Federal Republic · Parliamentary</div>
+      <div class="cc-desc">Bundesrat, Bundestag, the Bundesbank, coalition politics, corporate co-determination, and the memory of what happens when democratic institutions fail.</div>
+      <div class="cc-footer">
+        <div class="cc-status-label label-soon">Coming Soon</div>
+      </div>
+    </div>
+
+    <!-- FRANCE -->
+    <div class="country-card is-coming">
+      <div class="cc-flag">🇫🇷</div>
+      <div class="cc-header">
+        <div class="cc-name">France</div>
+        <div class="cc-status-dot dot-soon"></div>
+      </div>
+      <div class="cc-system">Semi-Presidential Republic</div>
+      <div class="cc-desc">The Fifth Republic's powerful presidency, the Élysée Palace, the grandes écoles pipeline, the Conseil d'État, and France's peculiar relationship with technocratic power.</div>
+      <div class="cc-footer">
+        <div class="cc-status-label label-soon">Coming Soon</div>
+      </div>
+    </div>
+
+    <!-- JAPAN -->
+    <div class="country-card is-coming">
+      <div class="cc-flag">🇯🇵</div>
+      <div class="cc-header">
+        <div class="cc-name">Japan</div>
+        <div class="cc-status-dot dot-soon"></div>
+      </div>
+      <div class="cc-system">Constitutional Monarchy · Parliamentary</div>
+      <div class="cc-desc">The LDP's near-permanent dominance, the bureaucratic ministries, Keidanren (business federation), the Imperial household, and the post-war US security architecture still shaping it all.</div>
+      <div class="cc-footer">
+        <div class="cc-status-label label-soon">Coming Soon</div>
+      </div>
+    </div>
+
+    <!-- ITALY -->
+    <div class="country-card is-coming">
+      <div class="cc-flag">🇮🇹</div>
+      <div class="cc-header">
+        <div class="cc-name">Italy</div>
+        <div class="cc-status-dot dot-soon"></div>
+      </div>
+      <div class="cc-system">Parliamentary Republic</div>
+      <div class="cc-desc">The most governments of any Western democracy, the Vatican, the North-South divide, Confindustria, the 'ndrangheta, and the curious durability of Italian political dynasties.</div>
+      <div class="cc-footer">
+        <div class="cc-status-label label-soon">Coming Soon</div>
+      </div>
+    </div>
+
+    <!-- CANADA -->
+    <div class="country-card is-coming">
+      <div class="cc-flag">🇨🇦</div>
+      <div class="cc-header">
+        <div class="cc-name">Canada</div>
+        <div class="cc-status-dot dot-soon"></div>
+      </div>
+      <div class="cc-system">Constitutional Monarchy · Parliamentary</div>
+      <div class="cc-desc">Westminster model under the Crown, ten provinces with real power, Indigenous governance, energy sector influence, and a continental relationship with the US that shapes everything.</div>
+      <div class="cc-footer">
+        <div class="cc-status-label label-soon">Coming Soon</div>
+      </div>
+    </div>
+
+    <!-- G20 PLACEHOLDER -->
+    <div class="country-card is-coming" style="grid-column: span 2;">
+      <div style="display:flex; align-items:center; gap:1.5rem; height:100%;">
+        <div style="font-size:2.5rem; opacity:0.2;">🌍</div>
+        <div>
+          <div style="font-size:0.48rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); margin-bottom:0.4rem;">G20 Arc · Planned</div>
+          <div style="font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--muted); margin-bottom:0.4rem;">China · India · Brazil · Australia · South Korea · Saudi Arabia · South Africa · and more</div>
+          <div style="font-size:0.58rem; color:rgba(106,100,96,0.5); line-height:1.7;">Coming after the G7 arc is complete. Each country will follow the same interactive atlas format — map, tiers, official + shadow power, detail panels.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- METHODOLOGY -->
+  <div class="method-note" id="method">
+    <div class="method-note-title">◆ How Goverlicious Works</div>
+    <div class="method-note-body">
+      Each country map shows two things at once: the <strong style="color:var(--text);">formal constitutional structure</strong> (who officially holds power) and the <strong style="color:var(--text);">shadow power architecture</strong> (who actually shapes decisions). Every node is clickable, with a detail panel covering the real story — budgets, who controls what, notable incidents, power assessments. Filters let you toggle between formal and shadow views.<br><br>
+      Maps are updated at significant electoral events, or at New Year's Eve as a general refresh. The goal isn't comprehensiveness — it's honest clarity about how power actually works in each country. The formal tier and the shadow tier are equally important. Sometimes (Russia, Saudi Arabia) the formal tier is almost irrelevant. Sometimes (Germany, Canada) it mostly works as advertised.
+    </div>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="https://www.digidrifters.com" class="footer-logo">DIGI<span>DRIFTERS</span></a>
+  <div class="footer-text">© 2025 Digidrifters · Goverlicious · A Living Power Atlas</div>
+  <a href="hubalicious.html" class="footer-link">← Hubalicious</a>
+</footer>
+
+</body>
+</html>

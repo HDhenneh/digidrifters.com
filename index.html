@@ -29,6 +29,8 @@
     --future-bg: #080810;
     --liberty-accent: #B8936A;
     --liberty-bg: #0A0804;
+    --power-accent: #8B7FFF;
+    --power-bg: #080810;
   }
 
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -498,6 +500,25 @@
   .exhibit-liberty .exhibit-zone-tag { color: var(--liberty-accent); }
   .exhibit-liberty .exhibit-stat-num { color: var(--liberty-accent); }
   .exhibit-liberty .exhibit-enter { color: var(--liberty-accent); }
+
+  /* Goverlicious / Power Atlas card */
+  .exhibit-power {
+    background: var(--power-bg);
+  }
+  .exhibit-power::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 25% 25%, rgba(200,168,74,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 75%, rgba(200,168,74,0.06) 0%, transparent 40%);
+    transition: opacity 0.4s;
+  }
+  .exhibit-power:hover::before { opacity: 1.5; }
+  .exhibit-power .exhibit-bg-letter { -webkit-text-stroke: 1px var(--power-accent); }
+  .exhibit-power .exhibit-zone-tag { color: var(--power-accent); }
+  .exhibit-power .exhibit-stat-num { color: var(--power-accent); }
+  .exhibit-power .exhibit-enter { color: var(--power-accent); }
 
   /* Scan line effect on hover */
   .exhibit-card::after {
@@ -1291,12 +1312,40 @@
       </div>
     </a>
 
+    <!-- GOVERLICIOUS -->
+    <a class="exhibit-card exhibit-power reveal" href="hubalicious/goverlicious.html" style="transition-delay:0.3s">
+      <div class="exhibit-grid-overlay"></div>
+      <div class="exhibit-bg-letter">G</div>
+      <div class="exhibit-content">
+        <div class="exhibit-zone-tag">Zone 04 · Power</div>
+        <h3 class="exhibit-name">Gover<br>licious</h3>
+        <p class="exhibit-desc">Who actually runs each country. Not just the constitutions — the siloviki, the oligarchs, the media barons, and the intelligence services. Formal structure vs shadow power.</p>
+        <div class="exhibit-meta">
+          <div class="exhibit-stats">
+            <div class="exhibit-stat">
+              <div class="exhibit-stat-num">2</div>
+              <div class="exhibit-stat-label">Countries Live</div>
+            </div>
+            <div class="exhibit-stat">
+              <div class="exhibit-stat-num">196</div>
+              <div class="exhibit-stat-label">Target</div>
+            </div>
+            <div class="exhibit-stat">
+              <div class="exhibit-stat-num">2</div>
+              <div class="exhibit-stat-label">Maps Each</div>
+            </div>
+          </div>
+          <div class="exhibit-enter">Enter Exhibit →</div>
+        </div>
+      </div>
+    </a>
+
     <!-- COMING: MAP ROOM -->
     <div class="exhibit-card exhibit-coming reveal" style="border-right:none;transition-delay:0.45s">
       <div class="coming-badge">Coming Soon</div>
       <div class="exhibit-bg-letter" style="-webkit-text-stroke: 1px rgba(255,92,58,0.2)">M</div>
       <div class="exhibit-content">
-        <div class="exhibit-zone-tag" style="color:var(--explore-accent)">Zone 04 · Cartography</div>
+        <div class="exhibit-zone-tag" style="color:var(--explore-accent)">Zone 05 · Cartography</div>
         <h3 class="exhibit-name" style="color:var(--smoke)">The<br>Map Room</h3>
         <p class="exhibit-desc" style="color:var(--text-dim)">Historical maps, reimagined as interactive exhibits. See the world as it was believed, feared, and drawn across the centuries.</p>
         <div class="exhibit-meta">

@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goverlicious — United Kingdom</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0e0c0a;
+  --parchment: #f2ead8;
+  --parchment2: #e8ddc8;
+  --gold: #b8892a;
+  --gold-light: #d4a84b;
+  --gold-faint: rgba(184,137,42,0.12);
+  --official: #1c3d5e;
+  --official-mid: #2a5a8a;
+  --official-faint: rgba(28,61,94,0.12);
+  --shadow-col: #3d1a0a;
+  --shadow-mid: #7a3518;
+  --shadow-faint: rgba(61,26,10,0.12);
+  --muted: #7a6e5f;
+  --border: rgba(184,137,42,0.25);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--ink);
+  color: var(--parchment);
+  font-family: 'Space Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── APP SHELL ── */
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  background: var(--ink);
+  border-bottom: 1px solid var(--border);
+  padding: 1.2rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.masthead-left { display: flex; align-items: baseline; gap: 1rem; }
+
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--gold-light);
+}
+
+.logo sup {
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-weight: 400;
+  vertical-align: super;
+  text-transform: uppercase;
+}
+
+.country-tag {
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-left: 1px solid var(--border);
+  padding-left: 1rem;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.9rem;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover { color: var(--parchment); border-color: var(--gold); }
+.filter-btn.active-all { background: var(--gold-faint); color: var(--gold-light); border-color: var(--gold); }
+.filter-btn.active-official { background: var(--official-faint); color: #6aaee8; border-color: var(--official-mid); }
+.filter-btn.active-shadow { background: var(--shadow-faint); color: #e89060; border-color: var(--shadow-mid); }
+
+.collapse-all-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.9rem;
+  border-radius: 2px;
+  border: 1px solid rgba(122,110,95,0.3);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.collapse-all-btn:hover { color: var(--parchment); }
+
+/* ── MAIN LAYOUT ── */
+.main-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: calc(100vh - 60px);
+}
+
+/* ── MAP PANEL ── */
+.map-panel {
+  background: #0a0906;
+  border-right: 1px solid var(--border);
+  padding: 2rem 1.5rem;
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.map-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--parchment);
+}
+
+.map-title em {
+  color: var(--gold-light);
+  font-style: italic;
+}
+
+.map-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.meta-item {
+  background: rgba(184,137,42,0.06);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 0.6rem 0.7rem;
+}
+
+.meta-label {
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+
+.meta-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--parchment);
+}
+
+/* SVG Map */
+.map-svg-wrap {
+  background: rgba(28,61,94,0.08);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.map-svg-wrap svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Mayor pins */
+.mayor-section { }
+
+.mayor-section-title {
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.6;
+  margin-bottom: 0.6rem;
+}
+
+.mayor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.mayor-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.7rem;
+  background: rgba(61,26,10,0.15);
+  border: 1px solid rgba(184,137,42,0.15);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 0.6rem;
+}
+
+.mayor-item:hover {
+  background: rgba(61,26,10,0.3);
+  border-color: rgba(184,137,42,0.35);
+}
+
+.mayor-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+.mayor-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--parchment);
+}
+
+.mayor-city {
+  font-size: 0.55rem;
+  color: var(--muted);
+  margin-left: auto;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.legend-title {
+  font-size: 0.5rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.6rem;
+  color: var(--muted);
+}
+
+.legend-swatch {
+  width: 18px;
+  height: 8px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+/* ── CHART PANEL ── */
+.chart-panel {
+  padding: 2rem 2.5rem 4rem;
+  overflow-y: auto;
+}
+
+/* ── TIER ── */
+.tier-block {
+  margin-bottom: 0;
+  position: relative;
+}
+
+.tier-connector {
+  display: flex;
+  justify-content: center;
+  height: 32px;
+  position: relative;
+}
+
+.tier-connector::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 1px; height: 100%;
+  background: linear-gradient(to bottom, var(--gold), rgba(184,137,42,0.15));
+}
+
+.tier-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.7rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tier-number {
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  opacity: 0.5;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tier-name {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.tier-toggle {
+  font-size: 0.6rem;
+  color: var(--gold);
+  opacity: 0.5;
+  margin-left: auto;
+  transition: transform 0.25s;
+  flex-shrink: 0;
+}
+
+.tier-toggle.collapsed { transform: rotate(-90deg); }
+
+.tier-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--border), transparent);
+}
+
+.tier-body {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.tier-body.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* ── CARDS ── */
+.card {
+  border-radius: 3px;
+  padding: 1rem 1.1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s;
+  position: relative;
+  flex: 1 1 200px;
+  min-width: 180px;
+  max-width: 280px;
+  animation: cardIn 0.4s ease both;
+}
+
+.card.filtered-out {
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card:hover { transform: translateY(-3px); }
+
+.card.monarchy {
+  background: linear-gradient(145deg, #1e0f00, #2d1a00);
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 20px rgba(184,137,42,0.1), inset 0 1px 0 rgba(184,137,42,0.15);
+}
+
+.card.official {
+  background: linear-gradient(145deg, #091929, #112340);
+  border: 1px solid rgba(42,90,138,0.5);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.card.influence {
+  background: linear-gradient(145deg, #130800, #1f0d03);
+  border: 1px solid rgba(122,53,24,0.5);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.card.selected {
+  box-shadow: 0 0 0 2px var(--gold-light), 0 8px 32px rgba(0,0,0,0.5) !important;
+}
+
+.card-icon { font-size: 1.2rem; margin-bottom: 0.4rem; display: block; }
+
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--parchment);
+  line-height: 1.2;
+  margin-bottom: 0.15rem;
+}
+
+.card.monarchy .card-title { color: var(--gold-light); }
+.card.influence .card-title { color: #d4956a; }
+
+.card-role {
+  font-size: 0.52rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.card.monarchy .card-role { color: rgba(184,137,42,0.6); }
+.card.influence .card-role { color: rgba(184,137,42,0.45); }
+
+.card-preview {
+  font-size: 0.6rem;
+  line-height: 1.6;
+  color: rgba(242,234,216,0.45);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-badge {
+  display: inline-block;
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.12rem 0.45rem;
+  border-radius: 1px;
+  margin-top: 0.5rem;
+}
+
+.badge-gold { background: rgba(184,137,42,0.15); color: var(--gold-light); }
+.badge-blue { background: rgba(42,90,138,0.2); color: #7ab0e0; }
+.badge-green { background: rgba(42,138,90,0.15); color: #7ae0b0; }
+.badge-purple { background: rgba(90,42,138,0.15); color: #b07ae0; }
+.badge-red { background: rgba(138,42,42,0.15); color: #e07a7a; }
+.badge-orange { background: rgba(138,90,42,0.15); color: #e0b07a; }
+.badge-teal { background: rgba(42,138,138,0.15); color: #7ae0e0; }
+
+/* Ministry grid — compact */
+.ministries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.ministry-card {
+  background: linear-gradient(145deg, #091929, #0d1e35);
+  border: 1px solid rgba(42,90,138,0.3);
+  border-radius: 2px;
+  padding: 0.65rem 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  animation: cardIn 0.4s ease both;
+}
+
+.ministry-card:hover {
+  border-color: rgba(42,90,138,0.7);
+  transform: translateY(-1px);
+}
+
+.ministry-card.selected {
+  box-shadow: 0 0 0 1px var(--gold-light);
+}
+
+.ministry-icon { font-size: 0.9rem; margin-bottom: 0.25rem; display: block; }
+
+.ministry-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--parchment);
+  line-height: 1.25;
+  margin-bottom: 0.15rem;
+}
+
+.ministry-abbr {
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ── DETAIL PANEL (slide-in) ── */
+.detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.detail-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.detail-panel {
+  position: fixed;
+  top: 0; right: 0;
+  width: min(480px, 100vw);
+  height: 100vh;
+  background: #0e0c0a;
+  border-left: 1px solid var(--border);
+  z-index: 201;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow-y: auto;
+  padding: 2rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.detail-panel.open {
+  transform: translateX(0);
+}
+
+.detail-close {
+  position: absolute;
+  top: 1.2rem; right: 1.5rem;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+  width: 28px; height: 28px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.detail-close:hover { color: var(--parchment); border-color: var(--gold); }
+
+.detail-type-tag {
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.6;
+}
+
+.detail-icon { font-size: 2.5rem; }
+
+.detail-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--parchment);
+}
+
+.detail-title.gold { color: var(--gold-light); }
+.detail-title.amber { color: #d4956a; }
+
+.detail-role {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.detail-divider {
+  height: 1px;
+  background: linear-gradient(to right, var(--border), transparent);
+}
+
+.detail-body {
+  font-size: 0.72rem;
+  line-height: 1.8;
+  color: rgba(242,234,216,0.7);
+}
+
+.detail-section-title {
+  font-size: 0.5rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+}
+
+.detail-fact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.detail-fact {
+  background: var(--gold-faint);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 0.5rem 0.7rem;
+}
+
+.detail-fact-label {
+  font-size: 0.48rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+
+.detail-fact-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--parchment);
+}
+
+.power-meter {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.power-label {
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.power-bar-wrap {
+  flex: 1;
+  height: 4px;
+  background: rgba(184,137,42,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.power-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.22,1,0.36,1);
+}
+
+.fill-gold { background: linear-gradient(to right, var(--gold), var(--gold-light)); }
+.fill-blue { background: linear-gradient(to right, var(--official-mid), #6aaee8); }
+.fill-red { background: linear-gradient(to right, var(--shadow-mid), #e89060); }
+
+/* ── MAYOR DETAIL ── */
+.mayor-detail-panel {
+  background: rgba(61,26,10,0.12);
+  border: 1px solid rgba(184,137,42,0.2);
+  border-radius: 3px;
+  padding: 1rem;
+}
+
+.mayor-dp-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #d4956a;
+  margin-bottom: 0.2rem;
+}
+
+.mayor-dp-city {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+
+.mayor-dp-desc {
+  font-size: 0.65rem;
+  line-height: 1.7;
+  color: rgba(242,234,216,0.55);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: rgba(184,137,42,0.3); border-radius: 2px; }
+
+/* responsive */
+@media (max-width: 860px) {
+  .main-layout { grid-template-columns: 1fr; }
+  .map-panel { position: static; height: auto; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="masthead-left">
+    <div class="logo">Goverlicious<sup>beta</sup></div>
+    <div class="country-tag">🇬🇧 &nbsp;United Kingdom · 2025</div>
+  </div>
+  <div class="controls">
+    <button class="filter-btn active-all" id="filter-all" onclick="setFilter('all')">All Power</button>
+    <button class="filter-btn" id="filter-official" onclick="setFilter('official')">Official Only</button>
+    <button class="filter-btn" id="filter-shadow" onclick="setFilter('shadow')">Shadow Only</button>
+    <button class="collapse-all-btn" id="collapseBtn" onclick="toggleAllTiers()">Collapse All</button>
+  </div>
+</header>
+
+<div class="main-layout">
+
+<!-- MAP PANEL -->
+<aside class="map-panel">
+  <div>
+    <div class="map-title">United<br><em>Kingdom</em></div>
+  </div>
+
+  <div class="map-meta">
+    <div class="meta-item"><div class="meta-label">System</div><div class="meta-value">Constitutional Monarchy</div></div>
+    <div class="meta-item"><div class="meta-label">Population</div><div class="meta-value">67.6M</div></div>
+    <div class="meta-item"><div class="meta-label">Parliament</div><div class="meta-value">Bicameral</div></div>
+    <div class="meta-item"><div class="meta-label">Head of State</div><div class="meta-value">King Charles III</div></div>
+  </div>
+
+  <!-- SVG Map of UK (simplified outline) -->
+  <div class="map-svg-wrap">
+    <svg viewBox="0 0 220 320" width="200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="glow" cx="50%" cy="60%" r="50%">
+          <stop offset="0%" stop-color="rgba(28,61,94,0.4)"/>
+          <stop offset="100%" stop-color="rgba(28,61,94,0)"/>
+        </radialGradient>
+      </defs>
+      <!-- England -->
+      <path d="M 95 180 L 85 170 L 80 155 L 75 140 L 70 125 L 72 110 L 78 98 L 85 90 L 95 85 L 108 82 L 122 84 L 132 92 L 138 105 L 140 120 L 138 135 L 132 148 L 125 160 L 118 172 L 112 180 L 108 190 L 105 200 L 100 210 L 95 218 L 90 225 L 93 230 L 100 232 L 108 228 L 112 220 L 115 212 L 118 205 L 122 198 L 126 192 L 128 185 L 132 178 L 136 172 L 140 165 L 143 158 L 145 150 L 145 140 L 143 130 L 140 120" fill="#1c3d5e" fill-opacity="0.7" stroke="#2a5a8a" stroke-width="1.2"/>
+      <!-- England main body -->
+      <path d="M 75 140 Q 65 145 60 155 Q 58 165 62 175 Q 68 185 76 188 Q 82 190 88 186 Q 95 180 95 180" fill="#1c3d5e" fill-opacity="0.5" stroke="#2a5a8a" stroke-width="0.8"/>
+      <!-- Wales -->
+      <path d="M 75 140 L 68 145 L 62 152 L 60 162 L 63 170 L 70 175 L 78 172 L 83 164 L 84 155 L 80 148 Z" fill="#1c3d5e" fill-opacity="0.6" stroke="#3a7aaa" stroke-width="1"/>
+      <!-- Scotland -->
+      <path d="M 80 90 L 78 78 L 75 65 L 72 52 L 70 40 L 68 28 L 70 18 L 76 12 L 85 10 L 95 12 L 105 16 L 112 22 L 115 32 L 115 42 L 112 52 L 108 62 L 105 72 L 103 82 L 95 85 Z" fill="#1c3d5e" fill-opacity="0.65" stroke="#2a5a8a" stroke-width="1.2"/>
+      <!-- Scotland highlands complexity -->
+      <path d="M 72 52 L 65 50 L 60 45 L 62 38 L 68 35 L 72 40 Z" fill="#1c3d5e" fill-opacity="0.4" stroke="#2a5a8a" stroke-width="0.7"/>
+      <!-- Northern Ireland -->
+      <path d="M 45 92 L 42 88 L 44 82 L 50 80 L 56 82 L 58 88 L 55 94 L 49 96 Z" fill="#1c3d5e" fill-opacity="0.6" stroke="#2a5a8a" stroke-width="1"/>
+      <!-- City dots -->
+      <!-- London -->
+      <circle cx="112" cy="162" r="5" fill="var(--gold)" opacity="0.9"/>
+      <circle cx="112" cy="162" r="9" fill="none" stroke="var(--gold)" stroke-width="0.8" opacity="0.4"/>
+      <text x="120" y="166" font-size="7" fill="#d4a84b" font-family="Space Mono" opacity="0.9">London</text>
+      <!-- Manchester -->
+      <circle cx="94" cy="118" r="3" fill="#e89060" opacity="0.8"/>
+      <text x="100" y="122" font-size="6" fill="#e89060" font-family="Space Mono" opacity="0.7">Mcr</text>
+      <!-- Birmingham -->
+      <circle cx="100" cy="140" r="3" fill="#e89060" opacity="0.8"/>
+      <text x="106" y="144" font-size="6" fill="#e89060" font-family="Space Mono" opacity="0.7">Bham</text>
+      <!-- Edinburgh -->
+      <circle cx="96" cy="50" r="3" fill="#7ab0e8" opacity="0.8"/>
+      <text x="102" y="54" font-size="6" fill="#7ab0e8" font-family="Space Mono" opacity="0.7">Edin</text>
+      <!-- Cardiff -->
+      <circle cx="73" cy="162" r="2.5" fill="#7ae8b0" opacity="0.7"/>
+      <text x="58" y="166" font-size="5.5" fill="#7ae8b0" font-family="Space Mono" opacity="0.7">Cardiff</text>
+      <!-- Glow overlay -->
+      <rect x="0" y="0" width="220" height="320" fill="url(#glow)" pointer-events="none"/>
+    </svg>
+  </div>
+
+  <!-- Metro Mayors -->
+  <div class="mayor-section">
+    <div class="mayor-section-title">Metro Mayors (Tier VII)</div>
+    <div class="mayor-list" id="mayorList">
+      <div class="mayor-item" onclick="showMayor('london')"><div class="mayor-dot"></div><div class="mayor-name">Sadiq Khan</div><div class="mayor-city">London</div></div>
+      <div class="mayor-item" onclick="showMayor('manchester')"><div class="mayor-dot"></div><div class="mayor-name">Andy Burnham</div><div class="mayor-city">Gtr Manchester</div></div>
+      <div class="mayor-item" onclick="showMayor('westmidlands')"><div class="mayor-dot"></div><div class="mayor-name">Richard Parker</div><div class="mayor-city">West Midlands</div></div>
+      <div class="mayor-item" onclick="showMayor('westyorks')"><div class="mayor-dot"></div><div class="mayor-name">Tracy Brabin</div><div class="mayor-city">West Yorkshire</div></div>
+      <div class="mayor-item" onclick="showMayor('liverpool')"><div class="mayor-dot"></div><div class="mayor-name">Steve Rotheram</div><div class="mayor-city">Liverpool CR</div></div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-title">Legend</div>
+    <div class="legend-row"><div class="legend-swatch" style="background:var(--gold);"></div>Crown / Monarchy</div>
+    <div class="legend-row"><div class="legend-swatch" style="background:#2a5a8a;"></div>Official / Formal Power</div>
+    <div class="legend-row"><div class="legend-swatch" style="background:#7a3518;"></div>Shadow / Influence</div>
+    <div class="legend-row"><div class="legend-swatch" style="background:#e89060;"></div>Metro Mayors</div>
+  </div>
+</aside>
+
+<!-- CHART PANEL -->
+<section class="chart-panel" id="chartPanel">
+
+  <!-- TIER I -->
+  <div class="tier-block" id="tier1">
+    <div class="tier-header" onclick="toggleTier('tier1')">
+      <span class="tier-number">Tier I</span>
+      <span class="tier-name">The Crown</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier1-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier1-body">
+      <div class="card monarchy" onclick="showDetail('crown')" data-type="monarchy">
+        <span class="card-icon">👑</span>
+        <div class="card-title">King Charles III</div>
+        <div class="card-role">Head of State · The Sovereign</div>
+        <div class="card-preview">Apex of constitutional authority — largely ceremonial but with real soft power in weekly PM audiences and moral authority.</div>
+        <span class="card-badge badge-gold">Ceremonial + Soft Power</span>
+      </div>
+      <div class="card monarchy" onclick="showDetail('privy')" data-type="monarchy">
+        <span class="card-icon">🔏</span>
+        <div class="card-title">Privy Council</div>
+        <div class="card-role">Ancient Advisory Body · Orders in Council</div>
+        <div class="card-preview">700 members, including all current and former Cabinet ministers. Issues Orders in Council — a form of legislation that bypasses full parliamentary debate.</div>
+        <span class="card-badge badge-gold">Constitutional Mechanism</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER II -->
+  <div class="tier-block" id="tier2">
+    <div class="tier-header" onclick="toggleTier('tier2')">
+      <span class="tier-number">Tier II</span>
+      <span class="tier-name">Executive Government</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier2-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier2-body">
+      <div class="card official" onclick="showDetail('pm')" data-type="official">
+        <span class="card-icon">🏛️</span>
+        <div class="card-title">Prime Minister</div>
+        <div class="card-role">Head of Government · No. 10</div>
+        <div class="card-preview">True seat of political power. Sets government agenda, controls military deployment, foreign policy.</div>
+        <span class="card-badge badge-blue">Executive</span>
+      </div>
+      <div class="card official" onclick="showDetail('cabinet')" data-type="official">
+        <span class="card-icon">📋</span>
+        <div class="card-title">The Cabinet</div>
+        <div class="card-role">~22 Senior Ministers</div>
+        <div class="card-preview">The great offices of state. Collective cabinet responsibility — public unanimity, private dissent.</div>
+        <span class="card-badge badge-blue">Executive</span>
+      </div>
+      <div class="card official" onclick="showDetail('chancellor')" data-type="official">
+        <span class="card-icon">💷</span>
+        <div class="card-title">Chancellor of the Exchequer</div>
+        <div class="card-role">No. 11 · Economic Policy</div>
+        <div class="card-preview">Controls national finances. Historically a rival power base to the PM.</div>
+        <span class="card-badge badge-blue">Executive</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER III: Ministries -->
+  <div class="tier-block" id="tier3">
+    <div class="tier-header" onclick="toggleTier('tier3')">
+      <span class="tier-number">Tier III</span>
+      <span class="tier-name">Departments & Ministries</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier3-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier3-body">
+      <div class="ministries-grid">
+        <div class="ministry-card" onclick="showDetail('home')" data-type="official"><span class="ministry-icon">🚔</span><div class="ministry-name">Home Office</div><div class="ministry-abbr">Security · Immigration</div></div>
+        <div class="ministry-card" onclick="showDetail('fcdo')" data-type="official"><span class="ministry-icon">🌍</span><div class="ministry-name">Foreign, Commonwealth & Dev</div><div class="ministry-abbr">FCDO</div></div>
+        <div class="ministry-card" onclick="showDetail('mod')" data-type="official"><span class="ministry-icon">⚔️</span><div class="ministry-name">Ministry of Defence</div><div class="ministry-abbr">MoD</div></div>
+        <div class="ministry-card" onclick="showDetail('nhs')" data-type="official"><span class="ministry-icon">🏥</span><div class="ministry-name">Health & Social Care</div><div class="ministry-abbr">DHSC · NHS</div></div>
+        <div class="ministry-card" onclick="showDetail('education')" data-type="official"><span class="ministry-icon">📚</span><div class="ministry-name">Education</div><div class="ministry-abbr">DfE</div></div>
+        <div class="ministry-card" onclick="showDetail('justice')" data-type="official"><span class="ministry-icon">⚖️</span><div class="ministry-name">Justice</div><div class="ministry-abbr">MoJ · Courts</div></div>
+        <div class="ministry-card" onclick="showDetail('transport')" data-type="official"><span class="ministry-icon">🚆</span><div class="ministry-name">Transport</div><div class="ministry-abbr">DfT</div></div>
+        <div class="ministry-card" onclick="showDetail('energy')" data-type="official"><span class="ministry-icon">⚡</span><div class="ministry-name">Energy Security & Net Zero</div><div class="ministry-abbr">DESNZ</div></div>
+        <div class="ministry-card" onclick="showDetail('business')" data-type="official"><span class="ministry-icon">🏭</span><div class="ministry-name">Business & Trade</div><div class="ministry-abbr">DBT</div></div>
+        <div class="ministry-card" onclick="showDetail('hmrc')" data-type="official"><span class="ministry-icon">🧾</span><div class="ministry-name">HMRC</div><div class="ministry-abbr">Tax & Revenue</div></div>
+        <div class="ministry-card" onclick="showDetail('levelling')" data-type="official"><span class="ministry-icon">🏙️</span><div class="ministry-name">Housing & Communities</div><div class="ministry-abbr">MHCLG</div></div>
+        <div class="ministry-card" onclick="showDetail('dwp')" data-type="official"><span class="ministry-icon">🤝</span><div class="ministry-name">Work & Pensions</div><div class="ministry-abbr">DWP</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER IV: Parliament -->
+  <div class="tier-block" id="tier4">
+    <div class="tier-header" onclick="toggleTier('tier4')">
+      <span class="tier-number">Tier IV</span>
+      <span class="tier-name">Parliament</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier4-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier4-body">
+      <div class="card official" onclick="showDetail('commons')" data-type="official">
+        <span class="card-icon">🏠</span>
+        <div class="card-title">House of Commons</div>
+        <div class="card-role">650 Elected MPs · Primary Chamber</div>
+        <div class="card-preview">The democratic heart. The party with a majority governs. Select committees scrutinise every department.</div>
+        <span class="card-badge badge-green">Legislative</span>
+      </div>
+      <div class="card official" onclick="showDetail('lords')" data-type="official">
+        <span class="card-icon">🏛️</span>
+        <div class="card-title">House of Lords</div>
+        <div class="card-role">~800 Peers · Revising Chamber</div>
+        <div class="card-preview">Unelected. Can delay and amend but not permanently block Commons. Technically expert, democratically awkward.</div>
+        <span class="card-badge badge-green">Legislative (Revising)</span>
+      </div>
+      <div class="card official" onclick="showDetail('opposition')" data-type="official">
+        <span class="card-icon">🗳️</span>
+        <div class="card-title">His Majesty's Opposition</div>
+        <div class="card-role">Official Opposition · Shadow Cabinet</div>
+        <div class="card-preview">Formally recognised as a constitutional role. The shadow cabinet scrutinises and provides an alternative government-in-waiting.</div>
+        <span class="card-badge badge-green">Democratic Check</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER V: Judicial + Civil -->
+  <div class="tier-block" id="tier5">
+    <div class="tier-header" onclick="toggleTier('tier5')">
+      <span class="tier-number">Tier V</span>
+      <span class="tier-name">Judicial & Administrative State</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier5-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier5-body">
+      <div class="card official" onclick="showDetail('supreme')" data-type="official">
+        <span class="card-icon">⚖️</span>
+        <div class="card-title">UK Supreme Court</div>
+        <div class="card-role">12 Justices · Final Appeal</div>
+        <div class="card-preview">Rules on constitutional questions and human rights. Cannot strike down Acts but declarations of incompatibility carry real political weight.</div>
+        <span class="card-badge badge-purple">Judicial</span>
+      </div>
+      <div class="card official" onclick="showDetail('civilservice')" data-type="official">
+        <span class="card-icon">🗂️</span>
+        <div class="card-title">Civil Service</div>
+        <div class="card-role">~500,000 Staff · Permanent Bureaucracy</div>
+        <div class="card-preview">Permanent, politically neutral — in theory. Holds institutional memory, shapes what's politically feasible.</div>
+        <span class="card-badge badge-blue">Administrative</span>
+      </div>
+      <div class="card official" onclick="showDetail('boe')" data-type="official">
+        <span class="card-icon">🏦</span>
+        <div class="card-title">Bank of England</div>
+        <div class="card-role">MPC · Monetary Policy</div>
+        <div class="card-preview">Sets interest rates independently since 1997. The Truss mini-budget showed how markets can humble elected governments overnight.</div>
+        <span class="card-badge badge-teal">Monetary Authority</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER VI: Devolved -->
+  <div class="tier-block" id="tier6">
+    <div class="tier-header" onclick="toggleTier('tier6')">
+      <span class="tier-number">Tier VI</span>
+      <span class="tier-name">Devolved Governments</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier6-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier6-body">
+      <div class="card official" onclick="showDetail('scotland')" data-type="official">
+        <span class="card-icon">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+        <div class="card-title">Scottish Parliament</div>
+        <div class="card-role">Holyrood · 129 MSPs</div>
+        <div class="card-preview">Controls health, education, justice, and taxation in Scotland. SNP independence push is a permanent constitutional pressure on Westminster.</div>
+        <span class="card-badge badge-blue">Devolved (Strongest)</span>
+      </div>
+      <div class="card official" onclick="showDetail('wales')" data-type="official">
+        <span class="card-icon">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
+        <div class="card-title">Senedd Cymru</div>
+        <div class="card-role">Welsh Parliament · 96 MSs</div>
+        <div class="card-preview">Controls health, education, local government in Wales. Gained primary legislative powers 2011. Growing assertiveness on divergence from England.</div>
+        <span class="card-badge badge-blue">Devolved</span>
+      </div>
+      <div class="card official" onclick="showDetail('ni')" data-type="official">
+        <span class="card-icon">☘️</span>
+        <div class="card-title">Stormont Assembly</div>
+        <div class="card-role">Northern Ireland · 90 MLAs</div>
+        <div class="card-preview">Power-sharing arrangement post-Good Friday Agreement. Chronically fragile — suspended multiple times. Unique relationship with both UK and Ireland.</div>
+        <span class="card-badge badge-blue">Devolved (Power-Sharing)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER VII: Metro Mayors -->
+  <div class="tier-block" id="tier7">
+    <div class="tier-header" onclick="toggleTier('tier7')">
+      <span class="tier-number">Tier VII</span>
+      <span class="tier-name">Metro Mayors</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier7-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier7-body">
+      <div class="card influence" onclick="showMayor('london')" data-type="official">
+        <span class="card-icon">🌆</span>
+        <div class="card-title">Mayor of London</div>
+        <div class="card-role">TfL · Met Police · GLA</div>
+        <div class="card-preview">Controls transport, policing, planning and economic development across 9M people. One of the most powerful elected mayors in Europe.</div>
+        <span class="card-badge badge-orange">Metro Executive</span>
+      </div>
+      <div class="card influence" onclick="showMayor('manchester')" data-type="official">
+        <span class="card-icon">🐝</span>
+        <div class="card-title">Mayor of Gtr Manchester</div>
+        <div class="card-role">Andy Burnham · 2.8M People</div>
+        <div class="card-preview">Widely considered the most influential regional politician after London. High-profile dissenter during COVID. Seen as a future PM candidate.</div>
+        <span class="card-badge badge-orange">Metro Executive</span>
+      </div>
+      <div class="card influence" onclick="showMayor('westmidlands')" data-type="official">
+        <span class="card-icon">🏭</span>
+        <div class="card-title">West Midlands Mayor</div>
+        <div class="card-role">Birmingham Region · 2.9M People</div>
+        <div class="card-preview">Oversees the UK's second-largest city region. HS2 truncation a major political fault line with Westminster.</div>
+        <span class="card-badge badge-orange">Metro Executive</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHADOW DIVIDER -->
+  <div style="display:flex; align-items:center; gap:1.5rem; margin: 2.5rem 0 1.5rem;">
+    <div style="flex:1; height:1px; background:linear-gradient(to right, transparent, rgba(184,137,42,0.25));"></div>
+    <div style="font-size:0.55rem; letter-spacing:0.3em; color:rgba(184,137,42,0.45); text-transform:uppercase; white-space:nowrap;">Shadow Power — Unofficial but Real</div>
+    <div style="flex:1; height:1px; background:linear-gradient(to left, transparent, rgba(184,137,42,0.25));"></div>
+  </div>
+
+  <!-- TIER VIII: Media -->
+  <div class="tier-block" id="tier8">
+    <div class="tier-header" onclick="toggleTier('tier8')">
+      <span class="tier-number">Tier VIII</span>
+      <span class="tier-name">Media Power</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier8-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier8-body">
+      <div class="card influence" onclick="showDetail('murdoch')" data-type="shadow">
+        <span class="card-icon">📰</span>
+        <div class="card-title">News UK / Murdoch</div>
+        <div class="card-role">The Sun · The Times · Talk TV</div>
+        <div class="card-preview">Decades of political kingmaking. PMs travel to court Murdoch. His papers set the daily political weather.</div>
+        <span class="card-badge badge-red">Media Kingmaker</span>
+      </div>
+      <div class="card influence" onclick="showDetail('bbc')" data-type="shadow">
+        <span class="card-icon">📡</span>
+        <div class="card-title">BBC</div>
+        <div class="card-role">Public Broadcaster · Charter Dependent</div>
+        <div class="card-preview">Officially independent, practically dependent on government for charter and licence fee — a structural leash with global reach.</div>
+        <span class="card-badge badge-red">Public Media</span>
+      </div>
+      <div class="card influence" onclick="showDetail('mail')" data-type="shadow">
+        <span class="card-icon">🗞️</span>
+        <div class="card-title">Daily Mail / DMGT</div>
+        <div class="card-role">Lord Rothermere · Middle England</div>
+        <div class="card-preview">UK's most-read paper online. Defines "middle England" cultural anxieties. Politicians fear its front pages.</div>
+        <span class="card-badge badge-red">Agenda Setter</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER IX: Financial -->
+  <div class="tier-block" id="tier9">
+    <div class="tier-header" onclick="toggleTier('tier9')">
+      <span class="tier-number">Tier IX</span>
+      <span class="tier-name">Financial & Corporate Power</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier9-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier9-body">
+      <div class="card influence" onclick="showDetail('city')" data-type="shadow">
+        <span class="card-icon">🏦</span>
+        <div class="card-title">The City of London</div>
+        <div class="card-role">Square Mile · Financial Sovereignty</div>
+        <div class="card-preview">Its own Lord Mayor, police force, and ancient governance. A quasi-sovereign state within a state with enormous lobbying reach.</div>
+        <span class="card-badge badge-teal">Financial Sovereignty</span>
+      </div>
+      <div class="card influence" onclick="showDetail('thinktanks')" data-type="shadow">
+        <span class="card-icon">💼</span>
+        <div class="card-title">Think Tanks & Lobbyists</div>
+        <div class="card-role">IEA · Policy Exchange · TPA · IPPR</div>
+        <div class="card-preview">Opaque donor funding. Revolving door with Westminster. IEA shaped Thatcherism; Policy Exchange shaped Johnson.</div>
+        <span class="card-badge badge-red">Ideological Pipeline</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER X: Deep Networks -->
+  <div class="tier-block" id="tier10">
+    <div class="tier-header" onclick="toggleTier('tier10')">
+      <span class="tier-number">Tier X</span>
+      <span class="tier-name">Deep Influence Networks</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier10-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier10-body">
+      <div class="card influence" onclick="showDetail('establishment')" data-type="shadow">
+        <span class="card-icon">🎩</span>
+        <div class="card-title">The Establishment</div>
+        <div class="card-role">Eton · Oxbridge · Gentlemen's Clubs</div>
+        <div class="card-preview">7% private school → 65% senior judges, 60% senior civil servants, 50% cabinet ministers. Invisible coordination layer.</div>
+        <span class="card-badge badge-red">Structural Power</span>
+      </div>
+      <div class="card influence" onclick="showDetail('donors')" data-type="shadow">
+        <span class="card-icon">💰</span>
+        <div class="card-title">Party Donors & Dark Money</div>
+        <div class="card-role">Peerages · Ambassadorships · Access</div>
+        <div class="card-preview">Large donors often receive peerages or policy access. Intelligence reports have flagged foreign-linked funding. Both parties implicated.</div>
+        <span class="card-badge badge-red">Dark Influence</span>
+      </div>
+      <div class="card influence" onclick="showDetail('intel')" data-type="shadow">
+        <span class="card-icon">🌐</span>
+        <div class="card-title">Intelligence Services</div>
+        <div class="card-role">MI5 · MI6 · GCHQ · JIC</div>
+        <div class="card-preview">Report to PM and senior ministers. JIC assessments shape major political choices. Five Eyes architecture gives GCHQ global surveillance reach.</div>
+        <span class="card-badge badge-red">Security State</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+</div><!-- end main-layout -->
+</div><!-- end app -->
+
+<!-- DETAIL OVERLAY -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-panel" id="detailPanel">
+  <button class="detail-close" onclick="closeDetail()">✕</button>
+  <div id="detailContent"></div>
+</div>
+
+<script>
+// ── DATA ──
+const details = {
+  crown: {
+    icon: '👑', type: 'Crown', title: 'King Charles III', role: 'Head of State · The Sovereign',
+    titleClass: 'gold',
+    body: `The United Kingdom is a constitutional monarchy — the King reigns, but does not rule. In practice, the Crown's power is exercised on the advice of ministers.
+
+But "ceremonial" undersells the reality. Charles holds weekly audiences with the Prime Minister, where — shielded from public scrutiny — he can advise, warn, and encourage. He signs all legislation into law. He appoints the Prime Minister (by convention, whoever commands a Commons majority). He opens Parliament with a speech written entirely by the government.
+
+His real power is atmospheric: as the embodiment of national continuity, his public stances carry weight disproportionate to his formal authority. His years as Prince of Wales, writing controversial "black spider" letters to ministers, showed a willingness to press political views.`,
+    facts: [{'l':'Acceded','v':'September 2022'},{'l':'System','v':'Constitutional Monarchy'},{'l':'Formal Power','v':'Low'},{'l':'Soft Power','v':'High'}],
+    powers: [['Formal Authority', 15, 'fill-gold'],['Soft Power', 72, 'fill-gold'],['Public Influence', 68, 'fill-gold']]
+  },
+  privy: {
+    icon: '🔏', type: 'Constitutional Body', title: 'The Privy Council', role: 'Ancient Advisory Body · Orders in Council',
+    body: `One of the least-known but most constitutionally significant bodies in the UK. Technically the monarch's formal advisory council, its origins date to medieval times.
+
+Today its ~700 members include all current and former Cabinet ministers, senior judges, archbishops, and others. In practice, it meets rarely and business is dispatched in minutes.
+
+Its real significance lies in Orders in Council — secondary legislation issued under Royal Prerogative that bypasses full parliamentary debate. This has been used for everything from ratifying treaties to controversial actions. The Judicial Committee of the Privy Council remains the final court of appeal for many Commonwealth nations.`,
+    facts: [{'l':'Members','v':'~700'},{'l':'Meets','v':'Rarely'},{'l':'Powers','v':'Orders in Council'},{'l':'Oversight','v':'Minimal'}],
+    powers: [['Formal Authority', 35, 'fill-gold'],['Transparency', 8, 'fill-gold'],['Constitutional Weight', 55, 'fill-gold']]
+  },
+  pm: {
+    icon: '🏛️', type: 'Executive', title: 'Prime Minister', role: 'Head of Government · No. 10 Downing Street',
+    body: `The Prime Minister is the true seat of political power in the United Kingdom. The role is not defined in statute — it evolved through convention.
+
+The PM chairs Cabinet, sets the government's legislative agenda, controls the deployment of armed forces (via Royal Prerogative, without requiring a parliamentary vote — though conventions are shifting), nominates peers, controls senior appointments, and leads the country in international negotiations.
+
+Power is ultimately parliamentary: the PM stays in office only while commanding a Commons majority. The relationship with the Chancellor is historically the most important in government — periods of PM-Chancellor conflict (Blair/Brown, May/Hammond, Truss/everyone) can paralyse policymaking.`,
+    facts: [{'l':'Formal Title','v':'First Lord of the Treasury'},{'l':'Residence','v':'No. 10 Downing St'},{'l':'Formal Power','v':'Very High'},{'l':'Accountability','v':'Commons majority'}],
+    powers: [['Executive Power', 92, 'fill-blue'],['Legislative Control', 78, 'fill-blue'],['Accountability', 65, 'fill-blue']]
+  },
+  cabinet: {
+    icon: '📋', type: 'Executive', title: 'The Cabinet', role: '~22 Senior Ministers · Collective Government',
+    body: `Cabinet government is the constitutional heart of UK executive power. The principle of collective responsibility means all ministers must publicly support Cabinet decisions — or resign.
+
+The "great offices of state" (PM, Chancellor, Home Secretary, Foreign Secretary) carry the most weight. Other senior positions include the Lord Chancellor, Defence Secretary, and Chief Secretary to the Treasury.
+
+In recent decades, Cabinet has increasingly been bypassed by smaller "kitchen cabinet" arrangements — informal groups around the PM. Under Johnson, formal Cabinet was often sidelined. The Cabinet Secretary (head of the civil service) holds enormous quiet influence over how government actually functions.`,
+    facts: [{'l':'Members','v':'~22 full Cabinet'},{'l':'Principle','v':'Collective Responsibility'},{'l':'Meetings','v':'Weekly (Tuesdays)'},{'l':'Accountability','v':'Parliamentary'}],
+    powers: [['Collective Power', 80, 'fill-blue'],['Individual Authority', 60, 'fill-blue'],['PM Override Risk', 45, 'fill-blue']]
+  },
+  chancellor: {
+    icon: '💷', type: 'Executive', title: 'Chancellor of the Exchequer', role: 'No. 11 Downing Street · Economic Policy',
+    body: `Historically the second most powerful position in British politics — and frequently a rival to the PM.
+
+The Chancellor controls HM Treasury, sets tax and spending policy through Budgets and Autumn Statements, and has the power to make or break the government's political fortunes. In the era of austerity, this was the most consequential role in domestic policy.
+
+The Gordon Brown/Tony Blair relationship redefined the position — Brown operated a virtual parallel government from the Treasury for a decade. The 2022 Liz Truss mini-budget (and its immediate demolition by bond markets) showed the limits of the Chancellor ignoring market and institutional constraints.`,
+    facts: [{'l':'Controls','v':'HM Treasury'},{'l':'Budget Cycle','v':'Annual + Autumn Stmt'},{'l':'Rival to PM','v':'Historically Yes'},{'l':'Market Power','v':'Subject to bond markets'}],
+    powers: [['Fiscal Authority', 88, 'fill-blue'],['Political Influence', 75, 'fill-blue'],['Market Dependency', 70, 'fill-blue']]
+  },
+  home: { icon: '🚔', type: 'Department', title: 'Home Office', role: 'Security · Immigration · Policing',
+    body: `One of the "great offices of state." Controls domestic security, immigration and asylum policy, counter-terrorism, drugs policy, and oversees policing across England and Wales. Immigration policy has made it one of the most politically volatile departments — Home Secretaries frequently resign or are reshuffled over crises.`,
+    facts: [{'l':'Budget','v':'~£20bn'},{'l':'Staff','v':'~35,000'},{'l':'Key Powers','v':'Immigration · Security'},{'l':'Controversy','v':'Very High'}],
+    powers: [['Coercive Power', 82, 'fill-blue'],['Political Heat', 88, 'fill-blue'],['Public Visibility', 90, 'fill-blue']]
+  },
+  fcdo: { icon: '🌍', type: 'Department', title: 'Foreign, Commonwealth & Development Office', role: 'FCDO · Diplomacy · Aid',
+    body: `Merged from the FCO and DFID in 2020. Manages UK's diplomatic relationships, international development, and foreign intelligence oversight. The UK's permanent UN Security Council seat gives the Foreign Secretary an internationally outsized platform.`,
+    facts: [{'l':'Budget','v':'~£17bn (inc aid)'},{'l':'Embassies','v':'280+ posts worldwide'},{'l':'UN Seat','v':'P5 Permanent Member'},{'l':'Post-Brexit','v':'Elevated importance'}],
+    powers: [['Diplomatic Power', 80, 'fill-blue'],['Aid Leverage', 65, 'fill-blue'],['Intelligence Role', 55, 'fill-blue']]
+  },
+  mod: { icon: '⚔️', type: 'Department', title: 'Ministry of Defence', role: 'Armed Forces · Nuclear Deterrent',
+    body: `Controls the UK's armed forces and the Trident nuclear deterrent. The UK is one of only 5 recognised nuclear weapons states. Defence policy increasingly shaped by NATO commitments and the post-Ukraine security environment.`,
+    facts: [{'l':'Budget','v':'~£52bn (2024)'},{'l':'Personnel','v':'~150,000 regular'},{'l':'Nuclear','v':'Trident · 4 submarines'},{'l':'NATO','v':'Founding member'}],
+    powers: [['Military Power', 85, 'fill-blue'],['Strategic Deterrence', 90, 'fill-blue'],['Parliamentary Oversight', 50, 'fill-blue']]
+  },
+  nhs: { icon: '🏥', type: 'Department', title: 'Dept of Health & Social Care', role: 'DHSC · NHS England',
+    body: `Oversees the NHS — the UK's most politically sacred institution and its largest employer. NHS England (semi-autonomous) manages the day-to-day. The Secretary of State carries enormous political risk: NHS crises dominate elections.`,
+    facts: [{'l':'NHS Budget','v':'~£180bn (2024)'},{'l':'NHS Staff','v':'~1.4M employees'},{'l':'Politically Sacred','v':'Yes — third rail'},{'l':'Social Care','v':'Chronically underfunded'}],
+    powers: [['Budget Scale', 95, 'fill-blue'],['Political Sensitivity', 92, 'fill-blue'],['Departmental Control', 55, 'fill-blue']]
+  },
+  education: { icon: '📚', type: 'Department', title: 'Department for Education', role: 'Schools · Universities · Skills',
+    body: `Controls curriculum, school standards, Ofsted inspections, and university funding policy. Academies and free schools were a significant power shift — removing schools from local authority control.`,
+    facts: [{'l':'Budget','v':'~£105bn'},{'l':'Schools','v':'~24,000 in England'},{'l':'Universities','v':'Fee regime via OfS'},{'l':'Ofsted','v':'Powerful scrutiny arm'}],
+    powers: [['Curriculum Control', 75, 'fill-blue'],['Structural Reforms', 70, 'fill-blue'],['Local Gov Bypass', 65, 'fill-blue']]
+  },
+  justice: { icon: '⚖️', type: 'Department', title: 'Ministry of Justice', role: 'Courts · Prisons · Probation',
+    body: `Oversees Her Majesty's Courts and Tribunals Service, the prison system, and the probation service. England and Wales has one of the highest incarceration rates in Western Europe. Prison capacity is a chronic crisis point.`,
+    facts: [{'l':'Budget','v':'~£11bn'},{'l':'Prisoners','v':'~87,000 (record high)'},{'l':'Courts','v':'HMCTS nationwide'},{'l':'Lord Chancellor','v':'Dual role with MoJ'}],
+    powers: [['Criminal Justice', 80, 'fill-blue'],['Prison Control', 75, 'fill-blue'],['Judicial Independence', 45, 'fill-blue']]
+  },
+  city: {
+    icon: '🏦', type: 'Shadow Power', title: 'City of London Corporation', role: 'Square Mile · Financial Sovereignty',
+    titleClass: 'amber',
+    body: `The City of London is not like other places. It has its own elected Lord Mayor (distinct from the Mayor of London), its own police force, its own ancient constitution, and its own lobbyist — the "Remembrancer" — who sits in Parliament and monitors legislation that might affect City interests.
+
+The financial sector it governs accounts for a disproportionate share of UK tax receipts, giving it structural leverage over economic policy. Post-Brexit regulatory divergence has been significantly shaped by City lobbying. Its annual Lord Mayor's Banquet is where the Chancellor traditionally makes major policy speeches.
+
+The Corporation actively lobbies globally for "open markets" — which broadly means light-touch financial regulation favoring the interests of its member firms.`,
+    facts: [{'l':'Area','v':'1 Square Mile'},{'l':'GDP Contribution','v':'~£130bn+'},{'l':'Own Police','v':'City of London Police'},{'l':'Parliament Rep','v':'The Remembrancer'}],
+    powers: [['Economic Leverage', 90, 'fill-red'],['Lobbying Power', 85, 'fill-red'],['Democratic Accountability', 12, 'fill-red']]
+  },
+  murdoch: {
+    icon: '📰', type: 'Shadow Power', title: 'News UK / Rupert Murdoch', role: 'The Sun · The Times · Talk TV',
+    titleClass: 'amber',
+    body: `"It's The Sun Wot Won It" — the 1992 front page after John Major's surprise election victory is the shorthand for decades of UK media kingmaking.
+
+Prime Ministers have routinely flown to visit Murdoch to secure his papers' support. Blair made the Sun's endorsement a priority. Cameron hired Rebekah Brooks and Andy Coulson (both later arrested in the phone-hacking scandal). The Leveson Inquiry exposed the depth of politician-press cosiness.
+
+Post-hacking, News UK's political leverage is more muted but far from gone. The Times sets serious political agendas. Talk TV extends reach to a new audience. The structural fact remains: News UK reaches millions of voters whose concerns politicians must address.`,
+    facts: [{'l':'Key Papers','v':'The Sun, The Times'},{'l':'Daily Reach','v':'Millions of UK readers'},{'l':'Leveson Inquiry','v':'2011-12'},{'l':'Political Alignment','v':'Shifts with power'}],
+    powers: [['Agenda Setting', 82, 'fill-red'],['Electoral Influence', 78, 'fill-red'],['Democratic Accountability', 10, 'fill-red']]
+  },
+  bbc: {
+    icon: '📡', type: 'Shadow / Public Power', title: 'BBC', role: 'Public Broadcaster · Charter Dependency',
+    body: `The BBC is the most trusted news source in the UK and one of the most globally influential media organisations on earth. It is also structurally dependent on the government it covers.
+
+The BBC's Royal Charter and licence fee are renewed by the government of the day — giving any administration a quiet veto over the Corporation's long-term existence. Governments have used this leverage repeatedly: threatening charter review as a backdrop to editorial disputes.
+
+The BBC's reach across class lines — unlike most media — means its framing of political stories has outsized effects. Its independence is real but conditional.`,
+    facts: [{'l':'Annual Budget','v':'~£5bn (licence fee)'},{'l':'Global Reach','v':'~450M weekly audience'},{'l':'Charter','v':'Renewed by government'},{'l':'Political Heat','v':'Permanent'}],
+    powers: [['Public Trust', 78, 'fill-blue'],['Editorial Independence', 55, 'fill-red'],['Government Leverage Exposure', 70, 'fill-red']]
+  },
+  establishment: {
+    icon: '🎩', type: 'Deep Structure', title: 'The Establishment', role: 'Eton · Oxbridge · Gentlemen\'s Clubs',
+    titleClass: 'amber',
+    body: `The numbers are stark: approximately 7% of British children attend fee-paying private schools. Yet those schools produce around 65% of senior judges, 59% of senior civil servants, 52% of Cabinet ministers, and 44% of the Sunday Times Rich List.
+
+This is not a conspiracy — it is a structural outcome of shared education, social networks, accent, cultural reference points, and mutual recognition. The Reform Club, the Garrick, the Athenaeum — these are spaces where senior figures from law, media, politics, and finance mix informally.
+
+The result is a class-based informal coordination layer that operates invisibly alongside formal democratic structures and is almost entirely immune to accountability.`,
+    facts: [{'l':'Private School Pop','v':'~7% of children'},{'l':'Cabinet (private)','v':'~52%'},{'l':'Senior Judges','v':'~65%'},{'l':'Senior Civil Svc','v':'~59%'}],
+    powers: [['Structural Reproduction', 88, 'fill-red'],['Network Reach', 85, 'fill-red'],['Democratic Accountability', 3, 'fill-red']]
+  },
+  intel: {
+    icon: '🌐', type: 'Security State', title: 'Intelligence Services', role: 'MI5 · MI6 · GCHQ · JIC',
+    titleClass: 'amber',
+    body: `The UK intelligence community is among the world's most capable and least publicly scrutinised. MI5 handles domestic counter-intelligence and counter-terrorism; MI6 handles foreign intelligence; GCHQ is the signals intelligence and cyber agency — participating in the Five Eyes alliance with the US, Australia, Canada, and New Zealand.
+
+The Joint Intelligence Committee (JIC) synthesises intelligence for the PM and Cabinet. Its assessments can decisively shape major political decisions — the Iraq War "dodgy dossier" is the most notorious example of how JIC framing can be politically weaponised.
+
+Parliamentary oversight via the Intelligence and Security Committee (ISC) is considered weak by international standards.`,
+    facts: [{'l':'Domestic','v':'MI5'},{'l':'Foreign','v':'MI6 (SIS)'},{'l':'Signals','v':'GCHQ'},{'l':'Alliance','v':'Five Eyes'}],
+    powers: [['Intelligence Capability', 88, 'fill-red'],['Political Influence', 65, 'fill-red'],['Democratic Oversight', 22, 'fill-red']]
+  },
+  thinktanks: {
+    icon: '💼', type: 'Shadow Power', title: 'Think Tanks & Lobbyists', role: 'IEA · Policy Exchange · TPA · IPPR',
+    titleClass: 'amber',
+    body: `Think tanks serve as the ideological R&D departments of political movements. The Institute for Economic Affairs (IEA) provided the intellectual architecture for Thatcherism in the 1970s. Policy Exchange shaped the Cameron and Johnson governments. The Adam Smith Institute has consistently pushed libertarian economic ideas into the mainstream.
+
+Most operate with opaque donor funding. The IEA has repeatedly declined to disclose funders despite being registered as an educational charity. The revolving door between senior think tank roles and government advisory positions is well-documented.
+
+On the left, the IPPR and Fabian Society play a similar role for Labour governments.`,
+    facts: [{'l':'Donor Disclosure','v':'Often opaque'},{'l':'Charity Status','v':'Used by most'},{'l':'Revolving Door','v':'Well documented'},{'l':'IEA Founded','v':'1955'}],
+    powers: [['Ideological Agenda-Setting', 75, 'fill-red'],['Policy Access', 68, 'fill-red'],['Transparency', 15, 'fill-red']]
+  },
+  donors: {
+    icon: '💰', type: 'Dark Influence', title: 'Party Donors & Dark Money', role: 'Cash for Access · Cash for Honours',
+    titleClass: 'amber',
+    body: `The Electoral Commission has described UK political finance as having "significant weaknesses." Large donors to both major parties have received life peerages, ambassadorships, and direct access to senior ministers.
+
+The 2021 Intelligence and Security Committee Russia Report raised concerns about money with Russian-adjacent origins flowing through the UK political system — and was suppressed for months before publication.
+
+The Sunday Times Rich List regularly overlaps with donor lists for both parties. The Non-Dom status of several major press proprietors (including the Daily Mail's Lord Rothermere) adds an additional layer of irony to their papers' populist editorial stances.`,
+    facts: [{'l':'Regulator','v':'Electoral Commission'},{'l':'Oversight Quality','v':'Considered Weak'},{'l':'Russia Report','v':'Suppressed 2019-21'},{'l':'Cash for Peerages','v':'Recurring scandal'}],
+    powers: [['Access Purchase', 72, 'fill-red'],['Policy Influence', 60, 'fill-red'],['Democratic Accountability', 8, 'fill-red']]
+  },
+  commons: {
+    icon: '🏠', type: 'Legislature', title: 'House of Commons', role: '650 Elected MPs · Primary Legislative Chamber',
+    body: `The democratic heart of the UK constitution. 650 Members of Parliament are elected via First Past The Post — a system that typically produces strong single-party majorities at the expense of proportional representation.
+
+The party (or coalition) with a Commons majority forms the government. Backbench rebellions can be decisive — Boris Johnson was brought down partly by his own MPs. Select Committees, which scrutinise each government department, are increasingly powerful and independently-minded.
+
+The Speaker holds significant authority in controlling debate and protecting parliamentary procedure.`,
+    facts: [{'l':'Members','v':'650 MPs'},{'l':'Electoral System','v':'FPTP'},{'l':'Term','v':'Max 5 years'},{'l':'Speaker','v':'Sir Lindsay Hoyle'}],
+    powers: [['Legislative Authority', 85, 'fill-blue'],['Government Accountability', 78, 'fill-blue'],['Electoral Fairness', 40, 'fill-blue']]
+  },
+  lords: {
+    icon: '🏛️', type: 'Legislature', title: 'House of Lords', role: '~800 Peers · Revising Chamber',
+    body: `The second chamber is unelected — an anomaly in modern democracies that the UK has been arguing about for over a century. Life peers (appointed by PMs), 92 remaining hereditary peers, and 26 Lords Spiritual (Church of England bishops) make up a chamber with no democratic mandate but real legislative influence.
+
+The Lords can delay legislation for up to a year (Salisbury Convention prevents them from blocking manifesto commitments outright) and their amendments frequently force government rethinks. Expertise in the chamber — it contains former PMs, senior judges, scientists, generals — gives its scrutiny genuine technical depth.
+
+The appointment system (effectively patronage by the PM) is a persistent source of controversy.`,
+    facts: [{'l':'Total Peers','v':'~800 (active)'},{'l':'Life Peers','v':'Majority'},{'l':'Hereditary','v':'92 remaining'},{'l':'Lords Spiritual','v':'26 Bishops'}],
+    powers: [['Revising Power', 60, 'fill-blue'],['Technical Scrutiny', 75, 'fill-blue'],['Democratic Legitimacy', 15, 'fill-blue']]
+  },
+  supreme: {
+    icon: '⚖️', type: 'Judiciary', title: 'UK Supreme Court', role: '12 Justices · Final Court of Appeal',
+    body: `Established in 2009, separating the highest court from the House of Lords for the first time. The Supreme Court rules on constitutional questions, human rights compatibility (under the Human Rights Act 1998), and devolution disputes.
+
+It cannot strike down Acts of Parliament — parliamentary sovereignty remains the constitutional bedrock. But it can declare legislation "incompatible" with the European Convention on Human Rights, creating intense political pressure to change the law.
+
+The 2019 prorogation case — where the Court unanimously ruled Boris Johnson's prorogation of Parliament unlawful — was a landmark demonstration of judicial willingness to check executive overreach.`,
+    facts: [{'l':'Justices','v':'12'},{'l':'Established','v':'2009'},{'l':'Strike-Down Power','v':'No'},{'l':'Landmark Case','v':'2019 Prorogation'}],
+    powers: [['Judicial Authority', 80, 'fill-purple'],['Constitutional Checks', 70, 'fill-purple'],['Democratic Override Risk', 25, 'fill-purple']]
+  },
+  civilservice: {
+    icon: '🗂️', type: 'Administrative', title: 'Civil Service', role: '~500,000 Staff · Permanent Bureaucracy',
+    body: `The Civil Service is constitutionally neutral — it serves whichever government is in power. In practice, its permanence means it holds something elected ministers lack: institutional memory and knowledge of what has been tried before.
+
+Permanent Secretaries in key departments (especially the Treasury and Cabinet Office) quietly shape the feasibility horizon of policy. The Cabinet Secretary is arguably the most powerful unelected official in the country.
+
+The tension between elected governments wanting radical change and a Civil Service committed to due process has been a recurring political flashpoint — with varying justice to each side's grievances.`,
+    facts: [{'l':'Staff','v':'~500,000'},{'l':'Principle','v':'Political Neutrality'},{'l':'Cabinet Secretary','v':'Most senior official'},{'l':'Flashpoint','v':'Recurring with ministers'}],
+    powers: [['Institutional Knowledge', 82, 'fill-blue'],['Policy Shaping', 65, 'fill-blue'],['Democratic Accountability', 35, 'fill-blue']]
+  },
+  boe: {
+    icon: '🏦', type: 'Monetary Authority', title: 'Bank of England', role: 'MPC · Monetary Policy Committee',
+    body: `The Bank of England was granted operational independence over monetary policy in 1997 by Gordon Brown — one of the most consequential constitutional changes of recent decades. The Monetary Policy Committee sets interest rates independently of political pressure.
+
+The Governor's public statements move markets, shape the fiscal space available to the Chancellor, and can effectively veto irresponsible economic policies — as spectacularly demonstrated in September 2022 when the Bank had to intervene in gilt markets following Liz Truss's mini-budget, precipitating her resignation within weeks.
+
+The Bank also serves as the UK's Prudential Regulation Authority, supervising major banks and insurers.`,
+    facts: [{'l':'Founded','v':'1694'},{'l':'Independence','v':'1997'},{'l':'Governor','v':'Andrew Bailey'},{'l':'MPC Members','v':'9'}],
+    powers: [['Monetary Authority', 88, 'fill-teal'],['Market Influence', 85, 'fill-teal'],['Elected Accountability', 20, 'fill-teal']]
+  },
+  mail: {
+    icon: '🗞️', type: 'Media Power', title: 'Daily Mail / DMGT', role: 'Lord Rothermere · Middle England Voice',
+    body: `The Daily Mail is the UK's most-read newspaper by online traffic and a dominant force in setting the cultural and political agenda for what politicians call "Middle England." Its front pages can make or break a Home Secretary's tenure on immigration.
+
+The paper is owned via a complex offshore structure by the 4th Viscount Rothermere, whose non-domicile tax status sits in pointed contrast to the paper's frequent moralising about public spending and benefit fraud.
+
+Former editor Paul Dacre's influence over Conservative Party policy during 26 years at the paper was considered by many insiders to exceed that of most Cabinet ministers.`,
+    facts: [{'l':'Owner','v':'Lord Rothermere (DMGT)'},{'l':'Editor Tenure','v':'Dacre: 26 years'},{'l':'Online Reach','v':'Largest UK newspaper'},{'l':'Tax Status','v':'Non-dom owner'}],
+    powers: [['Agenda Setting', 80, 'fill-red'],['Political Fear Factor', 82, 'fill-red'],['Democratic Accountability', 8, 'fill-red']]
+  },
+  opposition: {
+    icon: '🗳️', type: 'Legislature', title: "His Majesty's Opposition", role: 'Official Opposition · Shadow Cabinet',
+    body: `The Leader of the Opposition holds a formally recognised constitutional role, receives state funding (Short Money), and chairs a Shadow Cabinet that mirrors the government. This institutionalises the idea of an alternative government-in-waiting — a distinctly British constitutional idea.
+
+The Official Opposition has the right to set the agenda for Opposition Day debates, to lead Prime Minister's Questions responses, and to receive certain intelligence briefings.`,
+    facts: [{'l':'Funding','v':'Short Money'},{'l':'PMQs','v':'Leads response'},{'l':'Shadow Cabinet','v':'Mirrors government'},{'l':'Role','v':'Constitutional'}],
+    powers: [['Parliamentary Influence', 55, 'fill-blue'],['Public Platform', 68, 'fill-blue'],['Policy Leverage', 30, 'fill-blue']]
+  },
+  scotland: {
+    icon: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', type: 'Devolved Government', title: 'Scottish Parliament', role: 'Holyrood · Edinburgh',
+    body: `The most powerful devolved government in the UK. Scotland controls health, education, justice, some taxation, and much of social policy. Post-2014 further powers were devolved following the independence referendum.
+
+The SNP's dominance and the independence question mean Scottish politics operates partly independently of UK-wide political dynamics — and creates a permanent constitutional pressure on Westminster. The question of a second independence referendum remains unresolved.`,
+    facts: [{'l':'MSPs','v':'129'},{'l':'Powers','v':'Health, Education, Justice'},{'l':'Indyref2','v':'Unresolved'},{'l':'Current FM','v':'John Swinney'}],
+    powers: [['Devolved Authority', 75, 'fill-blue'],['Constitutional Pressure', 80, 'fill-blue'],['Independence Risk to Union', 65, 'fill-red']]
+  },
+  wales: {
+    icon: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', type: 'Devolved Government', title: 'Senedd Cymru', role: 'Welsh Parliament · Cardiff Bay',
+    body: `Wales gained its own legislative assembly in 1998 and primary legislative powers in 2011. The Senedd controls health, education, local government, economic development, and some tax powers. Welsh policy has diverged from England's in notable areas — including different approaches to organ donation, 20mph speed limits, and free school meals.`,
+    facts: [{'l':'MSs','v':'96 (expanded 2026)'},{'l':'Powers','v':'Health, Education, LG'},{'l':'First Minister','v':'Eluned Morgan'},{'l':'Party','v':'Labour-led'}],
+    powers: [['Devolved Authority', 62, 'fill-blue'],['Policy Divergence', 58, 'fill-blue'],['Independence Sentiment', 22, 'fill-blue']]
+  },
+  ni: {
+    icon: '☘️', type: 'Devolved Government', title: 'Northern Ireland Assembly', role: 'Stormont · Power-Sharing',
+    body: `Northern Ireland's political settlement is unique — a mandatory power-sharing arrangement between unionist and nationalist parties mandated by the Good Friday Agreement (1998). No majority can govern alone.
+
+The Assembly has been suspended multiple times — most recently for two years (2022-24) over the Northern Ireland Protocol. The DUP-Sinn Féin dynamic means government requires cross-community consent. The constitutional question — union with Britain or unification with Ireland — shapes all politics.`,
+    facts: [{'l':'MLAs','v':'90'},{'l':'System','v':'Mandatory power-sharing'},{'l':'GFA','v':'1998 foundation'},{'l':'Suspensions','v':'Multiple (inc 2022-24)'}],
+    powers: [['Devolved Powers', 58, 'fill-blue'],['Constitutional Fragility', 85, 'fill-red'],['Cross-Community Req', 90, 'fill-blue']]
+  }
+};
+
+const mayors = {
+  london: {
+    name: 'Sadiq Khan', city: 'Mayor of London', icon: '🌆',
+    desc: `Controls Transport for London, has strategic oversight of the Metropolitan Police (via the Mayor\'s Office for Policing and Crime), sets the London Plan (planning framework for 33 boroughs), and leads economic development for a city with a GDP larger than most countries. The most powerful directly-elected politician in the UK outside Parliament. Khan is the longest-serving London Mayor. The role has a visible international platform disproportionate to its formal powers.`,
+    facts: [{'l':'Population','v':'9M+'},{'l':'Budget','v':'~£20bn+ (TfL + GLA)'},{'l':'Police','v':'Met oversight via MOPAC'},{'l':'Elected','v':'2016, re-elected 2021, 2024'}]
+  },
+  manchester: {
+    name: 'Andy Burnham', city: 'Mayor of Greater Manchester', icon: '🐝',
+    desc: `Widely considered the most powerful and influential regional politician outside London. Controls transport (Bee Network), strategic housing, economic development, and has been granted health devolution — making Greater Manchester the only English region with integrated health and social care budgets under elected control. Burnham became nationally prominent by publicly confronting Boris Johnson over COVID tier restrictions in 2020. Considered a serious future Labour leadership contender.`,
+    facts: [{'l':'Population','v':'2.8M'},{'l':'Budget','v':'~£3bn+'},{'l':'Health Devolution','v':'Unique in England'},{'l':'Elected','v':'2017, re-elected 2021, 2024'}]
+  },
+  westmidlands: {
+    name: 'Richard Parker', city: 'Mayor of West Midlands', icon: '🏭',
+    desc: `Oversees the UK\'s second-largest city region centred on Birmingham. The truncation of HS2 — originally planned to terminate at Birmingham\'s Curzon Street — became a major political battle with Westminster. The region hosts significant manufacturing and automotive sector employment.`,
+    facts: [{'l':'Population','v':'2.9M'},{'l':'Key City','v':'Birmingham'},{'l':'HS2 Issue','v':'Major Westminster conflict'},{'l':'Elected','v':'2024'}]
+  },
+  westyorks: {
+    name: 'Tracy Brabin', city: 'Mayor of West Yorkshire', icon: '🎭',
+    desc: `Controls transport, economic development, and adult education for a region spanning Leeds, Bradford, Calderdale, Kirklees and Wakefield. Former actor and MP. West Yorkshire has one of the largest South Asian populations in the UK — a significant demographic shaping regional politics.`,
+    facts: [{'l':'Population','v':'2.3M'},{'l':'Key Cities','v':'Leeds, Bradford'},{'l':'Focus','v':'Transport, skills'},{'l':'Elected','v':'2021, re-elected 2024'}]
+  },
+  liverpool: {
+    name: 'Steve Rotheram', city: 'Mayor of Liverpool City Region', icon: '⚓',
+    desc: `Covers Liverpool, Wirral, Sefton, St Helens, Halton and Knowsley. One of the original metro mayors (2017). The region\'s economy has historically lagged national averages — Rotheram has focused on green energy (offshore wind) and Freeport status as economic levers.`,
+    facts: [{'l':'Population','v':'1.6M'},{'l':'Includes','v':'6 local authority areas'},{'l':'Focus','v':'Green energy, Freeport'},{'l':'Elected','v':'2017, re-elected 2021, 2024'}]
+  }
+};
+
+// ── FILTER ──
+let currentFilter = 'all';
+
+function setFilter(f) {
+  currentFilter = f;
+  ['all','official','shadow'].forEach(id => {
+    const btn = document.getElementById('filter-' + id);
+    btn.className = 'filter-btn' + (f === id ? ' active-' + id : '');
+  });
+  document.querySelectorAll('.card, .ministry-card').forEach(card => {
+    const t = card.dataset.type;
+    if (f === 'all') card.classList.remove('filtered-out');
+    else if (f === 'official') card.classList.toggle('filtered-out', t === 'shadow');
+    else if (f === 'shadow') card.classList.toggle('filtered-out', t === 'official' || t === 'monarchy');
+  });
+}
+
+// ── COLLAPSE ──
+let allCollapsed = false;
+
+function toggleTier(id) {
+  const body = document.getElementById(id + '-body');
+  const toggle = document.getElementById(id + '-toggle');
+  const isCollapsed = body.classList.toggle('collapsed');
+  toggle.classList.toggle('collapsed', isCollapsed);
+}
+
+function toggleAllTiers() {
+  allCollapsed = !allCollapsed;
+  for (let i = 1; i <= 10; i++) {
+    const body = document.getElementById('tier' + i + '-body');
+    const toggle = document.getElementById('tier' + i + '-toggle');
+    if (body) {
+      body.classList.toggle('collapsed', allCollapsed);
+      toggle.classList.toggle('collapsed', allCollapsed);
+    }
+  }
+  document.getElementById('collapseBtn').textContent = allCollapsed ? 'Expand All' : 'Collapse All';
+}
+
+// ── DETAIL PANEL ──
+function showDetail(key) {
+  const d = details[key];
+  if (!d) return;
+  const html = `
+    <div class="detail-type-tag">${d.type}</div>
+    <div class="detail-icon">${d.icon}</div>
+    <div class="detail-title ${d.titleClass || ''}">${d.title}</div>
+    <div class="detail-role">${d.role}</div>
+    <div class="detail-divider"></div>
+    <div class="detail-body">${d.body.replace(/\n\n/g,'<br><br>')}</div>
+    <div>
+      <div class="detail-section-title">Key Facts</div>
+      <div class="detail-fact-grid">
+        ${d.facts.map(f=>`<div class="detail-fact"><div class="detail-fact-label">${f.l}</div><div class="detail-fact-value">${f.v}</div></div>`).join('')}
+      </div>
+    </div>
+    <div>
+      <div class="detail-section-title">Power Assessment</div>
+      ${d.powers.map(p=>`
+        <div class="power-meter" style="margin-bottom:0.5rem">
+          <div class="power-label">${p[0]}</div>
+          <div class="power-bar-wrap"><div class="power-bar-fill ${p[2]}" style="width:${p[1]}%"></div></div>
+          <div style="font-size:0.6rem; color:var(--muted); width:28px; text-align:right; flex-shrink:0">${p[1]}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('detailContent').innerHTML = html;
+  document.getElementById('detailPanel').classList.add('open');
+  document.getElementById('detailOverlay').classList.add('open');
+  document.querySelectorAll('.card, .ministry-card').forEach(c => c.classList.remove('selected'));
+}
+
+function showMayor(key) {
+  const m = mayors[key];
+  if (!m) return;
+  const html = `
+    <div class="detail-type-tag">Metro Mayor</div>
+    <div class="detail-icon">${m.icon}</div>
+    <div class="detail-title amber">${m.name}</div>
+    <div class="detail-role">${m.city}</div>
+    <div class="detail-divider"></div>
+    <div class="detail-body">${m.desc}</div>
+    <div>
+      <div class="detail-section-title">Key Facts</div>
+      <div class="detail-fact-grid">
+        ${m.facts.map(f=>`<div class="detail-fact"><div class="detail-fact-label">${f.l}</div><div class="detail-fact-value">${f.v}</div></div>`).join('')}
+      </div>
+    </div>
+  `;
+  document.getElementById('detailContent').innerHTML = html;
+  document.getElementById('detailPanel').classList.add('open');
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('detailOverlay').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+</script>
+</body>
+</html>
