@@ -1112,6 +1112,33 @@
     color: var(--cream-dim);
   }
 
+  /* OUTFIT VIEW — editorial image */
+  .editorial-shot {
+    width: calc(100% + 72px);
+    margin: -4px -36px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .editorial-shot img {
+    width: 100%;
+    display: block;
+    filter: sepia(8%) contrast(1.04);
+  }
+
+  .editorial-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    padding: 28px 20px 14px;
+    background: linear-gradient(transparent, rgba(8,6,4,0.75));
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(240,232,216,0.6);
+    font-family: 'DM Mono', monospace;
+  }
+
   /* OUTFIT VIEW (description) */
   .outfit-full-desc {
     font-family: 'Cormorant Garamond', serif;
@@ -1324,6 +1351,7 @@ const outfits = [
     name: 'Royal Kalasiris',
     date: 'New Kingdom Period · c.1350 BCE',
     excerpt: 'The draped linen of a noble lady, pleated with extraordinary refinement across two millennia of tradition.',
+    editorial: 'images/archive-of-dress/egypt-kalasiris.png',
     figure: 'egyptian',
     materials: 'Fine linen', origin: 'Thebes, Egypt', context: 'Court dress',
     desc: 'The kalasiris — a close-fitting sheath of finely pleated white linen — was the defining garment of Egyptian aristocracy. This reconstruction draws from tomb paintings at Amarna, where noble women are depicted in diaphanous fabric so fine it required weavers of extraordinary skill. The pleating was set using starch from flax and retained through careful storage in cedar chests.',
@@ -1608,7 +1636,13 @@ function openPanel(index) {
 
 function renderOutfitView(o) {
   const el = document.getElementById('view-outfit');
+  const editorialHtml = o.editorial ? `
+    <div class="editorial-shot">
+      <img src="${o.editorial}" alt="Editorial reconstruction — ${o.name}">
+      <div class="editorial-caption">Editorial reconstruction · Archive of Dress</div>
+    </div>` : '';
   el.innerHTML = `
+    ${editorialHtml}
     <p class="outfit-full-desc">${o.desc}</p>
     <div class="detail-row"><span class="detail-label">Materials</span><span class="detail-value">${o.materials}</span></div>
     <div class="detail-row"><span class="detail-label">Origin</span><span class="detail-value">${o.origin}</span></div>
