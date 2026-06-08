@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goverlicious — United States of America</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #060810;
+  --concrete: #0C1020;
+  --concrete2: #121828;
+  --blue: #2B6BE0;
+  --blue-dim: #1A3E88;
+  --blue-faint: rgba(43,107,224,0.08);
+  --blue-glow: rgba(43,107,224,0.18);
+  --red-usa: #BF1E2E;
+  --steel: #2A3547;
+  --steel-light: #3D4F6A;
+  --gold: #C8A84A;
+  --gold-faint: rgba(200,168,74,0.1);
+  --frost: #D0D8E8;
+  --frost-dim: #7A8AA0;
+  --border-hard: rgba(43,107,224,0.25);
+  --border-soft: rgba(42,53,71,0.8);
+  --official: #0e1a2e;
+  --shadow-col: #160608;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--void);
+  color: var(--frost);
+  font-family: 'IBM Plex Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Grid overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(43,107,224,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(43,107,224,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Blue accent bar */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 4px;
+  height: 100vh;
+  background: linear-gradient(to bottom, var(--blue), var(--blue-dim), transparent);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* ── APP SHELL ── */
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  background: var(--concrete);
+  border-bottom: 1px solid var(--border-hard);
+  padding: 0 2rem;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.masthead-left { display: flex; align-items: center; gap: 1.2rem; }
+
+.logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.7rem;
+  letter-spacing: 0.08em;
+  color: var(--frost);
+}
+
+.logo-accent { color: var(--blue); }
+
+.country-tag {
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--frost-dim);
+  border-left: 2px solid var(--blue);
+  padding-left: 0.8rem;
+  line-height: 1.4;
+}
+
+.warning-tag {
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: var(--blue);
+  background: var(--blue-faint);
+  border: 1px solid var(--border-hard);
+  padding: 0.25rem 0.6rem;
+  border-radius: 1px;
+  text-transform: uppercase;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--border-soft);
+  background: transparent;
+  color: var(--frost-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  border-radius: 1px;
+}
+.filter-btn:hover { color: var(--frost); border-color: var(--steel-light); }
+.filter-btn.active-all { background: var(--blue-faint); color: var(--blue); border-color: var(--border-hard); }
+.filter-btn.active-official { background: rgba(14,26,46,0.4); color: #7aace8; border-color: rgba(43,107,224,0.4); }
+.filter-btn.active-shadow { background: rgba(191,30,46,0.08); color: #e8807a; border-color: rgba(191,30,46,0.35); }
+.collapse-all-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.35rem 0.8rem; border: 1px solid rgba(42,53,71,0.5);
+  background: transparent; color: var(--frost-dim); cursor: pointer; transition: all 0.15s; border-radius: 1px;
+}
+.collapse-all-btn:hover { color: var(--frost); }
+
+/* ── LAYOUT ── */
+.main-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  min-height: calc(100vh - 58px);
+}
+
+/* ── MAP PANEL ── */
+.map-panel {
+  background: var(--concrete);
+  border-right: 1px solid var(--border-hard);
+  padding: 1.8rem 1.5rem;
+  position: sticky;
+  top: 58px;
+  height: calc(100vh - 58px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.map-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  letter-spacing: 0.05em;
+  line-height: 0.95;
+  color: var(--frost);
+}
+
+.map-title .accent { color: var(--blue); }
+
+.vlast-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--blue);
+  opacity: 0.7;
+  margin-top: 0.3rem;
+}
+
+.map-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.meta-item {
+  background: var(--blue-faint);
+  border: 1px solid var(--border-hard);
+  border-radius: 1px;
+  padding: 0.5rem 0.6rem;
+}
+
+.meta-label {
+  font-size: 0.45rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--frost-dim);
+  margin-bottom: 0.2rem;
+}
+
+.meta-value {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--frost);
+  line-height: 1.2;
+}
+
+.map-svg-wrap {
+  background: rgba(14,32,64,0.12);
+  border: 1px solid var(--border-soft);
+  border-radius: 1px;
+  padding: 0.8rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Key States list */
+.fed-section-title {
+  font-size: 0.5rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--blue);
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+}
+
+.fed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.fed-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  background: rgba(14,26,46,0.14);
+  border: 1px solid var(--border-soft);
+  border-radius: 1px;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-size: 0.55rem;
+}
+.fed-item:hover { background: rgba(43,107,224,0.1); border-color: var(--steel-light); }
+
+.fed-dot { width: 5px; height: 5px; background: var(--blue); flex-shrink: 0; }
+.fed-name { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.75rem; color: var(--frost); }
+.fed-type { font-size: 0.48rem; color: var(--frost-dim); margin-left: auto; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.legend-title { font-size: 0.48rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--frost-dim); margin-bottom: 0.15rem; }
+.legend-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.55rem; color: var(--frost-dim); }
+.legend-swatch { width: 16px; height: 6px; border-radius: 0; flex-shrink: 0; }
+
+/* ── CHART PANEL ── */
+.chart-panel {
+  padding: 2rem 2.5rem 4rem;
+  overflow-y: auto;
+}
+
+/* Trump banner — special treatment */
+.putin-banner {
+  background: linear-gradient(135deg, #060c1a, #0c1a30);
+  border: 1px solid var(--blue);
+  border-left: 4px solid var(--blue);
+  border-radius: 1px;
+  padding: 1.4rem 1.6rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  overflow: hidden;
+  animation: cardIn 0.4s ease both;
+}
+
+.putin-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 200px; height: 100%;
+  background: radial-gradient(ellipse at right, rgba(43,107,224,0.08), transparent);
+  pointer-events: none;
+}
+
+.putin-banner:hover { box-shadow: 0 0 40px rgba(43,107,224,0.15); transform: translateY(-1px); }
+
+.pb-eyebrow {
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--blue);
+  opacity: 0.7;
+  margin-bottom: 0.4rem;
+}
+
+.pb-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+  color: var(--frost);
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+
+.pb-role {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--frost-dim);
+  margin-bottom: 0.7rem;
+}
+
+.pb-note {
+  font-size: 0.62rem;
+  line-height: 1.7;
+  color: rgba(208,216,232,0.55);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-style: italic;
+}
+
+.pb-badge {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: 0.48rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  background: var(--blue-faint);
+  border: 1px solid var(--border-hard);
+  color: var(--blue);
+}
+
+/* ── TIERS ── */
+.tier-connector {
+  display: flex;
+  justify-content: center;
+  height: 28px;
+  position: relative;
+}
+.tier-connector::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 1px; height: 100%;
+  background: linear-gradient(to bottom, var(--blue-dim), rgba(43,107,224,0.08));
+}
+
+.tier-block { margin-bottom: 0; }
+
+.tier-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.6rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tier-number { font-size: 0.48rem; letter-spacing: 0.2em; color: var(--blue); opacity: 0.5; text-transform: uppercase; white-space: nowrap; }
+.tier-name { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--frost-dim); white-space: nowrap; }
+.tier-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border-hard), transparent); }
+.tier-toggle { font-size: 0.6rem; color: var(--blue); opacity: 0.4; margin-left: auto; transition: transform 0.2s; flex-shrink: 0; }
+.tier-toggle.collapsed { transform: rotate(-90deg); }
+
+.tier-body {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+.tier-body.collapsed { max-height: 0; opacity: 0; }
+
+/* ── CARDS ── */
+.card {
+  border-radius: 1px;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.2s;
+  flex: 1 1 185px;
+  min-width: 170px;
+  max-width: 260px;
+  animation: cardIn 0.4s ease both;
+  position: relative;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card:hover { transform: translateY(-2px); }
+.card.filtered-out { opacity: 0.06; pointer-events: none; }
+
+.card.official {
+  background: linear-gradient(145deg, #08111e, #0e1a30);
+  border: 1px solid rgba(42,53,71,0.8);
+  border-top: 2px solid rgba(43,107,224,0.35);
+}
+
+.card.shadow {
+  background: linear-gradient(145deg, #100306, #180508);
+  border: 1px solid rgba(191,30,46,0.25);
+  border-top: 2px solid rgba(191,30,46,0.55);
+}
+
+.card.fsb {
+  background: linear-gradient(145deg, #080a14, #0e1020);
+  border: 1px solid rgba(43,107,224,0.22);
+  border-top: 2px solid rgba(43,107,224,0.5);
+}
+
+.card.selected { box-shadow: 0 0 0 1px var(--blue), 0 8px 24px rgba(0,0,0,0.5) !important; }
+
+.card-icon { font-size: 1.1rem; margin-bottom: 0.35rem; display: block; }
+
+.card-title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: var(--frost);
+  line-height: 1.25;
+  margin-bottom: 0.12rem;
+}
+.card.shadow .card-title { color: #e89080; }
+.card.fsb .card-title { color: #90b8e8; }
+
+.card-role {
+  font-size: 0.48rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--frost-dim);
+  margin-bottom: 0.4rem;
+}
+
+.card-preview {
+  font-size: 0.58rem;
+  line-height: 1.6;
+  color: rgba(208,216,232,0.38);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.card-badge {
+  display: inline-block;
+  font-size: 0.44rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.4rem;
+  margin-top: 0.4rem;
+}
+
+.badge-red { background: rgba(191,30,46,0.1); color: #e04060; border: 1px solid rgba(191,30,46,0.35); }
+.badge-blue { background: rgba(14,26,46,0.5); color: #7aace8; border: 1px solid rgba(43,107,224,0.3); }
+.badge-grey { background: rgba(42,53,71,0.3); color: var(--frost-dim); border: 1px solid var(--border-soft); }
+.badge-gold { background: var(--gold-faint); color: var(--gold); border: 1px solid rgba(200,168,74,0.3); }
+.badge-purple { background: rgba(80,40,120,0.2); color: #b090e0; border: 1px solid rgba(80,40,120,0.4); }
+
+/* Ministry grid */
+.ministries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.ministry-card {
+  background: linear-gradient(145deg, #08111e, #0c1628);
+  border: 1px solid rgba(42,53,71,0.6);
+  border-radius: 1px;
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  transition: all 0.12s;
+  animation: cardIn 0.4s ease both;
+}
+.ministry-card:hover { border-color: var(--steel-light); transform: translateY(-1px); }
+.ministry-icon { font-size: 0.85rem; margin-bottom: 0.2rem; display: block; }
+.ministry-name { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.75rem; font-weight: 400; color: var(--frost); line-height: 1.2; margin-bottom: 0.12rem; }
+.ministry-abbr { font-size: 0.44rem; letter-spacing: 0.12em; color: var(--frost-dim); text-transform: uppercase; }
+
+/* Shadow divider */
+.shadow-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 2.5rem 0 1.5rem;
+}
+.shadow-divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(191,30,46,0.35)); }
+.shadow-divider-line.rev { background: linear-gradient(to left, transparent, rgba(191,30,46,0.35)); }
+.shadow-divider-text { font-size: 0.5rem; letter-spacing: 0.3em; color: #e04060; opacity: 0.6; text-transform: uppercase; white-space: nowrap; }
+
+/* Reality check banner */
+.reality-banner {
+  background: var(--blue-faint);
+  border: 1px solid var(--border-hard);
+  border-left: 3px solid var(--blue);
+  padding: 0.8rem 1rem;
+  margin: 1.5rem 0;
+  font-size: 0.6rem;
+  line-height: 1.7;
+  color: rgba(208,216,232,0.5);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-style: italic;
+}
+
+/* ── DETAIL PANEL ── */
+.detail-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 200;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.detail-overlay.open { opacity: 1; pointer-events: all; }
+
+.detail-panel {
+  position: fixed;
+  top: 0; right: 0;
+  width: min(500px, 100vw);
+  height: 100vh;
+  background: var(--concrete);
+  border-left: 1px solid var(--border-hard);
+  z-index: 201;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow-y: auto;
+  padding: 2rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.detail-panel.open { transform: translateX(0); }
+
+.detail-close {
+  position: absolute; top: 1.1rem; right: 1.4rem;
+  background: none; border: 1px solid var(--border-hard);
+  color: var(--frost-dim); font-size: 0.85rem;
+  width: 26px; height: 26px; border-radius: 1px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s;
+}
+.detail-close:hover { color: var(--frost); border-color: var(--blue); }
+
+.detail-type-tag { font-size: 0.45rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--blue); opacity: 0.6; }
+.detail-icon { font-size: 2.2rem; }
+.detail-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.06em; line-height: 1; color: var(--frost); }
+.detail-title.red { color: #e87060; }
+.detail-title.blue { color: #7aace8; }
+.detail-role { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--frost-dim); }
+.detail-divider { height: 1px; background: linear-gradient(to right, var(--border-hard), transparent); }
+.detail-body { font-size: 0.68rem; line-height: 1.85; color: rgba(208,216,232,0.65); font-family: 'IBM Plex Sans', sans-serif; }
+
+.detail-section-title { font-size: 0.44rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--blue); opacity: 0.45; margin-bottom: 0.45rem; }
+
+.detail-fact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+.detail-fact { background: var(--blue-faint); border: 1px solid var(--border-hard); border-radius: 1px; padding: 0.45rem 0.6rem; }
+.detail-fact-label { font-size: 0.44rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--frost-dim); margin-bottom: 0.15rem; }
+.detail-fact-value { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.8rem; color: var(--frost); }
+
+.power-meter { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.45rem; }
+.power-label { font-size: 0.48rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--frost-dim); width: 65px; flex-shrink: 0; }
+.power-bar-wrap { flex: 1; height: 3px; background: var(--blue-faint); border-radius: 0; overflow: hidden; }
+.power-bar-fill { height: 100%; transition: width 0.7s cubic-bezier(0.22,1,0.36,1); }
+.fill-red { background: linear-gradient(to right, rgba(191,30,46,0.6), var(--red-usa)); }
+.fill-blue { background: linear-gradient(to right, var(--blue-dim), var(--blue)); }
+.fill-grey { background: linear-gradient(to right, #3a4a5a, #6a8aa0); }
+.fill-purple { background: linear-gradient(to right, #4a2a8a, #8a60d0); }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--void); }
+::-webkit-scrollbar-thumb { background: var(--blue-dim); }
+
+@media (max-width: 800px) {
+  .main-layout { grid-template-columns: 1fr; }
+  .map-panel { position: static; height: auto; }
+  .card { min-width: 100%; max-width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="masthead">
+  <div class="masthead-left">
+    <div class="logo">Govern<span class="logo-accent">licious</span></div>
+    <div class="country-tag">🇺🇸 United States of America · 2026<br>Constitutional Federal Republic</div>
+  </div>
+  <div class="controls">
+    <span class="warning-tag">⚠ Formal ≠ Complete</span>
+    <button class="filter-btn active-all" id="filter-all" onclick="setFilter('all')">All Power</button>
+    <button class="filter-btn" id="filter-official" onclick="setFilter('official')">Formal Only</button>
+    <button class="filter-btn" id="filter-shadow" onclick="setFilter('shadow')">Real Power</button>
+    <button class="collapse-all-btn" id="collapseBtn" onclick="toggleAllTiers()">Collapse All</button>
+  </div>
+</header>
+
+<div class="main-layout">
+
+<!-- MAP PANEL -->
+<aside class="map-panel">
+  <div>
+    <div class="map-title">United<br><span class="accent">States</span></div>
+    <div class="vlast-label">Constitutional Federal Republic · 2026</div>
+  </div>
+
+  <div class="map-meta">
+    <div class="meta-item"><div class="meta-label">System</div><div class="meta-value">Federal Presidential Republic</div></div>
+    <div class="meta-item"><div class="meta-label">Population</div><div class="meta-value">335M</div></div>
+    <div class="meta-item"><div class="meta-label">Legislature</div><div class="meta-value">Congress (bicameral)</div></div>
+    <div class="meta-item"><div class="meta-label">President</div><div class="meta-value">Donald Trump (since Jan 2025)</div></div>
+    <div class="meta-item"><div class="meta-label">GDP</div><div class="meta-value">~$28T (largest economy)</div></div>
+    <div class="meta-item"><div class="meta-label">Elections</div><div class="meta-value">Constitutional democracy</div></div>
+  </div>
+
+  <!-- SVG Map USA (simplified continental) -->
+  <div class="map-svg-wrap">
+    <svg viewBox="0 0 280 180" width="260" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="usaGlow" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stop-color="rgba(43,107,224,0.12)"/>
+          <stop offset="100%" stop-color="rgba(43,107,224,0)"/>
+        </radialGradient>
+      </defs>
+      <!-- Continental USA main body -->
+      <path d="M 22 42 L 20 52 L 18 62 L 18 72 L 20 82 L 22 90 L 26 98 L 30 104 L 36 108 L 44 112 L 50 116 L 55 122 L 58 128 L 60 122 L 63 116 L 68 112 L 75 110 L 82 112 L 88 108 L 92 104 L 98 102 L 108 103 L 115 105 L 120 108 L 126 110 L 132 108 L 138 105 L 145 104 L 152 106 L 158 110 L 162 108 L 166 104 L 170 102 L 175 104 L 178 110 L 182 114 L 188 116 L 192 112 L 196 108 L 200 105 L 205 106 L 208 112 L 210 120 L 208 126 L 205 118 L 202 112 L 198 115 L 195 122 L 192 128 L 188 122 L 184 116 L 180 118 L 178 125 L 176 118 L 172 114 L 168 116 L 165 108 L 162 112 L 162 118 L 165 124 L 168 128 L 168 122 L 170 128 L 172 135 L 175 140 L 178 135 L 182 128 L 185 122 L 188 128 L 192 135 L 195 140 L 198 148 L 200 142 L 202 135 L 205 130 L 210 128 L 215 126 L 220 122 L 226 118 L 230 112 L 235 106 L 240 100 L 245 92 L 248 82 L 250 72 L 250 62 L 248 52 L 244 44 L 238 38 L 228 32 L 215 28 L 200 25 L 182 23 L 162 22 L 140 22 L 118 23 L 96 26 L 75 30 L 55 36 L 38 40 Z"
+        fill="#0e2040" fill-opacity="0.85" stroke="#2B6BE0" stroke-width="0.8"/>
+      <!-- Florida peninsula -->
+      <path d="M 210 120 L 212 128 L 214 138 L 215 148 L 215 158 L 213 165 L 210 168 L 207 165 L 205 155 L 204 145 L 204 135 L 206 126 L 208 120 Z"
+        fill="#0e2040" fill-opacity="0.75" stroke="#2B6BE0" stroke-width="0.7"/>
+      <!-- Region labels -->
+      <text x="35" y="72" font-size="5.5" fill="rgba(208,216,232,0.2)" font-family="IBM Plex Mono">WEST</text>
+      <text x="140" y="68" font-size="5.5" fill="rgba(208,216,232,0.2)" font-family="IBM Plex Mono">MIDWEST</text>
+      <text x="150" y="110" font-size="5.5" fill="rgba(208,216,232,0.2)" font-family="IBM Plex Mono">SOUTH</text>
+      <text x="218" y="52" font-size="5" fill="rgba(208,216,232,0.2)" font-family="IBM Plex Mono">NE</text>
+      <!-- Washington DC -->
+      <circle cx="195" cy="72" r="4" fill="#2B6BE0" opacity="0.9"/>
+      <circle cx="195" cy="72" r="7" fill="none" stroke="#2B6BE0" stroke-width="0.7" opacity="0.35"/>
+      <text x="200" y="76" font-size="6" fill="#7aace8" font-family="IBM Plex Mono" font-weight="500">D.C.</text>
+      <!-- New York -->
+      <circle cx="220" cy="58" r="3" fill="#D0D8E8" opacity="0.75"/>
+      <text x="224" y="56" font-size="5.5" fill="#D0D8E8" font-family="IBM Plex Mono" opacity="0.65">NYC</text>
+      <!-- Los Angeles -->
+      <circle cx="35" cy="85" r="3" fill="#D0D8E8" opacity="0.65"/>
+      <text x="24" y="82" font-size="5.5" fill="#D0D8E8" font-family="IBM Plex Mono" opacity="0.6">L.A.</text>
+      <!-- Chicago -->
+      <circle cx="170" cy="55" r="2.5" fill="#D0D8E8" opacity="0.65"/>
+      <text x="174" y="53" font-size="5" fill="#D0D8E8" font-family="IBM Plex Mono" opacity="0.55">Chi</text>
+      <!-- Texas/Dallas -->
+      <circle cx="118" cy="90" r="2.5" fill="#D0D8E8" opacity="0.6"/>
+      <text x="122" y="88" font-size="5" fill="#D0D8E8" font-family="IBM Plex Mono" opacity="0.55">TX</text>
+      <!-- Glow overlay -->
+      <rect x="0" y="0" width="280" height="180" fill="url(#usaGlow)" pointer-events="none"/>
+    </svg>
+  </div>
+
+  <!-- Key States -->
+  <div>
+    <div class="fed-section-title">Key States</div>
+    <div class="fed-list">
+      <div class="fed-item" onclick="showState('california')"><div class="fed-dot"></div><div class="fed-name">California</div><div class="fed-type">West Coast</div></div>
+      <div class="fed-item" onclick="showState('texas')"><div class="fed-dot"></div><div class="fed-name">Texas</div><div class="fed-type">South / Border</div></div>
+      <div class="fed-item" onclick="showState('newyork')"><div class="fed-dot"></div><div class="fed-name">New York</div><div class="fed-type">Northeast</div></div>
+      <div class="fed-item" onclick="showState('florida')"><div class="fed-dot"></div><div class="fed-name">Florida</div><div class="fed-type">Southeast</div></div>
+      <div class="fed-item" onclick="showState('pennsylvania')"><div class="fed-dot"></div><div class="fed-name">Pennsylvania</div><div class="fed-type">Rust Belt</div></div>
+      <div class="fed-item" onclick="showState('georgia')"><div class="fed-dot"></div><div class="fed-name">Georgia</div><div class="fed-type">New South</div></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-title">Legend</div>
+    <div class="legend-row"><div class="legend-swatch" style="background:var(--blue);"></div>President / Executive</div>
+    <div class="legend-row"><div class="legend-swatch" style="background:#1a3e88;"></div>Formal / Constitutional</div>
+    <div class="legend-row"><div class="legend-swatch" style="background:var(--red-usa);"></div>Shadow / Real Power</div>
+    <div class="legend-row"><div class="legend-swatch" style="background:#3a3060;"></div>Intelligence / Deep State</div>
+    <div class="legend-row"><div class="legend-swatch" style="background:#5a4010;"></div>Corporate / Financial Power</div>
+  </div>
+</aside>
+
+<!-- CHART PANEL -->
+<section class="chart-panel">
+
+  <div class="reality-banner">
+    ⚠ The United States has the world's most imitated constitutional architecture — separation of powers, an independent judiciary, a free press, and regular elections. But formal structures only partially describe who actually holds power. This atlas maps both the constitutional layer and the parallel architecture of lobbying, corporate power, the permanent national security state, and the informal influence networks that shape policy regardless of who wins elections.
+  </div>
+
+  <!-- TIER I: The Presidency -->
+  <div class="tier-block" id="tier0">
+    <div class="tier-header" onclick="toggleTier('tier0')">
+      <span class="tier-number">Tier I</span>
+      <span class="tier-name">The Presidency — Commander-in-Chief</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier0-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier0-body">
+      <div class="putin-banner" onclick="showDetail('trump')" style="flex:1; min-width:300px;" data-type="official">
+        <div class="pb-eyebrow">47th President of the United States · Second Term Since January 2025</div>
+        <div class="pb-name">DONALD TRUMP</div>
+        <div class="pb-role">Real Estate Developer · Media Figure · 45th & 47th President</div>
+        <div class="pb-note">The presidency of the United States is constrained by a written constitution, an independent legislature, and a federal judiciary. Trump's second term has been characterised by aggressive executive action, significant use of executive orders, and explicit challenges to the institutional constraints on presidential power — including unprecedented use of the pardoning power, attempts to reshape the executive branch through DOGE, and challenges to judicial oversight.</div>
+        <span class="pb-badge">Click for full profile</span>
+      </div>
+      <div class="card shadow" onclick="showDetail('nsc')" data-type="shadow" style="flex:1 1 200px;">
+        <span class="card-icon">🛡️</span>
+        <div class="card-title">National Security Council</div>
+        <div class="card-role">Foreign Policy Synthesis · Permanent Staff</div>
+        <div class="card-preview">Where actual foreign policy and military decisions are synthesised. The permanent staff outlasts any administration — institutional continuity across elections.</div>
+        <span class="card-badge badge-red">Permanent Apparatus</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER II: Executive Inner Circle -->
+  <div class="tier-block" id="tier2">
+    <div class="tier-header" onclick="toggleTier('tier2')">
+      <span class="tier-number">Tier II</span>
+      <span class="tier-name">Executive Inner Circle</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier2-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier2-body">
+      <div class="card official" onclick="showDetail('vp')" data-type="official">
+        <span class="card-icon">🏛️</span>
+        <div class="card-title">VP JD Vance</div>
+        <div class="card-role">Vice President · Constitutional Successor</div>
+        <div class="card-preview">Constitutional successor and key political ally. Influential voice on foreign policy, trade, and the broader MAGA political project.</div>
+        <span class="card-badge badge-blue">Constitutional Successor</span>
+      </div>
+      <div class="card official" onclick="showDetail('chiefstaff')" data-type="official">
+        <span class="card-icon">🗂️</span>
+        <div class="card-title">Chief of Staff Susie Wiles</div>
+        <div class="card-role">White House Chief of Staff</div>
+        <div class="card-preview">First female White House Chief of Staff. Controls access to the President and manages the executive branch apparatus. Known for discipline, low media profile.</div>
+        <span class="card-badge badge-blue">White House Gatekeeper</span>
+      </div>
+      <div class="card shadow" onclick="showDetail('doge')" data-type="shadow">
+        <span class="card-icon">⚙️</span>
+        <div class="card-title">DOGE / Advisory Structure</div>
+        <div class="card-role">Dept of Government Efficiency · Informal Body</div>
+        <div class="card-preview">Informal advisory body with significant influence over federal agency restructuring and spending. Not a constitutional entity. Elon Musk as special advisor.</div>
+        <span class="card-badge badge-red">Extra-Constitutional Body</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER III: Key Departments -->
+  <div class="tier-block" id="tier3">
+    <div class="tier-header" onclick="toggleTier('tier3')">
+      <span class="tier-number">Tier III</span>
+      <span class="tier-name">Key Departments & Agencies</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier3-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier3-body">
+      <div class="ministries-grid">
+        <div class="ministry-card" onclick="showDetail('pentagon')" data-type="official"><span class="ministry-icon">⚔️</span><div class="ministry-name">Dept of Defense / Pentagon</div><div class="ministry-abbr">Pete Hegseth</div></div>
+        <div class="ministry-card" onclick="showDetail('state')" data-type="official"><span class="ministry-icon">🌍</span><div class="ministry-name">Dept of State</div><div class="ministry-abbr">Marco Rubio</div></div>
+        <div class="ministry-card" onclick="showDetail('treasury')" data-type="official"><span class="ministry-icon">💰</span><div class="ministry-name">Treasury Dept</div><div class="ministry-abbr">Scott Bessent</div></div>
+        <div class="ministry-card" onclick="showDetail('doj')" data-type="official"><span class="ministry-icon">⚖️</span><div class="ministry-name">Dept of Justice / FBI</div><div class="ministry-abbr">Pam Bondi</div></div>
+        <div class="ministry-card" onclick="showDetail('dhs')" data-type="official"><span class="ministry-icon">🛡️</span><div class="ministry-name">DHS</div><div class="ministry-abbr">Kristi Noem</div></div>
+        <div class="ministry-card" onclick="showDetail('intel')" data-type="shadow"><span class="ministry-icon">🕵️</span><div class="ministry-name">Intelligence Community</div><div class="ministry-abbr">DNI / CIA / NSA</div></div>
+        <div class="ministry-card" onclick="showDetail('fed')" data-type="official"><span class="ministry-icon">🏦</span><div class="ministry-name">Federal Reserve</div><div class="ministry-abbr">Jerome Powell (independent)</div></div>
+        <div class="ministry-card" onclick="showDetail('commerce')" data-type="official"><span class="ministry-icon">📈</span><div class="ministry-name">Commerce / Trade</div><div class="ministry-abbr">Howard Lutnick</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER IV: Congress -->
+  <div class="tier-block" id="tier4">
+    <div class="tier-header" onclick="toggleTier('tier4')">
+      <span class="tier-number">Tier IV</span>
+      <span class="tier-name">Congress — The Legislature</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier4-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier4-body">
+      <div class="card official" onclick="showDetail('senate')" data-type="official">
+        <span class="card-icon">🏛️</span>
+        <div class="card-title">Senate</div>
+        <div class="card-role">100 Senators · Republican Majority 53-47</div>
+        <div class="card-preview">Constitutional upper chamber. Confirms appointments, ratifies treaties, tries impeachments. The filibuster gives minority significant blocking power.</div>
+        <span class="card-badge badge-blue">Upper Chamber</span>
+      </div>
+      <div class="card official" onclick="showDetail('house')" data-type="official">
+        <span class="card-icon">🏢</span>
+        <div class="card-title">House of Representatives</div>
+        <div class="card-role">435 Members · Slim Republican Majority</div>
+        <div class="card-preview">Originates all revenue bills. Sole power of impeachment. Speaker Johnson. Slim majority makes every vote a negotiation.</div>
+        <span class="card-badge badge-blue">Lower Chamber</span>
+      </div>
+      <div class="card official" onclick="showDetail('congleaders')" data-type="official">
+        <span class="card-icon">🎙️</span>
+        <div class="card-title">Congressional Leadership</div>
+        <div class="card-role">Speaker Johnson · Leader Thune</div>
+        <div class="card-preview">Speaker Mike Johnson in the House, Majority Leader John Thune in the Senate. The legislative agenda flows through these two offices.</div>
+        <span class="card-badge badge-grey">Party Leadership</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER V: The Judiciary -->
+  <div class="tier-block" id="tier5">
+    <div class="tier-header" onclick="toggleTier('tier5')">
+      <span class="tier-number">Tier V</span>
+      <span class="tier-name">The Judiciary — Constitutional Arbiter</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier5-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier5-body">
+      <div class="card official" onclick="showDetail('scotus')" data-type="official">
+        <span class="card-icon">⚖️</span>
+        <div class="card-title">Supreme Court</div>
+        <div class="card-role">6-3 Conservative Majority · Roberts Chief</div>
+        <div class="card-preview">Last line of constitutional interpretation. Lifetime appointments. The 2024 presidential immunity ruling reshaped the constitutional landscape.</div>
+        <span class="card-badge badge-blue">Highest Court</span>
+      </div>
+      <div class="card official" onclick="showDetail('circuits')" data-type="official">
+        <span class="card-icon">🗂️</span>
+        <div class="card-title">Federal Circuit Courts</div>
+        <div class="card-role">13 Circuit Courts · Key Battleground</div>
+        <div class="card-preview">Key battleground for executive action challenges. The 9th Circuit (West Coast) and DC Circuit are the most influential. District courts have blocked multiple executive orders.</div>
+        <span class="card-badge badge-grey">Appellate Layer</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHADOW DIVIDER -->
+  <div class="shadow-divider">
+    <div class="shadow-divider-line"></div>
+    <div class="shadow-divider-text">⚡ Parallel Power Architecture — Money, Influence &amp; the Permanent State</div>
+    <div class="shadow-divider-line rev"></div>
+  </div>
+
+  <!-- TIER VI: Lobbying Industrial Complex -->
+  <div class="tier-block" id="tier6">
+    <div class="tier-header" onclick="toggleTier('tier6')">
+      <span class="tier-number">Tier VI</span>
+      <span class="tier-name">The Lobbying Industrial Complex</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier6-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier6-body">
+      <div class="card shadow" onclick="showDetail('kstreet')" data-type="shadow">
+        <span class="card-icon">🏢</span>
+        <div class="card-title">K Street</div>
+        <div class="card-role">~12,000 Lobbyists · $4B+ Annual Spend</div>
+        <div class="card-preview">Washington's lobbying corridor. The revolving door between government and lobbying firms is the primary mechanism of corporate policy influence.</div>
+        <span class="card-badge badge-red">Revolving Door</span>
+      </div>
+      <div class="card shadow" onclick="showDetail('superpacs')" data-type="shadow">
+        <span class="card-icon">💸</span>
+        <div class="card-title">Super PACs / Dark Money</div>
+        <div class="card-role">Citizens United (2010) · Unlimited Spend</div>
+        <div class="card-preview">Citizens United opened unlimited corporate political spending. $3B+ raised in 2024. Donors can remain legally anonymous through 501(c)(4) structures.</div>
+        <span class="card-badge badge-red">Anonymous Capital</span>
+      </div>
+      <div class="card shadow" onclick="showDetail('aipac')" data-type="shadow">
+        <span class="card-icon">🌐</span>
+        <div class="card-title">AIPAC &amp; Major Lobbies</div>
+        <div class="card-role">Foreign Policy · Energy · Pharma · Finance</div>
+        <div class="card-preview">AIPAC is among the most effective lobbying operations in Washington history. Energy, pharma, financial, and defence lobbies collectively shape the legislative agenda.</div>
+        <span class="card-badge badge-red">Sectoral Power</span>
+      </div>
+      <div class="card shadow" onclick="showDetail('chamber')" data-type="shadow">
+        <span class="card-icon">🏦</span>
+        <div class="card-title">Chamber of Commerce</div>
+        <div class="card-role">Most Powerful Business Lobby in the US</div>
+        <div class="card-preview">Sets the legislative agenda on tax, regulation, and trade. Spends more on lobbying than any other organisation. Broadly cross-partisan influence.</div>
+        <span class="card-badge badge-gold">Business Agenda Setter</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER VII: The Permanent State -->
+  <div class="tier-block" id="tier7">
+    <div class="tier-header" onclick="toggleTier('tier7')">
+      <span class="tier-number">Tier VII</span>
+      <span class="tier-name">The Permanent State</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier7-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier7-body">
+      <div class="card fsb" onclick="showDetail('deepstate')" data-type="shadow">
+        <span class="card-icon">🕵️</span>
+        <div class="card-title">Intelligence Community</div>
+        <div class="card-role">17 Agencies · ~$90B Annual Budget</div>
+        <div class="card-preview">CIA, NSA, DIA, FBI intelligence — 17 agencies that outlast administrations. NSA runs the most sophisticated mass surveillance infrastructure in human history.</div>
+        <span class="card-badge badge-purple">Deep State Layer</span>
+      </div>
+      <div class="card shadow" onclick="showDetail('pentagon_bur')" data-type="shadow">
+        <span class="card-icon">🪖</span>
+        <div class="card-title">Pentagon Bureaucracy / Joint Chiefs</div>
+        <div class="card-role">Military-Industrial Complex · $900B+ Budget</div>
+        <div class="card-preview">The military-industrial-congressional complex Eisenhower warned of in 1961. $900B+ annual budgets. The Joint Chiefs advise but also constrain civilian leadership.</div>
+        <span class="card-badge badge-red">Strategic Continuity</span>
+      </div>
+      <div class="card official" onclick="showDetail('civilservice')" data-type="official">
+        <span class="card-icon">📋</span>
+        <div class="card-title">Career Civil Service / Federal Courts</div>
+        <div class="card-role">~3M Federal Employees · Independent Judiciary</div>
+        <div class="card-preview">~3M federal employees and an independent federal judiciary form a structural counterweight to executive overreach. Courts have blocked dozens of executive orders.</div>
+        <span class="card-badge badge-blue">Institutional Counterweight</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tier-connector"></div>
+
+  <!-- TIER VIII: Corporate Power Nexus -->
+  <div class="tier-block" id="tier8">
+    <div class="tier-header" onclick="toggleTier('tier8')">
+      <span class="tier-number">Tier VIII</span>
+      <span class="tier-name">Corporate Power Nexus</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier8-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier8-body">
+      <div class="card shadow" onclick="showDetail('wallstreet')" data-type="shadow">
+        <span class="card-icon">💎</span>
+        <div class="card-title">Wall Street / BlackRock / Financial Complex</div>
+        <div class="card-role">Big Three: $20T+ AUM · Proxy Power</div>
+        <div class="card-preview">BlackRock, Vanguard, State Street collectively manage $20T+ — larger than any national economy except the US and China. Their proxy voting exceeds any elected official.</div>
+        <span class="card-badge badge-gold">Capital Hegemony</span>
+      </div>
+      <div class="card shadow" onclick="showDetail('bigtech')" data-type="shadow">
+        <span class="card-icon">📱</span>
+        <div class="card-title">Silicon Valley / Big Tech</div>
+        <div class="card-role">~$12T Combined Market Cap · Platform Power</div>
+        <div class="card-preview">Tech's political alignment has shifted dramatically. Musk's X is now the primary political communication platform for Trump. Big tech controls speech, payments, and cloud.</div>
+        <span class="card-badge badge-gold">Platform Oligopoly</span>
+      </div>
+      <div class="card shadow" onclick="showDetail('media')" data-type="shadow">
+        <span class="card-icon">📺</span>
+        <div class="card-title">Media Industrial Complex</div>
+        <div class="card-role">Fox · MSNBC · Murdoch · Podcasts</div>
+        <div class="card-preview">Fox News shapes conservative political reality. But the real story is fragmentation: Joe Rogan (10M+ listeners) and X have displaced TV for under-40s. Rogan's 2024 endorsement was decisive.</div>
+        <span class="card-badge badge-red">Information Environment</span>
+      </div>
+      <div class="card shadow" onclick="showDetail('defcos')" data-type="shadow">
+        <span class="card-icon">🚀</span>
+        <div class="card-title">Defence Contractors</div>
+        <div class="card-role">Lockheed · Raytheon · Northrop · Boeing · GD</div>
+        <div class="card-preview">Combined revenue $200B+. Suppliers deliberately distributed across 45 states to ensure congressional support. The revolving door between Pentagon and contractors is institutionalised.</div>
+        <span class="card-badge badge-red">Revolving Door</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+</div>
+</div>
+
+<!-- DETAIL OVERLAY + PANEL -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
+<div class="detail-panel" id="detailPanel">
+  <button class="detail-close" onclick="closeDetail()">✕</button>
+  <div id="detailContent"></div>
+</div>
+
+<script>
+const details = {
+  trump: {
+    icon: '🇺🇸', type: 'The Presidency', title: 'DONALD TRUMP', role: '47th President · Born 1946 · Real Estate / Media / Politics',
+    titleClass: 'blue',
+    body: `Donald Trump is the only person in American history to serve as president, lose a re-election bid, face four separate criminal indictments, be convicted by a jury, and then win back the presidency in a historic comeback.
+
+Born in Queens, New York in 1946, Trump inherited a real estate empire from his father Fred Trump and built it into a global brand through hotels, casinos, golf courses, and reality television. The Apprentice made him a household name as a decisive executive — a persona that proved more politically potent than his actual business record.
+
+His first term (2017-2021) was characterised by disruption: withdrawal from the Paris climate accord and Trans-Pacific Partnership, a tax cut that primarily benefited corporations and high earners, the appointment of three Supreme Court justices who later overturned Roe v Wade, and an unprecedented assault on institutional norms — including firing the FBI Director, attacking the intelligence community, and refusing to accept the 2020 election result.
+
+His second term has been more disciplined and more ambitious. Mass deportation operations, a sweeping tariff regime with near-universal import taxes, aggressive use of the pardon power (including for January 6 participants and for himself and allies), and DOGE's restructuring of the federal workforce have reshaped the executive branch. Courts have pushed back on many actions — the 2024 presidential immunity ruling made several of those challenges harder to sustain.`,
+    facts: [{'l':'Born','v':'1946, Queens, New York'},{'l':'Term','v':'2nd (47th President)'},{'l':'Electoral Votes 2024','v':'312'},{'l':'Net Worth (est.)','v':'~$6B+'}],
+    powers: [['Constitutional Authority', 85, 'fill-blue'],['Personal Control', 78, 'fill-blue'],['Congressional Cooperation', 65, 'fill-blue'],['Judicial Resistance', 55, 'fill-grey']]
+  },
+
+  nsc: {
+    icon: '🛡️', type: 'National Security Architecture', title: 'National Security Council', role: 'Statutory Body · Created 1947 · Permanent Staff ~200',
+    titleClass: 'blue',
+    body: `The National Security Council (NSC) is the principal forum for coordinating national security and foreign policy across the executive branch. It was established by the National Security Act of 1947 — the same legislation that created the CIA and the unified military command structure.
+
+The permanent staff of approximately 200 career officials serve across administrations and provide genuine institutional continuity on foreign and security policy. This staff — drawn from State, Defense, CIA, Treasury, and the military — holds classified institutional knowledge that outlasts any political appointment.
+
+The National Security Advisor is the most influential unconfirmed position in the US government. Unlike cabinet secretaries, the NSA does not require Senate confirmation and is not subject to the same oversight scrutiny. Recent NSAs have wielded extraordinary influence over foreign policy and military operations.
+
+The NSC's Deputies Committee and Principals Committee are where real inter-agency coordination happens. The formal NSC meeting chaired by the President is typically the end-point of a process, not where decisions are actually reached.`,
+    facts: [{'l':'Created','v':'1947 (National Security Act)'},{'l':'Permanent Staff','v':'~200 career officials'},{'l':'Confirmation Required','v':'No — NSA is unconfirmed'},{'l':'Role','v':'Foreign/security policy coordination'}],
+    powers: [['Policy Coordination', 88, 'fill-blue'],['Institutional Memory', 92, 'fill-blue'],['Democratic Accountability', 35, 'fill-grey'],['Continuity Across Admins', 90, 'fill-blue']]
+  },
+
+  vp: {
+    icon: '🏛️', type: 'Vice President', title: 'JD VANCE', role: 'Vice President of the United States · Former Senator Ohio',
+    titleClass: 'blue',
+    body: `JD Vance's trajectory is one of the most striking in recent American political history. A Yale Law School graduate and Marine combat veteran, he authored Hillbilly Elegy — a memoir about white working-class Appalachian culture that became a cultural touchstone after Trump's 2016 victory. At the time, Vance was an open Trump critic, describing him in private messages as "America's Hitler."
+
+His transformation into one of Trump's most ardent loyalists is attributed partly to his relationship with Peter Thiel — the libertarian tech billionaire who funded Vance's Senate campaign in Ohio in 2022 and became a major political patron. Vance's Silicon Valley VC background (Mithril Capital, Narya Capital) gave him tech-world connections that positioned him at the intersection of Trump-era nationalism and tech libertarianism.
+
+As Vice President, he holds the constitutional role of President of the Senate (casting tie-breaking votes) and is Trump's designated successor. His influence extends particularly to foreign policy — he has been a vocal critic of US aid to Ukraine, a hawk on China, and an advocate for the tariff-heavy economic nationalism that defines the second Trump term.
+
+He is widely regarded as the most likely Republican presidential candidate in 2028.`,
+    facts: [{'l':'Background','v':'Marine, Yale Law, VC'},{'l':'Home State','v':'Ohio'},{'l':'Previous Role','v':'US Senator (2023-2025)'},{'l':'Book','v':'Hillbilly Elegy (2016)'}],
+    powers: [['Constitutional Role', 65, 'fill-blue'],['Political Influence', 72, 'fill-blue'],['Foreign Policy Voice', 68, 'fill-blue'],['2028 Positioning', 85, 'fill-grey']]
+  },
+
+  chiefstaff: {
+    icon: '🗂️', type: 'White House', title: 'SUSIE WILES', role: 'White House Chief of Staff · First Female CoS',
+    titleClass: 'blue',
+    body: `Susie Wiles is the architect of Trump's political resurrection. As the chief strategist of his 2024 presidential campaign, she navigated the candidate through criminal indictments, a conviction, an assassination attempt, and a late opponent switch to deliver a decisive electoral victory.
+
+Known as "the Ice Maiden" for her composure and discipline — qualities historically rare in Trump's orbit — she controls access to the President, sets the White House schedule, manages inter-agency communication, and is the primary gatekeeper of the executive apparatus. Her low public profile is a deliberate operational choice.
+
+Her background is in Florida Republican politics: she managed Rick Scott's successful Senate campaign and DeSantis's 2018 gubernatorial victory before pivoting to Trump's orbit. Her deep knowledge of the GOP political infrastructure, combined with her organisational discipline, makes her a qualitatively different kind of Chief of Staff than many of Trump's first-term appointments.
+
+She is the first woman to hold the position in the 85-year history of the White House Chief of Staff role.`,
+    facts: [{'l':'Nickname','v':'"The Ice Maiden"'},{'l':'Historic','v':'First female White House CoS'},{'l':'2024 Role','v':'Trump campaign chief strategist'},{'l':'Background','v':'Florida Republican politics'}],
+    powers: [['White House Access Control', 90, 'fill-blue'],['Organisational Authority', 85, 'fill-blue'],['Public Profile', 15, 'fill-grey'],['Policy Influence', 70, 'fill-blue']]
+  },
+
+  doge: {
+    icon: '⚙️', type: 'Extra-Constitutional Body', title: 'DOGE', role: 'Dept of Government Efficiency · Executive Advisory Body',
+    titleClass: 'red',
+    body: `The Department of Government Efficiency (DOGE) was created by executive order in January 2025 with a stated mandate to cut federal spending, reduce the government workforce, and eliminate regulations. It is not a department in any statutory sense — it has no legal basis as an executive department and operates as an informal advisory and implementation body.
+
+Elon Musk served as the primary public face of DOGE, using his platform (X, formerly Twitter) to publicise spending cuts and personnel reductions. The operation accessed federal payment systems and personnel databases in ways that generated immediate legal challenges — multiple federal courts issued orders limiting DOGE's access to certain systems.
+
+DOGE's methods have included mass email terminations of federal employees, reduction in force orders across agencies, and the elimination of contracts and grants — many of which were subsequently challenged in court and some reinstated. The legal battles over DOGE's authority have become a defining feature of the second Trump term's relationship with the judiciary.
+
+Its actual governance structure remains opaque: it operates outside normal agency rules, its staff are not subject to standard civil service protections, and its decision-making process is largely hidden from public view.`,
+    facts: [{'l':'Created','v':'January 2025 (executive order)'},{'l':'Legal Status','v':'Informal advisory body'},{'l':'Primary Figure','v':'Elon Musk (special advisor)'},{'l':'Courts','v':'Multiple legal challenges ongoing'}],
+    powers: [['Informal Influence', 75, 'fill-red'],['Legal Basis', 22, 'fill-grey'],['Agency Restructuring Power', 68, 'fill-red'],['Accountability', 12, 'fill-grey']]
+  },
+
+  pentagon: {
+    icon: '⚔️', type: 'Department of Defense', title: 'PETE HEGSETH / PENTAGON', role: 'Secretary of Defense · World\'s Largest Employer',
+    titleClass: 'blue',
+    body: `Pete Hegseth's appointment as Secretary of Defense was among the most controversial of the second Trump administration. A Fox News host and Army National Guard veteran with deployment experience in Iraq and Afghanistan, he had no prior executive experience at any comparable scale of organisation. His Senate confirmation vote was 51-50, with Vice President Vance casting the tie-breaking vote.
+
+The Pentagon is the world's single largest employer, with approximately 3 million military and civilian personnel. Its annual budget of $900B+ makes it larger than the entire economies of most countries. The defence establishment has its own institutional logic, strategic culture, and bureaucratic inertia that substantially constrains any incoming Secretary.
+
+The actual operational strategy of US military forces is largely determined by the Joint Chiefs of Staff and the combatant commanders — the heads of US Indo-Pacific Command, European Command, Central Command, and others. These officers have direct operational authority that exceeds what any civilian Secretary can meaningfully micromanage.
+
+The military's relationship with civilian oversight has been a persistent tension throughout the Trump era: multiple former senior military officials have made public statements about the importance of civilian-military norms.`,
+    facts: [{'l':'Secretary','v':'Pete Hegseth (Fox News host)'},{'l':'Confirmation','v':'51-50 (Vance casting vote)'},{'l':'Budget','v':'$900B+ FY2025'},{'l':'Personnel','v':'~3M military + civilian'}],
+    powers: [['Formal Command Authority', 80, 'fill-blue'],['Operational Military Control', 55, 'fill-grey'],['Joint Chiefs Independence', 70, 'fill-grey'],['Budget Authority', 85, 'fill-blue']]
+  },
+
+  state: {
+    icon: '🌍', type: 'Department of State', title: 'MARCO RUBIO / STATE DEPT', role: 'Secretary of State · Former Senator Florida',
+    titleClass: 'blue',
+    body: `Marco Rubio's career arc is a study in political transformation. Once the darling of Republican moderates and the establishment's answer to Tea Party insurgency, he ran against Trump in 2016 and called him a "con artist." His evolution into a key Trump ally — and his appointment as Secretary of State — reflects both the complete triumph of Trump within the Republican Party and Rubio's own genuine alignment with the administration's hawkish foreign policy positions.
+
+Rubio is a known hawk on China, Cuba, and Venezuela — positions that predate his Trump alignment and reflect deep conviction. His Cuban-American heritage and Miami political base have always made him maximally hostile to the Castro regime and its regional allies. On China, he has been one of the most consistent voices in Washington for treating Beijing as a strategic adversary.
+
+The State Department has approximately 75,000 employees, operates 270+ diplomatic posts globally, and runs the Foreign Service — a career diplomatic corps with deep institutional knowledge and extensive overseas networks. The permanent Foreign Service provides continuity of diplomatic relationships that outlasts any political appointment.
+
+The department's relationship with DOGE's workforce reduction agenda has been a source of tension, as career Foreign Service officers are among the federal employees whose expertise is most genuinely irreplaceable.`,
+    facts: [{'l':'Secretary','v':'Marco Rubio (former Senator FL)'},{'l':'Background','v':'Cuban-American, Miami politics'},{'l':'Key Positions','v':'Hawk on China, Cuba, Venezuela'},{'l':'Department Size','v':'75,000 employees, 270+ posts'}],
+    powers: [['Diplomatic Representation', 82, 'fill-blue'],['Policy Influence', 70, 'fill-blue'],['Career FS Continuity', 75, 'fill-grey'],['Multilateral Engagement', 60, 'fill-grey']]
+  },
+
+  treasury: {
+    icon: '💰', type: 'Department of Treasury', title: 'SCOTT BESSENT / TREASURY', role: 'Secretary of Treasury · Hedge Fund Manager',
+    titleClass: 'blue',
+    body: `Scott Bessent is one of the more intellectually substantial figures in the second Trump cabinet. A macro hedge fund manager who made his career at Soros Fund Management before founding his own fund (Key Square Group), he combines deep financial market expertise with a genuine conversion to economic nationalism — an unusual combination.
+
+His central role has been as the architect and implementer of Trump's sweeping tariff regime — a policy that represents the most significant restructuring of US trade policy since the Smoot-Hawley Act of 1930. The tariffs, applied to imports from virtually all trading partners, have generated enormous market volatility, retaliatory measures from China and the EU, and intense debate about their long-term economic effects.
+
+The Treasury holds extraordinary structural power that extends well beyond budget management: it administers the US sanctions regime (the most powerful financial coercion tool in the world), manages dollar hegemony and the US debt market, oversees financial regulation, and runs the IRS.
+
+The dollar's status as the world's reserve currency gives the Treasury a geopolitical weapon that no other government possesses: access to dollar clearing systems can be denied to entire countries, banks, and individuals — a power weaponised through sanctions on Russia, Iran, North Korea, and others.`,
+    facts: [{'l':'Secretary','v':'Scott Bessent (hedge fund manager)'},{'l':'Background','v':'Soros Fund Management alumnus'},{'l':'Key Policy','v':'Architect of Trump tariff regime'},{'l':'Treasury Power','v':'Sanctions, dollar, debt management'}],
+    powers: [['Tariff Policy', 85, 'fill-blue'],['Sanctions Regime', 88, 'fill-blue'],['Dollar Hegemony', 92, 'fill-blue'],['Market Influence', 80, 'fill-blue']]
+  },
+
+  doj: {
+    icon: '⚖️', type: 'Dept of Justice / FBI', title: 'PAM BONDI / DOJ', role: 'Attorney General · Former Florida AG',
+    titleClass: 'blue',
+    body: `The Department of Justice sits at the intersection of law enforcement, political accountability, and the Trump administration's most contested governance terrain. Pam Bondi, former Florida Attorney General (2011-2019), was appointed after Trump's first-choice nominee Matt Gaetz withdrew following a House Ethics Committee investigation.
+
+The DOJ houses the Federal Bureau of Investigation — an organisation with approximately 38,000 employees that investigates federal crimes, oversees domestic counterintelligence, and runs one of the world's most extensive law enforcement databases. Trump's fraught relationship with FBI leadership is one of the defining narratives of his political career: he fired Director James Comey in 2017 in circumstances that precipitated the Mueller investigation; he has described FBI agents involved in investigations of him as "corrupt"; and the January 6 Capitol attack generated extensive FBI investigations of Trump supporters.
+
+The DOJ's independence — its capacity to investigate and prosecute without direction from the White House — is one of the fundamental norms of American governance. That norm has been under sustained pressure.
+
+The department also houses the Civil Rights Division, the Antitrust Division, and the national security division (which oversees FISA court applications and foreign intelligence matters) — each with significant independent legal and policy significance.`,
+    facts: [{'l':'AG','v':'Pam Bondi (former Florida AG)'},{'l':'FBI Size','v':'~38,000 employees'},{'l':'Trump/FBI','v':'Deep political friction since 2017'},{'l':'Key Power','v':'Federal prosecution + counterintelligence'}],
+    powers: [['Federal Prosecution', 80, 'fill-blue'],['FBI Independence (perceived)', 45, 'fill-grey'],['Political Influence', 70, 'fill-red'],['Civil Rights Enforcement', 50, 'fill-grey']]
+  },
+
+  dhs: {
+    icon: '🛡️', type: 'Homeland Security', title: 'KRISTI NOEM / DHS', role: 'Secretary of Homeland Security · Former SD Governor',
+    titleClass: 'blue',
+    body: `The Department of Homeland Security was created after September 11, 2001 as an amalgamation of 22 federal agencies — a massive bureaucratic reorganisation that unified border security (CBP, ICE), immigration courts, FEMA, the Coast Guard, and the Secret Service under a single department.
+
+Under Kristi Noem, formerly the Governor of South Dakota, DHS has been the primary operational instrument of Trump's mass deportation agenda — the largest in American history. Immigration and Customs Enforcement (ICE) operations have expanded dramatically, including into sanctuary cities and targeting individuals with no criminal record beyond immigration status violations.
+
+The border has been the most politically charged domestic issue of the Trump administration, and DHS sits at its centre. The department also oversees cybersecurity (CISA — the Cybersecurity and Infrastructure Security Agency) and coordinates responses to domestic terrorist threats and natural disasters.
+
+Noem's tenure has also included controversies — most notably her admission of shooting her own dog — that generated significant public attention but did not affect her political standing within the administration.`,
+    facts: [{'l':'Secretary','v':'Kristi Noem (former SD Governor)'},{'l':'Created','v':'2002, post-9/11 reorganisation'},{'l':'Key Mission','v':'Mass deportation + border security'},{'l':'Size','v':'240,000+ employees, 22 component agencies'}],
+    powers: [['Border Enforcement', 88, 'fill-blue'],['Immigration Removal', 82, 'fill-blue'],['Cybersecurity', 70, 'fill-blue'],['Emergency Management', 75, 'fill-blue']]
+  },
+
+  intel: {
+    icon: '🕵️', type: 'Intelligence Community', title: 'INTELLIGENCE COMMUNITY', role: '17 Agencies · CIA / NSA / DIA / FBI Intel',
+    titleClass: 'blue',
+    body: `The United States Intelligence Community comprises 17 agencies with an estimated combined annual budget of approximately $90 billion (the exact figure remains classified). Its scope — from satellite reconnaissance to human intelligence to signals interception to open-source analysis — makes it the most comprehensive intelligence apparatus ever assembled.
+
+The CIA (Central Intelligence Agency) handles foreign human intelligence and covert action. The NSA (National Security Agency) operates the world's most sophisticated mass electronic surveillance infrastructure — revealed in detail by Edward Snowden in 2013 — capable of intercepting global communications at scale. The DIA (Defense Intelligence Agency) handles military intelligence. The NRO operates reconnaissance satellites. The NGA provides geospatial intelligence.
+
+The IC has had a fraught relationship with the Trump administration: its assessments on Russian election interference (2016 and 2020), the COVID-19 origins debate, and the reliability of intelligence on Iran's nuclear programme have all generated political tension. The IC's independence — its capacity to deliver assessments that conflict with political leadership's preferences — is a persistent source of friction.
+
+Tulsi Gabbard was appointed Director of National Intelligence in 2025, a choice that generated significant concern within career intelligence circles about the IC's politicisation.`,
+    facts: [{'l':'Agencies','v':'17 (CIA, NSA, DIA, FBI intel, etc.)'},{'l':'Budget (est.)','v':'~$90B (classified)'},{'l':'NSA Capacity','v':'Global signals surveillance'},{'l':'DNI','v':'Tulsi Gabbard (2025)'}],
+    powers: [['Intelligence Collection', 95, 'fill-purple'],['Covert Action', 82, 'fill-purple'],['Democratic Oversight', 40, 'fill-grey'],['Permanence Across Admins', 88, 'fill-grey']]
+  },
+
+  fed: {
+    icon: '🏦', type: 'Federal Reserve', title: 'FEDERAL RESERVE', role: 'Jerome Powell · Nominally Independent Central Bank',
+    titleClass: 'blue',
+    body: `The Federal Reserve is the central bank of the United States — and through dollar hegemony, the de facto central bank of much of the global economy. Its decisions on interest rates affect mortgage payments, corporate borrowing costs, exchange rates, and asset prices globally.
+
+Jerome Powell was first appointed Chair by Trump in 2018, then reappointed by Biden in 2022. His second Trump term has been characterised by overt presidential pressure to cut interest rates — Trump has publicly demanded lower rates and has reportedly explored whether a president can legally fire a Fed Chair (the answer is legally contested; historically unprecedented).
+
+The Fed's independence from political direction is a foundational principle of its design — the rationale being that elected politicians will always prefer looser money (stimulative but inflationary) over the long run. Whether that independence can survive sustained presidential pressure is one of the key institutional questions of the current period.
+
+The Federal Open Market Committee (FOMC) — which sets the key interest rate — meets eight times per year. Its decisions move global markets more than almost any single government action.`,
+    facts: [{'l':'Chair','v':'Jerome Powell (Trump+Biden appointee)'},{'l':'Independence','v':'Structural — contested by Trump'},{'l':'FOMC Meetings','v':'8 per year'},{'l':'Mandate','v':'Price stability + full employment'}],
+    powers: [['Monetary Policy', 92, 'fill-blue'],['Interest Rate Control', 90, 'fill-blue'],['Political Independence (nominal)', 55, 'fill-grey'],['Global Market Influence', 88, 'fill-blue']]
+  },
+
+  commerce: {
+    icon: '📈', type: 'Commerce & Trade', title: 'HOWARD LUTNICK / COMMERCE', role: 'Secretary of Commerce · Cantor Fitzgerald CEO',
+    titleClass: 'blue',
+    body: `Howard Lutnick, the billionaire CEO of Cantor Fitzgerald — the bond trading firm that lost 658 employees (nearly two-thirds of its workforce) on September 11, 2001 and became a symbol of Wall Street resilience — was appointed Secretary of Commerce in the second Trump administration.
+
+The Commerce Department administers export controls (critical in the technology war with China), manages the National Oceanic and Atmospheric Administration (NOAA), oversees the Census Bureau, and administers the Patent and Trademark Office. In the current geopolitical environment, its export control function — determining which technologies can be sold to which foreign parties — has become one of the most consequential regulatory decisions in the US government.
+
+Lutnick has also been a key player in the tariff policy architecture, working alongside Treasury Secretary Bessent to implement the administration's trade agenda.`,
+    facts: [{'l':'Secretary','v':'Howard Lutnick (Cantor Fitzgerald CEO)'},{'l':'Key Function','v':'Export controls, trade, tech regulation'},{'l':'9/11 Connection','v':'Cantor Fitzgerald lost 658 staff'},{'l':'Tech War Role','v':'China chip/tech export controls'}],
+    powers: [['Export Controls', 80, 'fill-blue'],['Trade Policy Impl.', 75, 'fill-blue'],['Tech Regulation', 72, 'fill-blue'],['Economic Statecraft', 68, 'fill-blue']]
+  },
+
+  senate: {
+    icon: '🏛️', type: 'Legislature — Upper Chamber', title: 'THE SENATE', role: '100 Senators · Republican Majority 53-47',
+    titleClass: 'blue',
+    body: `The United States Senate is one of the most powerful legislative bodies in the world. Its constitutional powers include: confirmation of all cabinet secretaries, federal judges (including Supreme Court justices), and senior executive officials; ratification of treaties (requiring a two-thirds supermajority); sole power to try presidential impeachments; and equal legislative authority with the House on all legislation.
+
+After the 2024 elections, Republicans hold a 53-47 majority — sufficient to confirm nominees on simple majority votes (a rule change made permanent by both parties in different episodes, the "nuclear option") but not sufficient to overcome filibusters on legislation without Democratic cooperation.
+
+The filibuster — requiring 60 votes to end debate on most legislation — is the Senate's most powerful minority protection mechanism. With a 53-47 majority, Democrats can filibuster any legislation they choose. This creates a structural incentive for the administration to pursue policy through executive orders, regulatory action, and reconciliation (a budget procedure that bypasses the filibuster) rather than legislation.
+
+Majority Leader John Thune (South Dakota) succeeded Mitch McConnell and brings a different political style — more conventional Republican establishment than McConnell's strategic ruthlessness — to the position.`,
+    facts: [{'l':'Composition','v':'53 Republican, 47 Democrat'},{'l':'Majority Leader','v':'John Thune (South Dakota)'},{'l':'Filibuster','v':'60-vote threshold for most legislation'},{'l':'Key Power','v':'Confirmation of all nominees + judges'}],
+    powers: [['Confirmation Power', 92, 'fill-blue'],['Filibuster Leverage', 85, 'fill-grey'],['Treaty Ratification', 80, 'fill-blue'],['Impeachment Trial', 88, 'fill-blue']]
+  },
+
+  house: {
+    icon: '🏢', type: 'Legislature — Lower Chamber', title: 'HOUSE OF REPRESENTATIVES', role: '435 Members · Slim Republican Majority',
+    titleClass: 'blue',
+    body: `The House of Representatives is the more democratically responsive chamber — its 435 members all face re-election every two years, making it more volatile and more sensitive to political mood than the Senate.
+
+Republicans hold a slim majority — a margin that makes every vote contested and gives any handful of members significant leverage. The House Freedom Caucus, a bloc of approximately 30-40 hard-right conservatives, has repeatedly used its leverage to extract concessions from Republican leadership, complicating the passage of even consensus Republican priorities.
+
+The House's exclusive constitutional powers include: initiating all revenue bills (the "power of the purse"), the sole power to impeach the President, Vice President, and other officers. These powers make it an essential partner in any major legislative agenda.
+
+Speaker Mike Johnson (Louisiana), elevated to the speakership after Kevin McCarthy was removed in an extraordinary floor vote, has navigated an extremely narrow majority with a combination of dealmaking and appeals to party unity that have been intermittently successful.
+
+The House also controls the debt ceiling — the statutory limit on federal borrowing — which has become a periodic crisis instrument used by the majority to extract policy concessions.`,
+    facts: [{'l':'Members','v':'435 (apportioned by population)'},{'l':'Speaker','v':'Mike Johnson (Louisiana)'},{'l':'Term','v':'2 years (entire chamber elected)'},{'l':'Key Power','v':'Revenue bills, impeachment, debt ceiling'}],
+    powers: [['Revenue Legislation', 88, 'fill-blue'],['Impeachment Power', 85, 'fill-blue'],['Budget / Debt Ceiling', 82, 'fill-blue'],['Majority Stability', 45, 'fill-grey']]
+  },
+
+  congleaders: {
+    icon: '🎙️', type: 'Congressional Leadership', title: 'CONGRESSIONAL LEADERSHIP', role: 'Speaker Johnson · Leader Thune',
+    titleClass: 'blue',
+    body: `The legislative agenda of the US Congress is substantially controlled by its leaders: the Speaker of the House and the Senate Majority Leader. These two positions determine what comes to the floor for a vote, shape the composition of conference committees, and set the broad strategic direction of the legislative branch.
+
+Speaker Mike Johnson (R-Louisiana) came to the speakership in an unusual way — elevated after Kevin McCarthy became the first Speaker in US history to be removed by a floor vote (a motion led by Matt Gaetz in October 2023). Johnson had a notably low national profile before the speakership and has governed a fractious majority with variable success.
+
+Senate Majority Leader John Thune (R-South Dakota) succeeded the long-serving Mitch McConnell after McConnell announced his retirement from the leadership role. McConnell's 17-year tenure as Republican leader had been defined by strategic ruthlessness — most notably blocking Merrick Garland's Supreme Court confirmation in 2016 and then pushing through Amy Coney Barrett in 2020. Thune brings a different, more conventional political style.
+
+Congressional leadership serves as the critical intermediary between the White House's legislative agenda and the reality of governing a closely divided Congress.`,
+    facts: [{'l':'Speaker','v':'Mike Johnson (R-Louisiana)'},{'l':'Senate Maj. Leader','v':'John Thune (R-South Dakota)'},{'l':'McConnell legacy','v':'3 SCOTUS justices confirmed'},{'l':'Filibuster status','v':'Retained for legislation, not nominees'}],
+    powers: [['Legislative Agenda Setting', 82, 'fill-blue'],['Floor Scheduling', 88, 'fill-blue'],['Nominee Confirmation', 78, 'fill-blue'],['Conference Negotiation', 75, 'fill-grey']]
+  },
+
+  scotus: {
+    icon: '⚖️', type: 'Supreme Court', title: 'SUPREME COURT', role: '6-3 Conservative Supermajority · Roberts Chief Justice',
+    titleClass: 'blue',
+    body: `The Supreme Court of the United States is the final arbiter of constitutional law — its rulings are binding on all lower courts, all government agencies, and all actors in the United States. Justices serve lifetime appointments, meaning a single cohort can shape American law for decades after the political conditions that produced them have passed.
+
+The current 6-3 conservative supermajority is the product of three Trump appointees (Gorsuch, Kavanaugh, Barrett) joining existing conservatives (Thomas, Alito) under the leadership of Chief Justice Roberts. The conservative bloc has delivered a sequence of landmark rulings: Dobbs v Jackson (2022) overturned Roe v Wade after 49 years; West Virginia v EPA significantly curtailed administrative agency power; and Trump v United States (2024) granted presidents broad immunity for "official acts" — a ruling with potentially far-reaching consequences for presidential accountability.
+
+The Roberts Court has also shown willingness to apply the "major questions doctrine" — requiring explicit congressional authorisation for significant agency actions — as a tool to constrain executive branch regulatory authority.
+
+The liberal dissenters — Sotomayor, Kagan, and Jackson — have been vocal, writing pointed dissents that are as much political documents as legal arguments.`,
+    facts: [{'l':'Majority','v':'Roberts, Thomas, Alito, Gorsuch, Kavanaugh, Barrett'},{'l':'Minority','v':'Sotomayor, Kagan, Jackson'},{'l':'Dobbs','v':'2022 — overturned Roe v Wade'},{'l':'Immunity Ruling','v':'2024 — broad presidential immunity'}],
+    powers: [['Constitutional Finality', 98, 'fill-blue'],['Executive Constraint', 75, 'fill-blue'],['Democratic Accountability', 15, 'fill-grey'],['Precedent Longevity', 92, 'fill-blue']]
+  },
+
+  circuits: {
+    icon: '🗂️', type: 'Federal Circuit Courts', title: 'FEDERAL CIRCUIT COURTS', role: '13 Circuit Courts · Appellate Jurisdiction',
+    titleClass: 'blue',
+    body: `The United States Courts of Appeals (the circuit courts) form the intermediate appellate layer of the federal judiciary — below the Supreme Court but above the district courts where cases are tried. There are 13 circuits, each covering a geographic area or a specific subject matter.
+
+The most influential are the DC Circuit (which handles most challenges to federal agency action — the gateway to the Supreme Court on administrative law questions), the 9th Circuit (covering the West Coast, the largest circuit, and historically the most frequently reversed by the Supreme Court), and the 2nd Circuit (covering New York, the dominant voice on securities and commercial law).
+
+These courts have become a primary battleground for challenges to executive action in the second Trump term. District courts have issued preliminary injunctions blocking multiple executive orders — on immigration, DOGE access to federal systems, and various agency actions — and the circuit courts have heard emergency appeals. The speed and scope of judicial pushback has been historically unusual.
+
+The composition of these courts is also a product of appointment politics: the Trump first term and Biden years both produced significant numbers of judicial appointments, reshaping circuit compositions in ways that will outlast current political conditions.`,
+    facts: [{'l':'Number of Circuits','v':'13 (11 geographic + DC + Federal)'},{'l':'Most Influential','v':'DC Circuit, 9th Circuit, 2nd Circuit'},{'l':'Current Role','v':'Primary forum for executive action challenges'},{'l':'Composition','v':'Trump + Biden appointees both significant'}],
+    powers: [['Administrative Law Authority', 85, 'fill-blue'],['Executive Action Review', 80, 'fill-blue'],['SCOTUS Gateway (DC Circuit)', 88, 'fill-blue'],['Speed of Injunctions', 72, 'fill-grey']]
+  },
+
+  kstreet: {
+    icon: '🏢', type: 'The Lobbying Industry', title: 'K STREET', role: 'Washington Lobbying Corridor · ~12,000 Registered Lobbyists',
+    titleClass: 'red',
+    body: `K Street — the Washington DC corridor dominated by lobbying and public affairs firms — is not merely a metaphor. It describes a literal geography: the street and its surrounds house the offices of firms that collectively spend more than $4 billion per year to influence federal legislation and regulation.
+
+Approximately 12,000 individuals are registered as federal lobbyists, but the total ecosystem of influence professionals — lawyers, public affairs consultants, former officials in advisory roles — is far larger. The "revolving door" between government and lobbying is the fundamental mechanism: a senior congressional staffer leaves for a lobbying firm at three to five times their government salary, bringing their relationships and knowledge with them. A cabinet official who departs for the private sector typically has a waiting list of corporate clients.
+
+The "cooling off" period — typically one year for former executive officials and two years for former members of Congress — is widely regarded as inadequate. In practice, a former official can take a job at a lobbying firm and begin strategising about their old department immediately, even if they cannot formally make contact with their former colleagues.
+
+The Citizens United decision (2010) significantly amplified K Street's power by opening the door to unlimited corporate spending in elections, creating additional leverage for corporate interests over elected officials.`,
+    facts: [{'l':'Registered Lobbyists','v':'~12,000 federal'},{'l':'Annual Spend','v':'$4.1B (2023)'},{'l':'Revolving Door','v':'Cooling off: 1-2 years (inadequate)'},{'l':'Citizens United','v':'2010 — expanded spending power'}],
+    powers: [['Legislative Influence', 82, 'fill-red'],['Regulatory Capture', 78, 'fill-red'],['Access to Officials', 85, 'fill-red'],['Public Visibility', 12, 'fill-grey']]
+  },
+
+  superpacs: {
+    icon: '💸', type: 'Campaign Finance / Dark Money', title: 'SUPER PACs / DARK MONEY', role: 'Citizens United (2010) · Unlimited Anonymous Spending',
+    titleClass: 'red',
+    body: `Citizens United v Federal Election Commission (2010) is one of the most consequential Supreme Court decisions in modern American political history. The Court held, 5-4, that corporations have First Amendment rights to political speech and cannot be restricted in their independent expenditures in elections. Combined with a subsequent ruling (SpeechNow.org v FEC), this created the Super PAC — an entity that can raise and spend unlimited amounts on political advertising, provided it does not formally coordinate with campaigns.
+
+The companion mechanism is "dark money" — spending through 501(c)(4) social welfare nonprofits, which can engage in political activity without disclosing their donors. This means billionaires and corporations can spend unlimited sums to influence elections with complete anonymity.
+
+The 2024 election was the most expensive in American history: total spending exceeded $16 billion. The Koch network (now the American Crossroads ecosystem), the Soros network (Democracy Alliance), and a handful of tech billionaires each deployed sums that would constitute the entire political budget of most democratic countries.
+
+The long-term effect has been to significantly increase the leverage of concentrated private wealth over electoral outcomes and over the behaviour of elected officials who know they may face well-funded primary or general election challenges.`,
+    facts: [{'l':'Citizens United','v':'2010 — unlimited corporate spending'},{'l':'Dark Money','v':'501(c)(4) = anonymous unlimited'},{'l':'2024 Total Spend','v':'$16B+ (most in history)'},{'l':'Key Donors','v':'Koch network, Soros, tech billionaires'}],
+    powers: [['Electoral Influence', 85, 'fill-red'],['Donor Anonymity', 92, 'fill-red'],['Accountability', 5, 'fill-grey'],['Policy Access', 78, 'fill-red']]
+  },
+
+  aipac: {
+    icon: '🌐', type: 'Sectoral Lobbying', title: 'AIPAC & MAJOR LOBBIES', role: 'Foreign Policy · Energy · Pharma · Finance Lobbies',
+    titleClass: 'red',
+    body: `The American Israel Public Affairs Committee (AIPAC) is widely regarded as among the most effective advocacy organisations in Washington history. It combines a large professional staff, a massive donor network, and a sophisticated electoral operation — its super PAC (United Democracy Project) spent $100M+ in the 2022 midterms to defeat progressive Democrats who had been critical of Israeli policy. It has bipartisan reach: pro-Israel positions have historically been supported by both parties, though this consensus has been under pressure since October 2023.
+
+But AIPAC is one lobby among many. The energy sector (oil, gas, and now renewable) spends hundreds of millions annually — the American Petroleum Institute alone is one of Washington's biggest spenders. The pharmaceutical industry's lobby successfully prevented Medicare from negotiating drug prices for decades. The financial sector's lobbying helped shape post-2008 financial regulation in ways that preserved most of its pre-crisis structures.
+
+The National Rifle Association (NRA), though financially weakened in recent years, has shaped gun policy through a combination of direct lobbying, electoral engagement, and a grassroots membership that provides genuine constituent pressure.
+
+The agriculture lobby, trial lawyers, and the real estate industry (through the National Association of Realtors) complete a picture of a political economy in which virtually every significant economic sector has organised representation that systematically shapes the legislation affecting it.`,
+    facts: [{'l':'AIPAC Super PAC','v':'$100M+ in 2022 midterms'},{'l':'API (energy)','v':'One of Washington\'s top spenders'},{'l':'Pharma lobby','v':'Blocked drug price negotiation for decades'},{'l':'Financial lobby','v':'$750M+ in 2023'}],
+    powers: [['Electoral Targeting', 88, 'fill-red'],['Bipartisan Reach', 80, 'fill-red'],['Policy Outcome Control', 75, 'fill-red'],['Public Accountability', 8, 'fill-grey']]
+  },
+
+  chamber: {
+    icon: '🏦', type: 'Business Lobbying', title: 'CHAMBER OF COMMERCE', role: 'Most Powerful Business Lobby in the US',
+    titleClass: 'red',
+    body: `The United States Chamber of Commerce is the world's largest business lobby and consistently the biggest spender on federal lobbying in America. It represents roughly 3 million businesses of all sizes and has an annual lobbying budget that dwarfs every other organisation in Washington.
+
+Unlike trade associations that represent single industries, the Chamber speaks for broad business interests — tax policy, regulatory burden, labour law, trade, and tort reform. Its positions tend to favour lower taxes, reduced regulation, free trade, and business-friendly labour law. These positions cut across party lines in ways that give the Chamber unusual bipartisan reach, though it has aligned more consistently with Republicans in recent years.
+
+The Chamber's influence operates at multiple levels: direct lobbying of Congress and executive agencies, funding of political campaigns (it is among the largest outside spenders in federal elections), state-level litigation challenging federal regulations, and public communications campaigns.
+
+Notably, the Chamber has occasionally clashed with the Trump administration — it generally supported free trade and opposed protectionist tariffs — illustrating the tension between traditional business conservatism and the economic nationalism of Trump-era Republicanism.`,
+    facts: [{'l':'Members','v':'~3M businesses'},{'l':'Lobbying Spend','v':'Consistently #1 in Washington'},{'l':'Trump tension','v':'Opposed protectionist tariffs'},{'l':'Influence Model','v':'Direct lobbying + electoral spending + litigation'}],
+    powers: [['Legislative Agenda Influence', 88, 'fill-red'],['Regulatory Shape', 82, 'fill-red'],['Electoral Spending', 78, 'fill-red'],['Cross-Party Reach', 75, 'fill-grey']]
+  },
+
+  deepstate: {
+    icon: '🕵️', type: 'Intelligence / Permanent State', title: 'INTELLIGENCE COMMUNITY', role: '17 Agencies · NSA / CIA / DIA · $90B+ Budget',
+    titleClass: 'blue',
+    body: `The term "deep state" has acquired politically charged connotations — used by Trump and his allies to describe what they see as a coordinated bureaucratic resistance to elected leadership. But beneath the political valence, it describes a real institutional phenomenon: the permanent national security and administrative bureaucracy that provides continuity of governance and institutional knowledge across administrations.
+
+The National Security Agency (NSA) is the most technically capable intelligence organisation in human history. Its PRISM program (revealed by Snowden in 2013) demonstrated the capacity to collect communications metadata and content from virtually all major US internet companies. Its XKeyscore system allows analysts to search through vast data stores of internet activity. Its signals intelligence capabilities cover virtually every form of electronic communication.
+
+The CIA's directorate of operations runs a global network of human intelligence assets. Its covert action programs — approved by presidential finding — include targeted killings, support for foreign political actors, and cyberoperations.
+
+The Office of the Director of National Intelligence (ODNI) nominally coordinates these 17 agencies. Tulsi Gabbard's appointment as DNI in 2025 was widely seen as an attempt to bring the IC under tighter political control — a goal that has historically proven difficult.
+
+The IC's structural characteristic is precisely its resistance to political direction: career intelligence officers serve under multiple presidents, develop institutional loyalties, and have access to information that political appointees do not.`,
+    facts: [{'l':'Agencies','v':'17 total'},{'l':'Budget (est.)','v':'~$90B classified'},{'l':'NSA','v':'Mass surveillance infrastructure'},{'l':'DNI','v':'Tulsi Gabbard (2025)'}],
+    powers: [['Intelligence Gathering', 95, 'fill-purple'],['Covert Operations', 82, 'fill-purple'],['Cross-Admin Continuity', 90, 'fill-grey'],['Political Control', 35, 'fill-grey']]
+  },
+
+  pentagon_bur: {
+    icon: '🪖', type: 'Military-Industrial Complex', title: 'PENTAGON / JOINT CHIEFS', role: 'Military-Industrial-Congressional Complex · $900B+',
+    titleClass: 'red',
+    body: `In his farewell address in January 1961, President Dwight D. Eisenhower — the Supreme Allied Commander who won World War II — warned the American people of "the acquisition of unwarranted influence, whether sought or unsought, by the military-industrial complex." He was describing a system of interlocking interests between the defence industry, the military, and Congress that he believed posed a structural risk to democratic governance.
+
+Six decades later, that complex has grown to a scale Eisenhower could not have anticipated. The Department of Defense budget for fiscal year 2025 exceeded $900 billion — larger than the next ten countries' defence budgets combined. The five largest defence contractors (Lockheed Martin, RTX/Raytheon, Northrop Grumman, Boeing Defense, General Dynamics) collectively employ hundreds of thousands and have supplier networks deliberately spread across key congressional districts.
+
+The Joint Chiefs of Staff — the Chairman (currently CQ Brown Jr., though his tenure was under pressure in the second Trump term) and the service chiefs — advise the president and secretary of defense but also exercise substantial independent institutional authority. Their strategic assessments, military advice, and relationships with allied military counterparts constitute a parallel channel of foreign and security policy.
+
+Civil-military relations in the Trump era have been notably tense: multiple former senior officers (Mattis, Kelly, McMaster, Milley) have made public statements about concerns regarding civilian-military norms.`,
+    facts: [{'l':'Budget FY2025','v':'$900B+'},{'l':'Personnel','v':'~2.8M active + reserve military'},{'l':'Eisenhower Warning','v':'1961 farewell address — MIC'},{'l':'Trump tension','v':'Multiple senior officers spoke out'}],
+    powers: [['Operational Military Authority', 88, 'fill-blue'],['Strategic Advice', 80, 'fill-grey'],['Congressional Budget Support', 85, 'fill-red'],['Institutional Independence', 65, 'fill-grey']]
+  },
+
+  civilservice: {
+    icon: '📋', type: 'Institutional Counterweight', title: 'CIVIL SERVICE / FEDERAL COURTS', role: '~3M Federal Employees · Independent Judiciary',
+    titleClass: 'blue',
+    body: `The United States federal civil service comprises approximately 2.9 million civilian employees spread across departments, agencies, and independent bodies. Created through the Pendleton Civil Service Reform Act of 1883 (replacing the "spoils system" with merit-based hiring), the career civil service is designed to provide expertise, institutional memory, and policy continuity that persists across changes in political leadership.
+
+Civil servants' protections — merit-based hiring, protection from partisan dismissal, rights to appeal — have been directly targeted by the Trump administration's DOGE initiative and Schedule F (an executive order that would reclassify certain career civil service positions as politically appointable). Courts have been the primary check on these efforts.
+
+The federal judiciary — comprising approximately 870 district court judges, 179 circuit court judges, and 9 Supreme Court justices — represents the most durable structural check on executive overreach. Federal judges have lifetime tenure; they cannot be removed for their rulings; they have consistently blocked executive actions that exceed statutory or constitutional authority.
+
+In the current period, the interaction between executive overreach, civil service resistance, and judicial review is arguably the most consequential ongoing political process in American governance.`,
+    facts: [{'l':'Civil Servants','v':'~2.9M civilian federal employees'},{'l':'Established','v':'1883 (Pendleton Act)'},{'l':'Schedule F','v':'Trump order to reclassify positions'},{'l':'Judicial Appointments','v':'870 district + 179 circuit judges'}],
+    powers: [['Institutional Memory', 85, 'fill-blue'],['Executive Constraint (courts)', 78, 'fill-blue'],['DOGE Vulnerability', 55, 'fill-grey'],['Judicial Independence', 88, 'fill-blue']]
+  },
+
+  wallstreet: {
+    icon: '💎', type: 'Financial Power', title: 'WALL STREET / BLACKROCK', role: 'Big Three Asset Managers · $20T+ AUM',
+    titleClass: 'red',
+    body: `BlackRock, Vanguard, and State Street — the "Big Three" passive index fund managers — collectively manage assets in excess of $20 trillion. To put this in perspective: this sum exceeds the entire GDP of every country on Earth except the United States and China. These three firms collectively own 20-25% of most S&P 500 companies.
+
+Their power operates through proxy voting: as the largest shareholders of virtually every major publicly traded company, they vote on governance matters including CEO compensation, board composition, and — increasingly — political and social issues. When BlackRock votes on a board proposal at Apple or Exxon, it does so with a stake that dwarfs every other investor. No elected official has comparable leverage over corporate behaviour.
+
+The broader financial complex — Goldman Sachs, JPMorgan, Citigroup, Morgan Stanley, and the network of hedge funds and private equity firms — exercises political power through multiple channels: direct lobbying, the revolving door (Goldman Sachs alumni have included multiple Treasury Secretaries across both parties), campaign finance, and the implicit leverage of being "too big to fail."
+
+The financial sector spent an estimated $750M+ on federal lobbying and campaign contributions in 2023. Its influence over financial regulation, tax policy, and trade has been consistently exercised across administrations.`,
+    facts: [{'l':'BlackRock AUM','v':'~$10T'},{'l':'Vanguard AUM','v':'~$8T'},{'l':'State Street AUM','v':'~$4T'},{'l':'Goldman revolving door','v':'Multiple Treasury Secretaries both parties'}],
+    powers: [['Asset Management Scale', 95, 'fill-red'],['Corporate Governance', 88, 'fill-red'],['Political Lobbying', 82, 'fill-red'],['Democratic Accountability', 8, 'fill-grey']]
+  },
+
+  bigtech: {
+    icon: '📱', type: 'Tech / Platform Power', title: 'SILICON VALLEY / BIG TECH', role: 'Apple · Microsoft · Google · Amazon · Nvidia · Meta',
+    titleClass: 'red',
+    body: `The combined market capitalisation of Apple, Microsoft, Google/Alphabet, Amazon, Nvidia, and Meta was approximately $12 trillion as of early 2026. These companies control the operating systems of personal devices (Apple iOS, Google Android), the search and discovery infrastructure of the internet (Google), the cloud computing backbone of the global economy (Amazon AWS, Microsoft Azure, Google Cloud), the world's largest social networks (Meta), and the dominant AI chip platform (Nvidia).
+
+Silicon Valley's political alignment has shifted dramatically in the last decade. In 2016, the tech industry was broadly liberal and hostile to Trump. By 2024, a significant portion of tech leadership — led most visibly by Elon Musk but including a broader libertarian-to-conservative shift — aligned with Trump and the MAGA movement.
+
+Musk's acquisition of Twitter (rebranded X) in 2022 and his transformation of it into Trump's primary communications platform represents the most direct expression of this shift. X is now the de facto town square of American politics — a privately controlled infrastructure for political speech with no regulatory constraint on its owner's political choices.
+
+The tech industry's control over speech platforms (who can be banned, what content is amplified), payment systems (Stripe, Apple Pay), and cloud infrastructure (who gets to run a website) gives these companies structural power that regulation has consistently struggled to address.`,
+    facts: [{'l':'Combined Market Cap','v':'~$12T (top 5, 2026)'},{'l':'Musk / X','v':'Trump\'s primary communications platform'},{'l':'Cloud Control','v':'AWS, Azure, Google Cloud = internet backbone'},{'l':'Political Shift','v':'Liberal 2016 → libertarian/MAGA 2024'}],
+    powers: [['Platform Control', 92, 'fill-red'],['Political Communication', 88, 'fill-red'],['Infrastructure Power', 90, 'fill-red'],['Regulatory Constraint', 22, 'fill-grey']]
+  },
+
+  media: {
+    icon: '📺', type: 'Media / Information Environment', title: 'MEDIA INDUSTRIAL COMPLEX', role: 'Fox · MSNBC · CNN · Podcasts · Murdoch Empire',
+    titleClass: 'red',
+    body: `The American media landscape is simultaneously more fragmented and more powerful than at any previous point in history. The fragmentation creates parallel information environments in which different populations inhabit largely non-overlapping media realities.
+
+Fox News — controlled by the Murdoch family (Rupert Murdoch's sons Lachlan and James now run the empire) — reaches approximately 2 million viewers nightly and functions as the primary information environment for the Republican base. Its framing of political events shapes the context in which Republican voters evaluate political reality. Rupert Murdoch's global media empire (News Corp, Fox News, The Australian, The Sun, The Times, The New York Post) gives him an outsized role in shaping conservative political opinion across the English-speaking world.
+
+But the most consequential shift of the 2024 election was in podcasts and alternative media. Joe Rogan's podcast reaches 10 million+ listeners per episode — multiples of any cable news show. His October 2024 endorsement of Trump (after a three-hour interview on The Joe Rogan Experience) reached audiences that CNN and MSNBC combined cannot. Political podcasters, YouTube channels, and X's evolving media ecosystem have collectively displaced traditional broadcast media for the under-40 demographic.
+
+Network news still reaches 25 million+ nightly (NBC, ABC, CBS combined) but its audience is ageing, and its influence over the political conversation has declined substantially.`,
+    facts: [{'l':'Fox News','v':'~2M nightly viewers'},{'l':'Joe Rogan','v':'10M+ listeners, endorsed Trump 2024'},{'l':'Murdoch empire','v':'Fox, News Corp, NY Post, Times (UK)'},{'l':'Network news','v':'25M+ nightly (ageing audience)'}],
+    powers: [['Conservative Narrative Control', 82, 'fill-red'],['Podcast / Alt Media Influence', 78, 'fill-red'],['Under-40 Reach (traditional)', 20, 'fill-grey'],['Global Media Reach (Murdoch)', 75, 'fill-red']]
+  },
+
+  defcos: {
+    icon: '🚀', type: 'Defence Industry', title: 'DEFENCE CONTRACTORS', role: 'Lockheed · RTX · Northrop · Boeing · GD',
+    titleClass: 'red',
+    body: `The five major US defence contractors — Lockheed Martin, RTX (formerly Raytheon Technologies), Northrop Grumman, Boeing Defense, and General Dynamics — collectively generate revenues exceeding $200 billion annually. They are the primary suppliers of the weapons, aircraft, ships, missiles, and electronics that constitute American military power.
+
+The geographic distribution of their supplier networks is not accidental. The F-35 program — the most expensive weapons system in history at $1.7 trillion over its lifetime — has suppliers in 45 of 50 states. This is a deliberate political strategy: ensuring broad congressional constituencies who benefit from the program's continuation. A representative voting against the F-35 is voting against jobs in their own district.
+
+The "revolving door" between the Pentagon and defence contractors is institutionalised and well-documented. Senior military officers typically retire in their late 40s or 50s with full pensions and immediately take positions on defence contractor boards or as consultants — often working with the very programs they previously oversaw in government. The legal "cooling off" period is two years; the relationships and knowledge transfer in practice immediately.
+
+The defence industrial base has also become a key variable in the Ukraine conflict: the speed at which the US could supply artillery shells, HIMARS rockets, and air defence systems has been constrained by the atrophied production capacity of a defence industry that had optimised for profit margins rather than surge capacity.`,
+    facts: [{'l':'Combined Revenue','v':'$200B+'},{'l':'F-35 Lifecycle Cost','v':'$1.7T — 45-state supplier network'},{'l':'Revolving Door','v':'Senior officers → contractor boards'},{'l':'Ukraine lesson','v':'Production capacity: profit vs. surge'}],
+    powers: [['Defense Budget Capture', 88, 'fill-red'],['Congressional Geography Leverage', 85, 'fill-red'],['R&D Monopoly', 82, 'fill-red'],['Public Accountability', 15, 'fill-grey']]
+  }
+};
+
+const states = {
+  california: {
+    name: 'California',
+    city: 'Sacramento',
+    desc: 'The world\'s 5th largest economy (~$3.8T GDP). Home to Silicon Valley, Hollywood, and the largest state population (39M). Deeply Democratic in federal elections (54 electoral votes). Has occasionally challenged federal policy through its AG and independent regulatory standards (auto emissions, environmental rules). Under Newsom, has positioned itself as an opposition governance model to the Trump administration.',
+    facts: [{'l':'Population','v':'39M'},{'l':'GDP','v':'~$3.8T'},{'l':'Electoral Votes','v':'54'},{'l':'Governor','v':'Gavin Newsom'}]
+  },
+  texas: {
+    name: 'Texas',
+    city: 'Austin',
+    desc: 'The second-largest state by population and economy. Massive oil and gas production, major tech hub (Austin). Reliably Republican at state and federal level, though demographic change is narrowing margins. Governor Greg Abbott has made Texas a testing ground for conservative policies on immigration, abortion, and education. The Texas border is the focal point of the immigration conflict with the federal government.',
+    facts: [{'l':'Population','v':'30M'},{'l':'GDP','v':'~$2.0T'},{'l':'Electoral Votes','v':'40'},{'l':'Governor','v':'Greg Abbott'}]
+  },
+  newyork: {
+    name: 'New York',
+    city: 'Albany / NYC',
+    desc: 'The financial capital of the world. NYC hosts the NYSE, most major investment banks, and a disproportionate share of global wealth management. New York State is reliably Democratic but its financial sector shapes policy across party lines. The Southern District of New York (SDNY) is the most consequential federal prosecutor\'s office in the country.',
+    facts: [{'l':'Population','v':'20M'},{'l':'GDP','v':'~$2.1T'},{'l':'Electoral Votes','v':'28'},{'l':'Key Role','v':'Global financial capital'}]
+  },
+  florida: {
+    name: 'Florida',
+    city: 'Tallahassee',
+    desc: 'The largest swing state and the key to many presidential elections. Republican under DeSantis, Florida has enacted significant conservative legislation on education, gender, and immigration. Mar-a-Lago in Palm Beach is Trump\'s primary residence and the site of his post-presidency operation. A top retirement destination with the country\'s largest 65+ population share — significant for healthcare and social security policy.',
+    facts: [{'l':'Population','v':'22M'},{'l':'Electoral Votes','v':'30'},{'l':'Governor','v':'Ron DeSantis'},{'l':'Trump connection','v':'Mar-a-Lago, Palm Beach'}]
+  },
+  pennsylvania: {
+    name: 'Pennsylvania',
+    city: 'Harrisburg',
+    desc: 'The ultimate bellwether. Pennsylvania\'s mix of Philadelphia suburbs, Pittsburgh\'s post-industrial west, and rural Pennsylvania creates a state that has swung both ways in every recent election. The decline of manufacturing in the "Rust Belt" portion of PA is central to the realignment of working-class voters toward the Republican Party that Trump accelerated.',
+    facts: [{'l':'Population','v':'13M'},{'l':'Electoral Votes','v':'19'},{'l':'Key Industry','v':'Healthcare, Finance, Manufacturing remnants'},{'l':'Swing status','v':'Core battleground state'}]
+  },
+  georgia: {
+    name: 'Georgia',
+    city: 'Atlanta',
+    desc: 'The most consequential state of the 2020-2024 cycle. Biden flipped it in 2020 (first Democrat since 1992). The January 6 indictment against Trump originated from Fulton County DA Fani Willis. Trump won it back in 2024. Atlanta\'s growth as a major business and Black cultural hub is transforming Georgia\'s long-term demographic trajectory.',
+    facts: [{'l':'Population','v':'11M'},{'l':'Electoral Votes','v':'16'},{'l':'Key City','v':'Atlanta (major financial hub)'},{'l':'2020 Election','v':'Flipped Democrat — then back'}]
+  }
+};
+
+function setFilter(f) {
+  currentFilter = f;
+  ['all','official','shadow'].forEach(id => {
+    const btn = document.getElementById('filter-' + id);
+    btn.className = 'filter-btn' + (f === id ? ' active-' + f : '');
+  });
+  document.querySelectorAll('.card, .ministry-card, .putin-banner').forEach(card => {
+    const t = card.dataset.type;
+    if (f === 'all') card.classList.remove('filtered-out');
+    else if (f === 'official') card.classList.toggle('filtered-out', t === 'shadow');
+    else if (f === 'shadow') card.classList.toggle('filtered-out', t === 'official');
+  });
+}
+let currentFilter = 'all';
+
+let allCollapsed = false;
+function toggleAllTiers() {
+  allCollapsed = !allCollapsed;
+  ['tier0','tier2','tier3','tier4','tier5','tier6','tier7','tier8'].forEach(id => {
+    const body = document.getElementById(id + '-body');
+    const toggle = document.getElementById(id + '-toggle');
+    if (body) { body.classList.toggle('collapsed', allCollapsed); toggle.classList.toggle('collapsed', allCollapsed); }
+  });
+  document.getElementById('collapseBtn').textContent = allCollapsed ? 'Expand All' : 'Collapse All';
+}
+
+function toggleTier(id) {
+  const body = document.getElementById(id + '-body');
+  const toggle = document.getElementById(id + '-toggle');
+  body.classList.toggle('collapsed');
+  toggle.classList.toggle('collapsed', body.classList.contains('collapsed'));
+}
+
+function showDetail(key) {
+  const d = details[key];
+  if (!d) return;
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-type-tag">${d.type}</div>
+    <div class="detail-icon">${d.icon}</div>
+    <div class="detail-title ${d.titleClass||''}">${d.title}</div>
+    <div class="detail-role">${d.role}</div>
+    <div class="detail-divider"></div>
+    <div class="detail-body">${d.body.replace(/\n\n/g,'<br><br>')}</div>
+    <div><div class="detail-section-title">Key Facts</div>
+    <div class="detail-fact-grid">${d.facts.map(f=>`<div class="detail-fact"><div class="detail-fact-label">${f.l}</div><div class="detail-fact-value">${f.v}</div></div>`).join('')}</div></div>
+    <div><div class="detail-section-title">Power Assessment</div>
+    ${d.powers.map(p=>`<div class="power-meter"><div class="power-label">${p[0]}</div><div class="power-bar-wrap"><div class="power-bar-fill ${p[2]}" style="width:${p[1]}%"></div></div><div style="font-size:0.55rem;color:var(--frost-dim);width:26px;text-align:right;flex-shrink:0">${p[1]}</div></div>`).join('')}</div>
+  `;
+  document.getElementById('detailPanel').classList.add('open');
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function showState(key) {
+  const s = states[key];
+  if (!s) return;
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-type-tag">Key State</div>
+    <div class="detail-icon">🗺️</div>
+    <div class="detail-title">${s.name}</div>
+    <div class="detail-role">State Capital: ${s.city}</div>
+    <div class="detail-divider"></div>
+    <div class="detail-body">${s.desc}</div>
+    <div><div class="detail-section-title">Key Facts</div>
+    <div class="detail-fact-grid">${s.facts.map(x=>`<div class="detail-fact"><div class="detail-fact-label">${x.l}</div><div class="detail-fact-value">${x.v}</div></div>`).join('')}</div></div>
+  `;
+  document.getElementById('detailPanel').classList.add('open');
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('detailOverlay').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+</script>
+</body>
+</html>
