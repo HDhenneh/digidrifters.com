@@ -397,6 +397,46 @@
     filter: sepia(4%) contrast(1.05) brightness(0.95);
   }
 
+  .outfit-visual-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8,6,4,0.75) 0%, rgba(8,6,4,0.1) 50%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .outfit-visual-text {
+    position: absolute;
+    bottom: 20px;
+    left: 24px;
+    right: 24px;
+    z-index: 2;
+  }
+
+  .outfit-visual-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--cream);
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .outfit-visual-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .outfit-visual-caption {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.6;
+    color: rgba(240,232,216,0.65);
+  }
+
   .outfit-info {
     padding: 28px 32px 32px;
   }
@@ -1368,6 +1408,8 @@ const outfits = [
     excerpt: 'The draped linen of a noble lady, pleated with extraordinary refinement across two millennia of tradition.',
     editorial: 'images/archive-of-dress/egypt-kalasiris.png',
     image: 'images/archive-of-dress/egypt-kalasiris-seated.png',
+    overlayTitle: 'The Court of <em>Amarna</em>',
+    overlayCaption: 'Finely pleated linen so sheer it required weavers of extraordinary skill. New Kingdom, c.1350 BCE.',
     figure: 'egyptian',
     materials: 'Fine linen', origin: 'Thebes, Egypt', context: 'Court dress',
     desc: 'The kalasiris — a close-fitting sheath of finely pleated white linen — was the defining garment of Egyptian aristocracy. This reconstruction draws from tomb paintings at Amarna, where noble women are depicted in diaphanous fabric so fine it required weavers of extraordinary skill. The pleating was set using starch from flax and retained through careful storage in cedar chests.',
@@ -1542,7 +1584,13 @@ function renderGrid(filter) {
     return `
     <div class="outfit-card" onclick="openPanel(${idx})">
       <div class="outfit-visual">
-        ${o.image ? `<img src="${o.image}" alt="${o.name}">` : getFigureHTML(o.figure)}
+        ${o.image ? `
+          <img src="${o.image}" alt="${o.name}">
+          <div class="outfit-visual-overlay"></div>
+          <div class="outfit-visual-text">
+            <div class="outfit-visual-title">${o.overlayTitle || ''}</div>
+            <div class="outfit-visual-caption">${o.overlayCaption || ''}</div>
+          </div>` : getFigureHTML(o.figure)}
       </div>
       <div class="outfit-info">
         <div class="outfit-era-tag">${o.eraLabel}</div>
