@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Goverlicious — United Kingdom</title>
+<meta name="description" content="Who actually runs the United Kingdom? Crown, Cabinet, Parliament and the shadow power around them. Updated October 2026.">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -730,8 +731,9 @@ body {
 <!-- MASTHEAD -->
 <header class="masthead">
   <div class="masthead-left">
+    <a href="../goverlicious.html" style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:inherit;opacity:0.65;text-decoration:none;border:1px solid currentColor;padding:0.35rem 0.7rem;border-radius:2px;align-self:center">← Atlas</a>
     <div class="logo">Goverlicious<sup>beta</sup></div>
-    <div class="country-tag">🇬🇧 &nbsp;United Kingdom · 2025</div>
+    <div class="country-tag">🇬🇧 &nbsp;United Kingdom · 2026</div>
   </div>
   <div class="controls">
     <button class="filter-btn active-all" id="filter-all" onclick="setFilter('all')">All Power</button>
@@ -751,8 +753,8 @@ body {
 
   <div class="map-meta">
     <div class="meta-item"><div class="meta-label">System</div><div class="meta-value">Constitutional Monarchy</div></div>
-    <div class="meta-item"><div class="meta-label">Population</div><div class="meta-value">67.6M</div></div>
-    <div class="meta-item"><div class="meta-label">Parliament</div><div class="meta-value">Bicameral</div></div>
+    <div class="meta-item"><div class="meta-label">Population</div><div class="meta-value">69.3M</div></div>
+    <div class="meta-item"><div class="meta-label">Prime Minister</div><div class="meta-value">Andy Burnham (since Jul 2026)</div></div>
     <div class="meta-item"><div class="meta-label">Head of State</div><div class="meta-value">King Charles III</div></div>
   </div>
 
@@ -804,7 +806,7 @@ body {
     <div class="mayor-section-title">Metro Mayors (Tier VII)</div>
     <div class="mayor-list" id="mayorList">
       <div class="mayor-item" onclick="showMayor('london')"><div class="mayor-dot"></div><div class="mayor-name">Sadiq Khan</div><div class="mayor-city">London</div></div>
-      <div class="mayor-item" onclick="showMayor('manchester')"><div class="mayor-dot"></div><div class="mayor-name">Andy Burnham</div><div class="mayor-city">Gtr Manchester</div></div>
+      <div class="mayor-item" onclick="showMayor('manchester')"><div class="mayor-dot"></div><div class="mayor-name">Bev Craig</div><div class="mayor-city">Gtr Manchester</div></div>
       <div class="mayor-item" onclick="showMayor('westmidlands')"><div class="mayor-dot"></div><div class="mayor-name">Richard Parker</div><div class="mayor-city">West Midlands</div></div>
       <div class="mayor-item" onclick="showMayor('westyorks')"><div class="mayor-dot"></div><div class="mayor-name">Tracy Brabin</div><div class="mayor-city">West Yorkshire</div></div>
       <div class="mayor-item" onclick="showMayor('liverpool')"><div class="mayor-dot"></div><div class="mayor-name">Steve Rotheram</div><div class="mayor-city">Liverpool CR</div></div>
@@ -864,7 +866,7 @@ body {
       <div class="card official" onclick="showDetail('pm')" data-type="official">
         <span class="card-icon">🏛️</span>
         <div class="card-title">Prime Minister</div>
-        <div class="card-role">Head of Government · No. 10</div>
+        <div class="card-role">Andy Burnham · No. 10</div>
         <div class="card-preview">True seat of political power. Sets government agenda, controls military deployment, foreign policy.</div>
         <span class="card-badge badge-blue">Executive</span>
       </div>
@@ -878,7 +880,7 @@ body {
       <div class="card official" onclick="showDetail('chancellor')" data-type="official">
         <span class="card-icon">💷</span>
         <div class="card-title">Chancellor of the Exchequer</div>
-        <div class="card-role">No. 11 · Economic Policy</div>
+        <div class="card-role">John Healey · No. 11</div>
         <div class="card-preview">Controls national finances. Historically a rival power base to the PM.</div>
         <span class="card-badge badge-blue">Executive</span>
       </div>
@@ -997,15 +999,15 @@ body {
       <div class="card official" onclick="showDetail('scotland')" data-type="official">
         <span class="card-icon">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
         <div class="card-title">Scottish Parliament</div>
-        <div class="card-role">Holyrood · 129 MSPs</div>
+        <div class="card-role">Holyrood · SNP minority · 129 MSPs</div>
         <div class="card-preview">Controls health, education, justice, and taxation in Scotland. SNP independence push is a permanent constitutional pressure on Westminster.</div>
         <span class="card-badge badge-blue">Devolved (Strongest)</span>
       </div>
       <div class="card official" onclick="showDetail('wales')" data-type="official">
         <span class="card-icon">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
         <div class="card-title">Senedd Cymru</div>
-        <div class="card-role">Welsh Parliament · 96 MSs</div>
-        <div class="card-preview">Controls health, education, local government in Wales. Gained primary legislative powers 2011. Growing assertiveness on divergence from England.</div>
+        <div class="card-role">Plaid minority · 96 MSs</div>
+        <div class="card-preview">Controls health, education, local government in Wales. Gained primary legislative powers 2011. Plaid Cymru took power in 2026, ending 27 years of Labour rule; Reform UK is the opposition.</div>
         <span class="card-badge badge-blue">Devolved</span>
       </div>
       <div class="card official" onclick="showDetail('ni')" data-type="official">
@@ -1039,8 +1041,8 @@ body {
       <div class="card influence" onclick="showMayor('manchester')" data-type="official">
         <span class="card-icon">🐝</span>
         <div class="card-title">Mayor of Gtr Manchester</div>
-        <div class="card-role">Andy Burnham · 2.8M People</div>
-        <div class="card-preview">Widely considered the most influential regional politician after London. High-profile dissenter during COVID. Seen as a future PM candidate.</div>
+        <div class="card-role">Bev Craig · 2.8M People</div>
+        <div class="card-preview">The job that launched a Prime Minister: Andy Burnham went from here to No. 10 in 2026. Bev Craig won the mayoral by-election to succeed him.</div>
         <span class="card-badge badge-orange">Metro Executive</span>
       </div>
       <div class="card influence" onclick="showMayor('westmidlands')" data-type="official">
@@ -1199,8 +1201,8 @@ Its real significance lies in Orders in Council — secondary legislation issued
 
 The PM chairs Cabinet, sets the government's legislative agenda, controls the deployment of armed forces (via Royal Prerogative, without requiring a parliamentary vote — though conventions are shifting), nominates peers, controls senior appointments, and leads the country in international negotiations.
 
-Power is ultimately parliamentary: the PM stays in office only while commanding a Commons majority. The relationship with the Chancellor is historically the most important in government — periods of PM-Chancellor conflict (Blair/Brown, May/Hammond, Truss/everyone) can paralyse policymaking.`,
-    facts: [{'l':'Formal Title','v':'First Lord of the Treasury'},{'l':'Residence','v':'No. 10 Downing St'},{'l':'Formal Power','v':'Very High'},{'l':'Accountability','v':'Commons majority'}],
+Power is ultimately parliamentary: the PM stays in office only while commanding a Commons majority — as 2026 showed. Andy Burnham, the Mayor of Greater Manchester, returned to Parliament at the Makerfield by-election on 18 June 2026; Keir Starmer announced his resignation four days later, and Burnham was the only candidate to clear the nomination threshold, backed by 94% of Labour MPs. He became Prime Minister on 20 July 2026 without a general election — a reminder that in Britain the party, not the voter, picks a mid-term PM. His early moves: a 'Number 10 North' office in Manchester, removing VAT on household electricity, and a pledge to keep Labour's fiscal rules. The relationship with the Chancellor is historically the most important in government — periods of PM-Chancellor conflict (Blair/Brown, May/Hammond, Truss/everyone) can paralyse policymaking.`,
+    facts: [{'l':'Incumbent','v':'Andy Burnham (since 20 Jul 2026)'},{'l':'Predecessor','v':'Keir Starmer (2024–26)'},{'l':'Formal Title','v':'First Lord of the Treasury'},{'l':'Residence','v':'No. 10 + No. 10 North'},{'l':'Formal Power','v':'Very High'},{'l':'Accountability','v':'Commons majority'}],
     powers: [['Executive Power', 92, 'fill-blue'],['Legislative Control', 78, 'fill-blue'],['Accountability', 65, 'fill-blue']]
   },
   cabinet: {
@@ -1209,8 +1211,10 @@ Power is ultimately parliamentary: the PM stays in office only while commanding 
 
 The "great offices of state" (PM, Chancellor, Home Secretary, Foreign Secretary) carry the most weight. Other senior positions include the Lord Chancellor, Defence Secretary, and Chief Secretary to the Treasury.
 
-In recent decades, Cabinet has increasingly been bypassed by smaller "kitchen cabinet" arrangements — informal groups around the PM. Under Johnson, formal Cabinet was often sidelined. The Cabinet Secretary (head of the civil service) holds enormous quiet influence over how government actually functions.`,
-    facts: [{'l':'Members','v':'~22 full Cabinet'},{'l':'Principle','v':'Collective Responsibility'},{'l':'Meetings','v':'Weekly (Tuesdays)'},{'l':'Accountability','v':'Parliamentary'}],
+In recent decades, Cabinet has increasingly been bypassed by smaller "kitchen cabinet" arrangements — informal groups around the PM. Under Johnson, formal Cabinet was often sidelined. The Cabinet Secretary (head of the civil service) holds enormous quiet influence over how government actually functions — since 2026 that is Dame Antonia Romeo, the first woman in the role.
+
+Burnham's August 2026 reshuffle rebuilt the top table: John Healey to the Treasury, Ed Miliband to the Foreign Office, Shabana Mahmood kept the Home Office, Wes Streeting moved to Defence, and Louise Haigh became First Secretary of State running the Cabinet Office. Rachel Reeves, David Lammy and Darren Jones left the Cabinet.`,
+    facts: [{'l':'Members','v':'~22 full Cabinet'},{'l':'Principle','v':'Collective Responsibility'},{'l':'Cabinet Secretary','v':'Dame Antonia Romeo'},{'l':'Accountability','v':'Parliamentary'}],
     powers: [['Collective Power', 80, 'fill-blue'],['Individual Authority', 60, 'fill-blue'],['PM Override Risk', 45, 'fill-blue']]
   },
   chancellor: {
@@ -1219,8 +1223,10 @@ In recent decades, Cabinet has increasingly been bypassed by smaller "kitchen ca
 
 The Chancellor controls HM Treasury, sets tax and spending policy through Budgets and Autumn Statements, and has the power to make or break the government's political fortunes. In the era of austerity, this was the most consequential role in domestic policy.
 
-The Gordon Brown/Tony Blair relationship redefined the position — Brown operated a virtual parallel government from the Treasury for a decade. The 2022 Liz Truss mini-budget (and its immediate demolition by bond markets) showed the limits of the Chancellor ignoring market and institutional constraints.`,
-    facts: [{'l':'Controls','v':'HM Treasury'},{'l':'Budget Cycle','v':'Annual + Autumn Stmt'},{'l':'Rival to PM','v':'Historically Yes'},{'l':'Market Power','v':'Subject to bond markets'}],
+The Gordon Brown/Tony Blair relationship redefined the position — Brown operated a virtual parallel government from the Treasury for a decade. The 2022 Liz Truss mini-budget (and its immediate demolition by bond markets) showed the limits of the Chancellor ignoring market and institutional constraints.
+
+Since August 2026 the Chancellor is John Healey, moved from Defence by Andy Burnham to replace Rachel Reeves. Burnham has promised to keep Reeves's fiscal rules — so the Treasury's arithmetic, and the bond markets behind it, still cap what the new government can do.`,
+    facts: [{'l':'Incumbent','v':'John Healey (Aug 2026)'},{'l':'Budget Cycle','v':'Annual + Autumn Stmt'},{'l':'Rival to PM','v':'Historically Yes'},{'l':'Market Power','v':'Subject to bond markets'}],
     powers: [['Fiscal Authority', 88, 'fill-blue'],['Political Influence', 75, 'fill-blue'],['Market Dependency', 70, 'fill-blue']]
   },
   home: { icon: '🚔', type: 'Department', title: 'Home Office', role: 'Security · Immigration · Policing',
@@ -1393,22 +1399,28 @@ Former editor Paul Dacre's influence over Conservative Party policy during 26 ye
     icon: '🗳️', type: 'Legislature', title: "His Majesty's Opposition", role: 'Official Opposition · Shadow Cabinet',
     body: `The Leader of the Opposition holds a formally recognised constitutional role, receives state funding (Short Money), and chairs a Shadow Cabinet that mirrors the government. This institutionalises the idea of an alternative government-in-waiting — a distinctly British constitutional idea.
 
-The Official Opposition has the right to set the agenda for Opposition Day debates, to lead Prime Minister's Questions responses, and to receive certain intelligence briefings.`,
-    facts: [{'l':'Funding','v':'Short Money'},{'l':'PMQs','v':'Leads response'},{'l':'Shadow Cabinet','v':'Mirrors government'},{'l':'Role','v':'Constitutional'}],
+The Official Opposition has the right to set the agenda for Opposition Day debates, to lead Prime Minister's Questions responses, and to receive certain intelligence briefings.
+
+The Official Opposition is Kemi Badenoch's Conservative Party — but it is no longer the only challenger. Reform UK, with only a handful of MPs, regularly polls ahead of the Conservatives (Opinium, 7 October 2026: Labour 29%, Reform 23%, Conservatives 20%) and became the main opposition in the Welsh Senedd in May 2026. The UK's opposition is now split between a formal one in Parliament and an insurgent one in the polls.`,
+    facts: [{'l':'Leader','v':'Kemi Badenoch (Con)'},{'l':'Insurgent','v':'Reform UK · ~23% polls'},{'l':'PMQs','v':'Leads response'},{'l':'Shadow Cabinet','v':'Mirrors government'},{'l':'Role','v':'Constitutional'}],
     powers: [['Parliamentary Influence', 55, 'fill-blue'],['Public Platform', 68, 'fill-blue'],['Policy Leverage', 30, 'fill-blue']]
   },
   scotland: {
     icon: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', type: 'Devolved Government', title: 'Scottish Parliament', role: 'Holyrood · Edinburgh',
     body: `The most powerful devolved government in the UK. Scotland controls health, education, justice, some taxation, and much of social policy. Post-2014 further powers were devolved following the independence referendum.
 
-The SNP's dominance and the independence question mean Scottish politics operates partly independently of UK-wide political dynamics — and creates a permanent constitutional pressure on Westminster. The question of a second independence referendum remains unresolved.`,
-    facts: [{'l':'MSPs','v':'129'},{'l':'Powers','v':'Health, Education, Justice'},{'l':'Indyref2','v':'Unresolved'},{'l':'Current FM','v':'John Swinney'}],
+The SNP's dominance and the independence question mean Scottish politics operates partly independently of UK-wide political dynamics — and creates a permanent constitutional pressure on Westminster. The question of a second independence referendum remains unresolved.
+
+At the May 2026 election the SNP won 58 of 129 seats — seven short of a majority — and John Swinney was re-elected First Minister on 20 May at the head of a minority government. Reform UK entered Holyrood with 17 seats, level with Labour. The 2022 Supreme Court ruling still means Holyrood cannot hold an independence vote without Westminster's consent.`,
+    facts: [{'l':'MSPs','v':'129'},{'l':'Powers','v':'Health, Education, Justice'},{'l':'2026 Result','v':'SNP 58 (minority)'},{'l':'First Minister','v':'John Swinney'}],
     powers: [['Devolved Authority', 75, 'fill-blue'],['Constitutional Pressure', 80, 'fill-blue'],['Independence Risk to Union', 65, 'fill-red']]
   },
   wales: {
     icon: '🏴󠁧󠁢󠁷󠁬󠁳󠁿', type: 'Devolved Government', title: 'Senedd Cymru', role: 'Welsh Parliament · Cardiff Bay',
-    body: `Wales gained its own legislative assembly in 1998 and primary legislative powers in 2011. The Senedd controls health, education, local government, economic development, and some tax powers. Welsh policy has diverged from England's in notable areas — including different approaches to organ donation, 20mph speed limits, and free school meals.`,
-    facts: [{'l':'MSs','v':'96 (expanded 2026)'},{'l':'Powers','v':'Health, Education, LG'},{'l':'First Minister','v':'Eluned Morgan'},{'l':'Party','v':'Labour-led'}],
+    body: `Wales gained its own legislative assembly in 1998 and primary legislative powers in 2011. The Senedd controls health, education, local government, economic development, and some tax powers. Welsh policy has diverged from England's in notable areas — including different approaches to organ donation, 20mph speed limits, and free school meals.
+
+May 2026 was an earthquake. Labour, which had led every Welsh government since 1999, fell to nine seats; First Minister Eluned Morgan lost her own seat. Plaid Cymru won 43 of the enlarged 96 seats and Rhun ap Iorwerth became First Minister of a Plaid minority government. Reform UK, starting from zero, won 34 seats to become the official opposition.`,
+    facts: [{'l':'MSs','v':'96 (expanded 2026)'},{'l':'Powers','v':'Health, Education, LG'},{'l':'First Minister','v':'Rhun ap Iorwerth'},{'l':'Government','v':'Plaid minority (43/96)'}],
     powers: [['Devolved Authority', 62, 'fill-blue'],['Policy Divergence', 58, 'fill-blue'],['Independence Sentiment', 22, 'fill-blue']]
   },
   ni: {
@@ -1428,9 +1440,9 @@ const mayors = {
     facts: [{'l':'Population','v':'9M+'},{'l':'Budget','v':'~£20bn+ (TfL + GLA)'},{'l':'Police','v':'Met oversight via MOPAC'},{'l':'Elected','v':'2016, re-elected 2021, 2024'}]
   },
   manchester: {
-    name: 'Andy Burnham', city: 'Mayor of Greater Manchester', icon: '🐝',
-    desc: `Widely considered the most powerful and influential regional politician outside London. Controls transport (Bee Network), strategic housing, economic development, and has been granted health devolution — making Greater Manchester the only English region with integrated health and social care budgets under elected control. Burnham became nationally prominent by publicly confronting Boris Johnson over COVID tier restrictions in 2020. Considered a serious future Labour leadership contender.`,
-    facts: [{'l':'Population','v':'2.8M'},{'l':'Budget','v':'~£3bn+'},{'l':'Health Devolution','v':'Unique in England'},{'l':'Elected','v':'2017, re-elected 2021, 2024'}]
+    name: 'Bev Craig', city: 'Mayor of Greater Manchester', icon: '🐝',
+    desc: `Widely considered the most powerful and influential regional politician outside London. Controls transport (Bee Network), strategic housing, economic development, and has been granted health devolution — making Greater Manchester the only English region with integrated health and social care budgets under elected control. Burnham became nationally prominent by publicly confronting Boris Johnson over COVID tier restrictions in 2020. That platform carried Burnham all the way to No. 10 in July 2026. Bev Craig, previously leader of Manchester City Council, won the 2026 mayoral by-election to succeed him — inheriting the Bee Network, health devolution and Burnham's 'Number 10 North' next door.`,
+    facts: [{'l':'Population','v':'2.8M'},{'l':'Budget','v':'~£3bn+'},{'l':'Health Devolution','v':'Unique in England'},{'l':'Mayor','v':'Bev Craig (by-election 2026)'}]
   },
   westmidlands: {
     name: 'Richard Parker', city: 'Mayor of West Midlands', icon: '🏭',

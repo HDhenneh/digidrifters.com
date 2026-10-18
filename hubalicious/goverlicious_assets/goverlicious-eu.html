@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goverlicious — European Union</title>
+<meta name="description" content="Who actually runs European Union? Formal structure and shadow power, mapped tier by tier. Updated October 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter+Tight:wght@400;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060b1f; --panel: #0a1130; --text: #eef1fb; --muted: #8790b8;
+  --gold: #ffcc00; --gold-light: #ffdc4a; --gold-faint: color-mix(in srgb, #ffcc00 12%, transparent);
+  --official: #173a9e; --official-light: #9db5ff;
+  --shadow-col: #7a2a8a; --shadow-light: #e48cf5; --accent2: #ffdc4a;
+  --border: rgba(255,204,0,0.2);
+  --f-display: 'Syne', sans-serif; --f-body: 'Space Mono', monospace; --f-serif: 'Inter Tight', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); }
+body { background: var(--bg); background-image: radial-gradient(rgba(255,204,0,0.07) 1px, transparent 1.5px); background-size: 46px 46px; color: var(--text); font-family: var(--f-body); min-height: 100vh; overflow-x: hidden; }
+button { font: inherit; color: inherit; text-align: left; }
+.app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+.masthead { background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; }
+.masthead-left { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+.back { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; border: 1px solid var(--border); padding: 0.35rem 0.7rem; border-radius: 2px; }
+.back:hover { color: var(--text); border-color: var(--gold); }
+.logo { font-family: var(--f-display); font-size: 1.5rem; letter-spacing: -0.01em; color: var(--gold-light); }
+.logo sup { font-size: 0.5rem; letter-spacing: 0.2em; color: var(--muted); font-family: var(--f-body); vertical-align: super; text-transform: uppercase; }
+.country-tag { font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); border-left: 1px solid var(--border); padding-left: 1rem; }
+.controls { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.filter-btn, .collapse-all-btn { font-family: var(--f-body); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.45rem 0.9rem; border-radius: 2px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+.filter-btn:hover, .collapse-all-btn:hover { color: var(--text); border-color: var(--gold); }
+.filter-btn.active-all { background: var(--gold-faint); color: var(--gold-light); border-color: var(--gold); }
+.filter-btn.active-official { background: color-mix(in srgb, var(--official-light) 12%, transparent); color: var(--official-light); border-color: var(--official-light); }
+.filter-btn.active-shadow { background: color-mix(in srgb, var(--shadow-light) 12%, transparent); color: var(--shadow-light); border-color: var(--shadow-light); }
+.main-layout { display: grid; grid-template-columns: 330px 1fr; min-height: calc(100vh - 60px); }
+.map-panel { background: color-mix(in srgb, var(--panel) 85%, transparent); border-right: 1px solid var(--border); padding: 2rem 1.5rem; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; display: flex; flex-direction: column; gap: 1.4rem; }
+.map-title { font-family: var(--f-display); font-size: 2.1rem; line-height: 1.02; color: var(--text); }
+.map-title em { color: var(--gold-light); font-style: normal; }
+.map-sub { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: 0.5rem; }
+.thesis { font-family: var(--f-serif); font-size: 0.82rem; line-height: 1.65; color: color-mix(in srgb, var(--text) 75%, transparent); border-left: 2px solid var(--gold); padding-left: 0.8rem; }
+.map-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.meta-item { background: var(--gold-faint); border: 1px solid var(--border); border-radius: 2px; padding: 0.55rem 0.65rem; }
+.meta-label { font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
+.meta-value { font-family: var(--f-serif); font-size: 0.8rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+.map-svg-wrap { background: color-mix(in srgb, var(--official) 18%, transparent); border: 1px solid var(--border); border-radius: 3px; padding: 0.6rem; }
+.map-svg-wrap svg { width: 100%; height: auto; display: block; }
+.map-svg-wrap .ctx { fill: color-mix(in srgb, var(--text) 6%, transparent); }
+.map-svg-wrap .land { fill: color-mix(in srgb, var(--official-light) 30%, var(--bg)); stroke: var(--official-light); stroke-width: 0.6; stroke-opacity: 0.7; }
+.map-svg-wrap .cap { fill: var(--gold-light); }
+.map-svg-wrap .cap-ring { fill: none; stroke: var(--gold); stroke-width: 0.8; opacity: 0.5; }
+.map-svg-wrap .city { fill: var(--accent2); opacity: 0.85; }
+.map-svg-wrap .cap-label { font: 600 8px var(--f-body); fill: var(--gold-light); }
+.map-svg-wrap .city-label { font: 6.5px var(--f-body); fill: var(--accent2); opacity: 0.85; }
+.gauge { border: 1px solid var(--border); border-radius: 3px; padding: 0.8rem; }
+.gauge-title { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; display: flex; justify-content: space-between; }
+.gauge-bar { height: 8px; border-radius: 4px; background: linear-gradient(to right, var(--shadow-light), var(--gold), var(--official-light)); position: relative; }
+.gauge-pin { position: absolute; top: -4px; width: 3px; height: 16px; background: var(--text); border-radius: 2px; }
+.gauge-ends { display: flex; justify-content: space-between; font-size: 0.5rem; color: var(--muted); margin-top: 0.4rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.mayor-section-title, .legend-title { font-size: 0.55rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); opacity: 0.75; margin-bottom: 0.5rem; }
+.mayor-list { display: flex; flex-direction: column; gap: 0.35rem; }
+.mayor-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.7rem; background: color-mix(in srgb, var(--shadow-col) 18%, transparent); border: 1px solid var(--border); border-radius: 2px; cursor: pointer; transition: all 0.15s; width: 100%; }
+.mayor-item:hover { border-color: var(--accent2); }
+.mayor-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); flex-shrink: 0; }
+.mayor-name { font-family: var(--f-serif); font-size: 0.8rem; font-weight: 600; color: var(--text); }
+.mayor-city { font-size: 0.52rem; color: var(--muted); margin-left: auto; letter-spacing: 0.1em; text-transform: uppercase; text-align: right; }
+.legend { display: flex; flex-direction: column; gap: 0.4rem; }
+.legend-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.6rem; color: var(--muted); }
+.legend-swatch { width: 18px; height: 8px; border-radius: 1px; flex-shrink: 0; }
+.chart-panel { padding: 2rem 2.5rem 4rem; overflow-y: auto; }
+.tier-connector { height: 30px; position: relative; }
+.tier-connector::after { content: ''; position: absolute; top: 0; left: 50%; width: 1px; height: 100%; background: linear-gradient(to bottom, var(--gold), transparent); }
+.tier-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.7rem; cursor: pointer; user-select: none; }
+.tier-number { font-size: 0.52rem; letter-spacing: 0.2em; color: var(--gold); opacity: 0.7; text-transform: uppercase; white-space: nowrap; }
+.tier-name { font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text); opacity: 0.8; white-space: nowrap; }
+.tier-side { font-size: 0.48rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--shadow-light); border: 1px solid color-mix(in srgb, var(--shadow-light) 40%, transparent); padding: 0.1rem 0.4rem; border-radius: 1px; }
+.tier-toggle { font-size: 0.65rem; color: var(--gold); opacity: 0.6; transition: transform 0.25s; }
+.tier-toggle.collapsed { transform: rotate(-90deg); }
+.tier-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+.tier-body { display: flex; gap: 0.75rem; flex-wrap: wrap; overflow: hidden; transition: max-height 0.35s ease, opacity 0.25s ease; max-height: 3000px; opacity: 1; }
+.tier-body.collapsed { max-height: 0; opacity: 0; }
+.card { display: block; border-radius: 3px; padding: 1rem 1.1rem; cursor: pointer; transition: transform 0.15s ease, opacity 0.2s, border-color 0.2s; flex: 1 1 220px; min-width: 200px; max-width: 320px; animation: cardIn 0.4s ease both; }
+.card > span { display: block; }
+.card.filtered-out, .ministry-card.filtered-out { opacity: 0.07; pointer-events: none; }
+@keyframes cardIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.card:hover { transform: translateY(-3px); }
+.card:focus-visible, .ministry-card:focus-visible, .mayor-item:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+.card.monarchy { background: linear-gradient(145deg, color-mix(in srgb, var(--gold) 14%, var(--bg)), color-mix(in srgb, var(--gold) 6%, var(--bg))); border: 1px solid var(--gold); }
+.card.official { background: linear-gradient(145deg, color-mix(in srgb, var(--official) 55%, var(--bg)), color-mix(in srgb, var(--official) 25%, var(--bg))); border: 1px solid color-mix(in srgb, var(--official-light) 35%, transparent); }
+.card.influence { background: linear-gradient(145deg, color-mix(in srgb, var(--shadow-col) 40%, var(--bg)), color-mix(in srgb, var(--shadow-col) 15%, var(--bg))); border: 1px solid color-mix(in srgb, var(--shadow-light) 35%, transparent); }
+.card-icon { font-size: 1.2rem; margin-bottom: 0.4rem; }
+.card-title { font-family: var(--f-display); font-size: 1.02rem; color: var(--text); line-height: 1.2; margin-bottom: 0.2rem; }
+.card.monarchy .card-title { color: var(--gold-light); }
+.card.influence .card-title { color: var(--shadow-light); }
+.card-role { font-size: 0.54rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+.card-preview { font-size: 0.64rem; line-height: 1.6; color: color-mix(in srgb, var(--text) 62%, transparent); }
+.card-badge { display: inline-block !important; font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.12rem 0.45rem; border-radius: 1px; margin-top: 0.6rem; }
+.badge-gold { background:rgba(242,194,48,0.15); color:var(--gold-light); }
+.badge-blue { background:rgba(90,140,210,0.18); color:#9cc0f0; }
+.badge-green { background:rgba(60,170,110,0.16); color:#86e0b0; }
+.badge-purple { background:rgba(140,90,210,0.16); color:#c3a0f0; }
+.badge-red { background:rgba(210,70,60,0.16); color:#f09a8a; }
+.badge-orange { background:rgba(210,140,60,0.16); color:#f0c08a; }
+.badge-teal { background:rgba(60,170,170,0.16); color:#8ae0e0; }
+.ministries-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.5rem; width: 100%; }
+.ministry-card { display: block; background: linear-gradient(145deg, color-mix(in srgb, var(--official) 45%, var(--bg)), color-mix(in srgb, var(--official) 20%, var(--bg))); border: 1px solid color-mix(in srgb, var(--official-light) 25%, transparent); border-radius: 2px; padding: 0.7rem 0.8rem; cursor: pointer; transition: all 0.15s; animation: cardIn 0.4s ease both; }
+.ministry-card > span { display: block; }
+.ministry-card:hover { border-color: var(--official-light); transform: translateY(-1px); }
+.ministry-icon { font-size: 0.95rem; margin-bottom: 0.25rem; }
+.ministry-name { font-family: var(--f-serif); font-size: 0.82rem; font-weight: 600; color: var(--text); line-height: 1.25; margin-bottom: 0.2rem; }
+.ministry-abbr { font-size: 0.52rem; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; line-height: 1.4; }
+.detail-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+.detail-overlay.open { opacity: 1; pointer-events: all; }
+.detail-panel { position: fixed; top: 0; right: 0; width: min(500px, 100vw); height: 100vh; background: var(--panel); border-left: 1px solid var(--border); z-index: 201; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); overflow-y: auto; padding: 2rem 1.8rem; }
+.detail-panel.open { transform: none; }
+#detailContent { display: flex; flex-direction: column; gap: 1.1rem; }
+.detail-close { position: absolute; top: 1.2rem; right: 1.5rem; background: none; border: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; width: 30px; height: 30px; border-radius: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.detail-close:hover { color: var(--text); border-color: var(--gold); }
+.detail-type-tag { font-size: 0.52rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); opacity: 0.75; }
+.detail-icon { font-size: 2.4rem; }
+.detail-title { font-family: var(--f-display); font-size: 1.8rem; line-height: 1.1; color: var(--text); }
+.detail-title.gold { color: var(--gold-light); }
+.detail-title.amber { color: var(--shadow-light); }
+.detail-role { font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.detail-divider { height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+.detail-body { font-family: var(--f-serif); font-size: 0.86rem; line-height: 1.75; color: color-mix(in srgb, var(--text) 82%, transparent); }
+.detail-section-title { font-size: 0.52rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); opacity: 0.7; margin-bottom: 0.5rem; }
+.detail-fact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.detail-fact { background: var(--gold-faint); border: 1px solid var(--border); border-radius: 2px; padding: 0.5rem 0.7rem; }
+.detail-fact-label { font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+.detail-fact-value { font-family: var(--f-serif); font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.power-meter { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+.power-label { font-size: 0.54rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); width: 92px; flex-shrink: 0; }
+.power-bar-wrap { flex: 1; height: 5px; background: var(--gold-faint); border-radius: 3px; overflow: hidden; }
+.power-bar-fill { height: 100%; border-radius: 3px; }
+.power-val { font-size: 0.6rem; color: var(--muted); width: 26px; text-align: right; }
+.fill-gold { background: linear-gradient(to right, var(--gold), var(--gold-light)); }
+.fill-blue { background: linear-gradient(to right, var(--official), var(--official-light)); }
+.fill-red { background: linear-gradient(to right, var(--shadow-col), var(--shadow-light)); }
+.page-foot { margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid var(--border); font-size: 0.58rem; line-height: 1.8; color: var(--muted); letter-spacing: 0.04em; }
+.page-foot a { color: var(--gold-light); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+@media (max-width: 900px) {
+  .main-layout { grid-template-columns: 1fr; }
+  .map-panel { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+  .chart-panel { padding: 1.5rem 1rem 3rem; }
+  .masthead { padding: 0.8rem 1rem; position: static; }
+  .card { max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="app">
+<header class="masthead">
+  <div class="masthead-left">
+    <a class="back" href="../goverlicious.html">← Atlas</a>
+    <div class="logo">Goverlicious<sup>vol. 1</sup></div>
+    <div class="country-tag">🇪🇺&nbsp; European Union · 2026</div>
+  </div>
+  <div class="controls">
+    <button class="filter-btn active-all" id="filter-all" onclick="setFilter('all')">All Power</button>
+    <button class="filter-btn" id="filter-official" onclick="setFilter('official')">Official Only</button>
+    <button class="filter-btn" id="filter-shadow" onclick="setFilter('shadow')">Shadow Only</button>
+    <button class="collapse-all-btn" id="collapseBtn" onclick="toggleAllTiers()">Collapse All</button>
+  </div>
+</header>
+<div class="main-layout">
+<aside class="map-panel">
+  <div>
+    <div class="map-title">European<br><em>Union</em></div>
+    <div class="map-sub">Supranational Union of 27 States · Updated October 2026</div>
+  </div>
+  <p class="thesis">The EU is the bonus chapter because it breaks the template: there is no head of state, no government that can be voted out, and no single capital. Power is split between institutions that represent Europe (the Commission, Parliament, Court, ECB) and those that represent nations (the European Council and Council of Ministers). The formal rules are unusually detailed — but in practice the biggest capitals, the permanent diplomats of COREPER and the Commission president&#x27;s inner circle settle most things before anyone votes.</p>
+  <div class="map-meta"><div class="meta-item"><div class="meta-label">Type</div><div class="meta-value">Union of 27 Member States</div></div><div class="meta-item"><div class="meta-label">Population</div><div class="meta-value">~450M</div></div><div class="meta-item"><div class="meta-label">Legislature</div><div class="meta-value">Parliament + Council</div></div><div class="meta-item"><div class="meta-label">Commission</div><div class="meta-value">Ursula von der Leyen</div></div><div class="meta-item"><div class="meta-label">European Council</div><div class="meta-value">António Costa</div></div><div class="meta-item"><div class="meta-label">Currency</div><div class="meta-value">Euro (20 states)</div></div></div>
+  <div class="map-svg-wrap"><svg viewBox="0 0 280 280" role="img" aria-label="Map of eu" xmlns="http://www.w3.org/2000/svg"><path d="M52.4,280L53.4,278.7L57.6,276.4L60.7,274.3L63.5,269.1L64.8,265.9L67.9,265.9L70.5,268.1L74.4,267.8L78.8,268.9L80.6,269L84.6,266.1L89.1,265.2L91.8,263.1L95.8,261.5L102.9,260.6L109.9,260.2L112,260.9L115.9,258.9L120.4,258.8L122.1,260.1L125,259.7L129.5,257.6L132.5,258.2L132.3,260.9L135.9,259L136.2,260L134.1,262.5L134.1,264.9L135.5,266.2L135,270.7L132.2,273.2L133,276L135.2,276.1L136.2,278.5L137.8,279.2L140,280L52.4,280ZM236.5,280L236.7,279.5L236.8,279.5L238.3,275.4L240.4,271.8L240.5,271.6L240.1,267.7L241.1,265.6L239.6,263.2L241.1,261.3L238.6,261.7L235.1,260.5L232.2,263.5L225.9,264.1L222.5,261.3L217.9,261.1L217,263.3L214.1,263.9L210,261.1L205.5,261.2L203,256L199.9,253.1L202,248.9L199.3,246.3L203.9,241.1L210.4,240.9L212.2,236.7L220.1,237.4L225.2,233.8L230.1,232.2L237,232.1L244.3,236L250.3,238.2L255.2,237.3L258.8,237.8L263.7,234.9L264.4,232.5L263.3,228.6L260.9,226.5L258.6,225.9L257,224.1L251.7,219.2L246.9,217L243.3,213.5L246.3,212.6L249.8,207.5L247.5,205.1L253.7,202.6L253.5,201.3L249.8,202.3L246.4,202.8L243.6,204.8L239.7,205.1L236.1,207.3L236.3,210.6L236.4,211.1L238.4,212.5L242.7,212.2L241.9,214.3L237.3,215.3L231.6,218.7L229.3,217.5L230.2,214.8L225.6,213L226.4,211.9L230.4,209.9L229.7,209.2L229.2,208.5L222.6,207L222.4,204.7L218.5,205.5L216.9,208.8L213.7,213.2L213.8,214.8L211.7,216L210.5,215.5L209.3,222.5L207.1,224.9L205.6,229L206.9,232.3L207.4,234.4L211.1,236.2L210.3,237.6L205.4,237.9L203.6,239.6L200.1,242.6L198.8,240L198.8,238.9L196.3,238.7L194.1,238.2L189,239.6L191.9,242.7L189.8,243.6L187.5,243.6L185.2,240.8L184.5,242L185.4,245.3L187.5,247.8L185.9,249L188.2,251.5L190.3,253L190.4,256L186.5,254.6L187.7,257.3L185.1,257.9L186.7,262.5L183.9,262.5L180.4,260.3L178.9,256.1L178.1,252.5L176.5,250.1L174.4,247L174.1,245.4L173.4,245.1L173.3,243.9L171,242L170.6,239.4L170.9,235.6L171.5,233.9L170.8,233L169.9,232.5L168.8,230.7L167,229.6L163,227.5L160.6,225.4L156.8,223.7L153.2,219.4L154.1,219L152.2,216.5L152.1,214.5L149.4,213.6L148.1,216.1L146.9,214.2L147,212.1L147.1,212L148.1,211.4L144.7,210.6L141.3,212.7L141.5,215.6L141,217.3L142.4,220.3L146.3,223.2L148.5,228L153.1,232.5L156.4,232.5L157.4,233.8L156.2,234.9L160,236.9L163.1,238.6L166.7,241.4L167.1,242.5L166.3,244.4L164,241.9L160.3,241L158.6,244.5L161.6,246.5L161.1,249.4L159.4,249.7L157.1,254.2L155.4,254.7L155.4,253L156.2,250.2L157.2,249L155.5,245.9L154.2,243.1L152.5,242.4L151.3,240.1L148.6,239.1L146.8,236.8L143.7,236.5L140.4,234L136.6,230.3L133.7,227L132.4,221.3L130.3,220.6L126.9,218.7L125,219.5L122.6,222.2L120.8,222.6L117,225.9L108.8,224.3L102.7,226.2L102.2,229.6L102.4,232.9L98.5,236.6L93.1,237.8L92.7,239.7L90.1,242.7L88.5,247.2L90.1,250.2L87.7,252.6L86.8,256.1L83.7,257.1L80.7,261.2L75.4,261.2L71.4,261.1L68.8,263L67.2,264.9L65.1,264.5L63.6,262.8L62.4,259.8L58.5,258.9L56.8,260.3L54.6,259.6L52.4,260.1L53.1,256L52.7,252.8L50.8,252.3L49.8,250.2L50.1,246.7L51.8,244.7L52.1,242.5L53,239.2L52.9,236.9L52,234.9L51.8,233L52.1,228.9L50.3,226.5L56.3,222.3L61.4,223.3L67,223.3L71.5,224.3L74.9,224L81.7,224.2L83.9,220.7L84.7,208.9L80.4,202.5L77.3,199.4L70.9,197L70.5,192.4L75.9,191L82.9,192.6L81.6,185.4L85.5,188.2L95.3,183.1L96.6,177.7L100.2,176.4L103.6,175L105.7,173.2L109.4,163.1L115.1,160.2L118.6,160.4L119.4,158.9L122.9,158.5L123.7,160L126.5,156.6L125.6,153.9L125.4,149.8L123.7,145.7L123.6,138L124.3,136L125.5,133.7L129.2,133.2L130.6,131L134,128.8L133.9,132.8L132.6,135.3L133.1,137.5L135.4,138.6L134.4,141.5L133.1,140.7L130.1,146L131.2,149.6L131.3,152.4L135.5,154.1L135.5,156.6L139.8,155.3L142.1,153.3L146.8,156.2L148.8,158.4L151.7,156.3L158.2,153L163.5,150.6L167.7,151.8L168,153.6L172,153.6L173,150.5L178.8,148.1L177.9,141.9L178,136.2L180.1,131.3L184,128.6L187.4,134.5L190.7,134.3L191.5,128.3L192,123.7L190.5,124.7L187.8,121.8L187.4,117.2L192.7,114.9L198,113.7L202.6,115L206.9,114.8L211.6,110.2L207.3,106.2L199.7,106.9L192.3,110L185.5,111.7L183,107.1L179,104.3L179.9,95.8L177.9,87.7L179.9,82.3L183.7,76.4L193.3,65.9L196.1,63.9L195.6,59.6L189.8,54.8L182.6,57.7L178.5,64.7L179.2,70.7L172.5,78.4L164.4,86.4L161.4,99L164.4,105.1L168.4,109.8L164.5,119.1L160.2,121L158.6,134.2L156.2,141.3L151.1,140.6L148.7,146.5L143.9,146.8L142.6,139.8L139.1,131.1L135.9,119.9L133.1,114.8L124.8,124.2L119.2,126.1L113.4,122L111.9,113.2L110.6,93.4L114.4,87.6L125.5,79.9L133.8,70L141.4,56.1L151.5,35.5L158.5,27L170,12.2L179.2,6.9L186.1,7.5L190.7,0L214.6,0L214.6,0L220.8,4.4L215.4,7.7L220,15.4L224.3,11.2L231.1,18.4L242.6,21.2L258.5,34.2L261.7,39.4L261.9,46.6L257.3,52.1L250.4,54.9L231.7,46.9L228.7,48.3L235.5,55.9L235.8,60.6L236,70.7L241.4,73.6L244.7,76.1L245.3,71.5L242.7,67.3L245.4,63.5L255.5,69.7L259,67.3L256.2,60L266,49.9L269.8,50.5L273.8,54.1L276.2,46.9L272.7,40.5L274.8,34L271.7,26.9L280,29.5L280,280ZM126.3,228.7L129,226.6L129.7,231.4L128.3,235.8L126.4,234.6L125.5,230.8ZM199.8,268.3L199.3,269.8L193.2,270.2L193.3,269.4L188.2,268.4L189,266.2L191.2,267.9L194.5,267.6L197.6,268L197.5,268.9ZM63.7,157.6L64.4,162.7L61.3,168.8L53.8,172.9L47.9,171.8L51.3,164.7L49.1,157.5L54.8,151.9L58,148.5L61.5,148.2L66,152.7ZM151.5,253.4L154.7,253L153.2,257.1L153.8,258.8L152.9,261.4L149.7,259.5L147.6,258.9L141.8,256.2L142.3,253.5L147.2,254ZM126.2,238.4L128.3,236.7L130.8,240.7L130.2,247.9L128.3,247.5L126.6,249.3L125,247.9L124.8,241.3L123.9,238.2ZM141.5,141.3L142.8,145L140.3,150.9L135.9,146.8L135.3,143.7ZM76.7,160.9L76.7,160.9L77.3,156.8L74.5,152.4L74.5,152.3L69.4,151L68.4,149L69.9,145.8L68.5,143.7L66.3,147.2L66,140L63.9,136.2L65.4,128.1L68.7,121.7L72,122.3L77.1,121.6L72.6,130.2L76.9,129.1L81.5,129.2L80.4,135.5L76.6,142.3L80.9,142.8L81.3,143.6L85,152.2L87.9,153.4L90.5,161.5L91.7,164.2L96.7,165.6L96.2,169.9L94.1,171.9L95.8,175.4L92,178.9L86.4,178.8L79.3,180.7L77.3,179.4L74.5,182.4L70.7,181.7L67.7,184.2L65.5,182.9L71.6,175.9L75.4,174.5L75.4,174.5L68.8,173.4L67.6,170.7L72,168.6L69.7,164.9L70.5,160.3ZM0,53.8L3.5,57.6L9.9,52L15.1,54.9L22,49.4L28.9,50.1L28.9,50.1L27.9,56.8L32.7,63.7L27.2,71.2L15.2,77.8L11.5,79.5L6,78.1L0,76.5L0,53.8ZM226.8,269.1L227.1,269.1L227.7,267.8L230.7,267.9L234.5,266.4L231.7,268.6L232,269.5L232.1,269.9L227.8,272L225.8,271.3L224.8,269.3Z" class="ctx"/><path d="M160.8,195.9L160.5,198.5L158.1,198.5L158.9,199.9L157.5,203.8L156.7,204.8L153.1,205L151,206.4L147.5,205.9L141.5,204.3L140.6,202.2L136.4,203.3L136,204.4L133.4,203.6L131.3,203.4L129.4,202.3L130,200.8L129.9,199.7L131.1,199.3L133.3,201L133.8,199.4L137.5,199.7L140.5,198.6L142.5,198.7L143.9,200L144.2,199L143.6,194.9L145.1,194.1L146.6,191.2L149.7,193.2L152.1,190.6L153.6,190.1L156.8,192.1L158.8,191.8L160.7,192.9L160.4,193.7Z" class="land" /><path d="M115.5,178.7L115,183.1L113.9,183.3L113.5,187L109.8,184L107.6,184.5L104.7,181.5L102.8,178.8L100.8,178.7L100.2,176.4L103.6,175L106.6,175.6L110.5,174.2L113.2,177.1Z" class="land" /><path d="M184.6,219.5L185.8,221.9L187.4,221.4L190.6,222.3L196.8,222.6L198.9,221.2L203.8,219.8L206.8,221.9L209.3,222.5L207.1,224.9L205.6,229L206.9,232.3L203.3,231.5L199.1,233.3L199,236.1L195.2,236.6L192.3,234.6L188.9,236.2L185.8,236L185.5,232.3L183.4,230.5L184.1,229.7L183.7,229L184.4,227.2L186,225.4L183.9,222.9L183.6,220.8Z" class="land" /><path d="M159.1,205.9L160.4,206.7L163.5,209.3L167,210.4L168.6,209.5L169.6,211.9L170.9,213.6L169.3,215.8L167.4,214.5L164.5,214.6L160.9,213.6L158.9,213.7L158,214.9L156.5,213.6L155.6,216L157.7,218.8L158.6,220.6L160.5,222.8L162.1,224L163.7,226.5L167.4,228.6L167,229.6L163,227.5L160.6,225.4L156.8,223.7L153.2,219.4L154.1,219L152.2,216.5L152.1,214.5L149.4,213.6L148.1,216.1L146.9,214.2L147,212.1L147.1,212L150.1,212.2L150.8,211.2L152.2,212.2L153.9,212.3L153.9,210.6L155.3,210L155.7,207.6Z" class="land" /><path d="M226.8,269.1L227.6,269.4L228.7,268.9L229.5,269L229.8,269.3L229.9,269.8L230.1,269.6L230.7,269.7L231.5,269.3L232,269.5L232.1,269.9L227.8,272L225.8,271.3L224.8,269.3Z" class="land" /><path d="M152.6,176.6L154.6,178.8L157.7,179.4L157.4,181.2L159.7,182.5L160.3,180.8L163.2,181.6L163.6,183.6L166.7,184L168.6,187.2L167.4,187.2L166.8,188.4L165.8,188.7L165.5,190.1L164.7,190.4L164.6,191L163.2,191.7L161.3,191.6L160.7,192.9L158.8,191.8L156.8,192.1L153.6,190.1L152.1,190.6L149.7,193.2L146.6,191.2L144.3,188.4L142.1,186.9L141.7,184.1L140.9,182.2L144,180.8L145.5,179.1L148.6,177.8L149.6,176.6L150.7,177.3Z" class="land" /><path d="M131.2,149.6L128.6,150.7L125.4,149.8L123.7,145.7L123.6,138L124.3,136L125.5,133.7L129.2,133.2L130.6,131L134,128.8L133.9,132.8L132.6,135.3L133.1,137.5L135.4,138.6L134.4,141.5L133.1,140.7L130.1,146ZM141.5,141.3L142.8,145L140.3,150.9L135.9,146.8L135.3,143.7Z" class="land" /><path d="M206.9,114.8L207.5,116.2L204.5,120.9L205.8,128.4L204,130.8L200.5,130.8L196.9,127.9L195.1,126.9L191.5,128.3L192,123.7L190.5,124.7L187.8,121.8L187.4,117.2L192.7,114.9L198,113.7L202.6,115Z" class="land" /><path d="M209.4,21.2L208.8,29.3L215.2,36.8L211.4,44.9L216.2,56.9L213.4,65.5L217.2,72.7L215.5,78.9L221.7,85.3L220.1,89.9L216.2,95.1L207.3,106.2L199.7,106.9L192.3,110L185.5,111.7L183,107.1L179,104.3L179.9,95.8L177.9,87.7L179.9,82.3L183.7,76.4L193.3,65.9L196.1,63.9L195.6,59.6L189.8,54.8L188.4,50.7L188.3,34.1L181.7,26.4L176.2,20.7L178.7,17.6L183.3,23.8L188.8,23.2L193.3,26L197.3,20.9L199.3,12.1L205.8,8L211.2,12.9Z" class="land" /><path d="M115.6,187.4L117.6,189.1L123.6,190.3L121.5,194.6L121,199.1L119.8,200.1L117.9,199.6L118,201.1L115,204.6L114.9,207.3L116.9,206.4L118.3,209L118.2,210.7L119.4,213L117.9,214.8L119,219.4L121.3,220.1L120.8,222.6L117,225.9L108.8,224.3L102.7,226.2L102.2,229.6L97.3,230.4L92.6,227.8L91.1,229L83.4,226.4L81.7,224.2L83.9,220.7L84.7,208.9L80.4,202.5L77.3,199.4L70.9,197L70.5,192.4L75.9,191L82.9,192.6L81.6,185.4L85.5,188.2L95.3,183.1L96.6,177.7L100.2,176.4L100.8,178.7L102.8,178.8L104.7,181.5L107.6,184.5L109.8,184L113.5,187L114.4,187.6ZM126.3,228.7L129,226.6L129.7,231.4L128.3,235.8L126.4,234.6L125.5,230.8Z" class="land" /><path d="M148.8,158.4L149.8,162L148.6,163.9L150.2,166.3L151.2,170L150.9,172.3L152.6,176.6L150.7,177.3L149.6,176.6L148.6,177.8L145.5,179.1L144,180.8L140.9,182.2L141.7,184.1L142.1,186.9L144.3,188.4L146.6,191.2L145.1,194.1L143.6,194.9L144.2,199L143.9,200L142.5,198.7L140.5,198.6L137.5,199.7L133.8,199.4L133.3,201L131.1,199.3L129.9,199.7L125.4,197.8L124.5,199.1L121,199.1L121.5,194.6L123.6,190.3L117.6,189.1L115.6,187.4L115.8,184.6L115,183.1L115.5,178.7L114.8,171.6L117.3,171.6L118.3,169.1L119.4,162.7L118.6,160.4L119.4,158.9L122.9,158.5L123.7,160L126.5,156.6L125.6,153.9L125.4,149.8L128.6,150.7L131.2,149.6L131.3,152.4L135.5,154.1L135.5,156.6L139.8,155.3L142.1,153.3L146.8,156.2Z" class="land" /><path d="M199.8,268.3L199.3,269.8L193.2,270.2L193.3,269.4L188.2,268.4L189,266.2L191.2,267.9L194.5,267.6L197.6,268L197.5,268.9ZM185.8,236L188.9,236.2L192.3,234.6L195.2,236.6L199,236.1L199.1,233.3L201.1,234.8L199.8,238.2L198.8,238.9L196.3,238.7L194.1,238.2L189,239.6L191.9,242.7L189.8,243.6L187.5,243.6L185.2,240.8L184.5,242L185.4,245.3L187.5,247.8L185.9,249L188.2,251.5L190.3,253L190.4,256L186.5,254.6L187.7,257.3L185.1,257.9L186.7,262.5L183.9,262.5L180.4,260.3L178.9,256.1L178.1,252.5L176.5,250.1L174.4,247L174.1,245.4L176,242.8L176.3,241L177.6,240.2L177.7,238.8L180.5,238.3L182.1,237.1L184.3,237.2L185,236.2Z" class="land" /><path d="M182.2,194L184.5,195.8L184.8,197.4L182.2,198.7L180.3,202.9L177.7,207.1L174.4,208.2L171.8,208L168.6,209.5L167,210.4L163.5,209.3L160.4,206.7L159.1,205.9L158.3,203.9L157.5,203.8L158.9,199.9L158.1,198.5L160.5,198.5L160.8,195.9L162.9,197.5L164.5,198.2L168,197.4L168.3,196.2L170,196L172,195L172.5,195.4L174.4,194.6L175.4,193.2L176.8,192.8L181.3,194.7Z" class="land" /><path d="M63.7,157.6L64.4,162.7L61.3,168.8L53.8,172.9L47.9,171.8L51.3,164.7L49.1,157.5L54.8,151.9L58,148.5L58.8,152.4L58,156.3L60.6,156.2Z" class="land" /><path d="M133.4,203.6L136,204.4L136.4,203.3L140.6,202.2L141.5,204.3L147.5,205.9L147,208.9L148.1,211.4L144.7,210.6L141.3,212.7L141.5,215.6L141,217.3L142.4,220.3L146.3,223.2L148.5,228L153.1,232.5L156.4,232.5L157.4,233.8L156.2,234.9L160,236.9L163.1,238.6L166.7,241.4L167.1,242.5L166.3,244.4L164,241.9L160.3,241L158.6,244.5L161.6,246.5L161.1,249.4L159.4,249.7L157.1,254.2L155.4,254.7L155.4,253L156.2,250.2L157.2,249L155.5,245.9L154.2,243.1L152.5,242.4L151.3,240.1L148.6,239.1L146.8,236.8L143.7,236.5L140.4,234L136.6,230.3L133.7,227L132.4,221.3L130.3,220.6L126.9,218.7L125,219.5L122.6,222.2L120.8,222.6L121.3,220.1L119,219.4L117.9,214.8L119.4,213L118.2,210.7L118.3,209L120.1,210.3L122.2,210L124.5,208L125.2,209L127.2,208.8L128.1,206.3L131.2,207.1L133.1,206.1ZM151.5,253.4L154.7,253L153.2,257.1L153.8,258.8L152.9,261.4L149.7,259.5L147.6,258.9L141.8,256.2L142.3,253.5L147.2,254ZM126.2,238.4L128.3,236.7L130.8,240.7L130.2,247.9L128.3,247.5L126.6,249.3L125,247.9L124.8,241.3L123.9,238.2Z" class="land" /><path d="M204,130.8L206,132.6L206.4,136.4L207.7,140.8L203.2,143.7L200.7,145L196.6,141.3L194.4,140.9L193.8,139.3L189.7,140L182.7,139.6L177.9,141.9L178,136.2L180.1,131.3L184,128.6L187.4,134.5L190.7,134.3L191.5,128.3L195.1,126.9L196.9,127.9L200.5,130.8Z" class="land" /><path d="M200.7,145L201,148.3L197.6,150.6L196.6,154.7L192.1,157.4L188,157.3L187,155.1L184.9,154.4L184.6,152.5L185,150.5L183.1,149.4L178.8,148.1L177.9,141.9L182.7,139.6L189.7,140L193.8,139.3L194.4,140.9L196.6,141.3Z" class="land" /><path d="M115,183.1L115.8,184.6L115.6,187.4L114.4,187.6L113.5,187L113.9,183.3Z" class="land" /><path d="M118.6,160.4L119.4,162.7L118.3,169.1L117.3,171.6L114.8,171.6L115.5,178.7L113.2,177.1L110.5,174.2L106.6,175.6L103.6,175L105.7,173.2L109.4,163.1L115.1,160.2Z" class="land" /><path d="M188,157.3L188.2,160.5L189.4,163.1L189.4,165.9L186.9,167.3L188.1,170.5L188.2,173.5L190.3,179.3L189.9,181.2L187.8,181.9L184,187.3L185.1,190.2L184.2,189.8L180.2,187.4L177.2,188.3L175.2,187.6L172.7,189L170.6,186.7L168.9,187.6L168.6,187.2L166.7,184L163.6,183.6L163.2,181.6L160.3,180.8L159.7,182.5L157.4,181.2L157.7,179.4L154.6,178.8L152.6,176.6L150.9,172.3L151.2,170L150.2,166.3L148.6,163.9L149.8,162L148.8,158.4L151.7,156.3L158.2,153L163.5,150.6L167.7,151.8L168,153.6L172,153.6L177.2,154.5L184.9,154.4L187,155.1Z" class="land" /><path d="M51.8,233L53.4,231.5L55.1,230.7L56.1,233.5L58.6,233.5L59.3,232.8L61.8,233L62.9,235.8L61,237.3L60.9,241.6L60.3,242.4L60.1,245L58.3,245.4L60,248.7L58.8,252.2L60.2,253.8L59.7,255.2L58.1,257.2L58.5,258.9L56.8,260.3L54.6,259.6L52.4,260.1L53.1,256L52.7,252.8L50.8,252.3L49.8,250.2L50.1,246.7L51.8,244.7L52.1,242.5L53,239.2L52.9,236.9L52,234.9Z" class="land" /><path d="M207.9,212.1L209.8,213.2L211.8,212.2L213.7,213.2L213.8,214.8L211.7,216L210.5,215.5L209.3,222.5L206.8,221.9L203.8,219.8L198.9,221.2L196.8,222.6L190.6,222.3L187.4,221.4L185.8,221.9L184.6,219.5L183.8,218.4L184.8,217.5L183.8,216.7L182.4,218L180,216.3L179.7,213.9L177.1,212.5L176.6,210.6L174.4,208.2L177.7,207.1L180.3,202.9L182.2,198.7L184.8,197.4L186.6,196.1L189.2,196.8L191.9,196.8L193.8,198.3L195.3,197.4L198.4,196.8L199.4,195.3L201.2,195.3L202.4,195.9L203.7,197.8L205.1,200.4L207.5,204.1L207.6,206.7L207.2,209.3Z" class="land" /><path d="M184.2,189.8L183,191.5L182.2,194L181.3,194.7L176.8,192.8L175.4,193.2L174.4,194.6L172.5,195.4L172,195L170,196L168.3,196.2L168,197.4L164.5,198.2L162.9,197.5L160.8,195.9L160.4,193.7L160.7,192.9L161.3,191.6L163.2,191.7L164.6,191L164.7,190.4L165.5,190.1L165.8,188.7L166.8,188.4L167.4,187.2L168.6,187.2L168.9,187.6L170.6,186.7L172.7,189L175.2,187.6L177.2,188.3L180.2,187.4Z" class="land" /><path d="M147.5,205.9L151,206.4L153.1,205L156.7,204.8L157.5,203.8L158.3,203.9L159.1,205.9L155.7,207.6L155.3,210L153.9,210.6L153.9,212.3L152.2,212.2L150.8,211.2L150.1,212.2L147.1,212L148.1,211.4L147,208.9Z" class="land" /><path d="M58.5,258.9L58.1,257.2L59.7,255.2L60.2,253.8L58.8,252.2L60,248.7L58.3,245.4L60.1,245L60.3,242.4L60.9,241.6L61,237.3L62.9,235.8L61.8,233L59.3,232.8L58.6,233.5L56.1,233.5L55.1,230.7L53.4,231.5L51.8,233L52.1,228.9L50.3,226.5L56.3,222.3L61.4,223.3L67,223.3L71.5,224.3L74.9,224L81.7,224.2L83.4,226.4L91.1,229L92.6,227.8L97.3,230.4L102.2,229.6L102.4,232.9L98.5,236.6L93.1,237.8L92.7,239.7L90.1,242.7L88.5,247.2L90.1,250.2L87.7,252.6L86.8,256.1L83.7,257.1L80.7,261.2L75.4,261.2L71.4,261.1L68.8,263L67.2,264.9L65.1,264.5L63.6,262.8L62.4,259.8Z" class="land" /><path d="M135.9,119.9L137.7,115.1L141.2,109.4L142.6,99.4L139.9,94.9L139.7,82.9L142.4,74.1L146.5,74.2L148,70.4L146.5,67.1L153,52.9L157.2,41.1L159.9,33.2L163.9,33.3L165.1,27L172.9,28.8L173.6,21.2L176.2,20.7L181.7,26.4L188.3,34.1L188.4,50.7L189.8,54.8L182.6,57.7L178.5,64.7L179.2,70.7L172.5,78.4L164.4,86.4L161.4,99L164.4,105.1L168.4,109.8L164.5,119.1L160.2,121L158.6,134.2L156.2,141.3L151.1,140.6L148.7,146.5L143.9,146.8L142.6,139.8L139.1,131.1Z" class="land" /><circle cx="107.9" cy="178.3" r="4.2" class="cap"/><circle cx="107.9" cy="178.3" r="8" class="cap-ring"/><text x="113.9" y="181.3" text-anchor="start" class="cap-label">Brussels</text><circle cx="122.1" cy="193.1" r="2.6" class="city"/><text x="128.1" y="196.1" text-anchor="start" class="city-label">Strasbourg</text><circle cx="126" cy="183.2" r="2.6" class="city"/><text x="132" y="186.2" text-anchor="start" class="city-label">Frankfurt</text></svg></div>
+  <div class="gauge">
+    <div class="gauge-title"><span>Does the org chart tell the truth?</span><span>60/100</span></div>
+    <div class="gauge-bar"><div class="gauge-pin" style="left:calc(60% - 1px)"></div></div>
+    <div class="gauge-ends"><span>Shadow rules</span><span>Formal rules</span></div>
+  </div>
+  <div class="mayor-section">
+    <div class="mayor-section-title">Capitals That Count</div>
+    <div class="mayor-list"><button class="mayor-item" onclick="showMayor('de')"><span class="mayor-dot"></span><span class="mayor-name">Germany</span><span class="mayor-city">Friedrich Merz</span></button><button class="mayor-item" onclick="showMayor('fr')"><span class="mayor-dot"></span><span class="mayor-name">France</span><span class="mayor-city">Emmanuel Macron</span></button><button class="mayor-item" onclick="showMayor('it')"><span class="mayor-dot"></span><span class="mayor-name">Italy</span><span class="mayor-city">Giorgia Meloni</span></button><button class="mayor-item" onclick="showMayor('pl')"><span class="mayor-dot"></span><span class="mayor-name">Poland</span><span class="mayor-city">Donald Tusk</span></button><button class="mayor-item" onclick="showMayor('hu')"><span class="mayor-dot"></span><span class="mayor-name">Hungary</span><span class="mayor-city">Péter Magyar</span></button></div>
+  </div>
+  <div class="legend"><div class="legend-title">Legend</div><div class="legend-row"><div class="legend-swatch" style="background:var(--gold)"></div>Union Leadership</div><div class="legend-row"><div class="legend-swatch" style="background:var(--official-light)"></div>Official / Formal Power</div><div class="legend-row"><div class="legend-swatch" style="background:var(--shadow-light)"></div>Shadow / Influence</div><div class="legend-row"><div class="legend-swatch" style="background:var(--accent2)"></div>Member States</div></div>
+</aside>
+<main class="chart-panel" id="chartPanel">
+
+  <div class="tier-block" id="tier1">
+    <div class="tier-header" onclick="toggleTier('tier1')">
+      <span class="tier-number">Tier I</span>
+      <span class="tier-name">The Leaders&#x27; Table</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier1-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier1-body"><button class="card monarchy" onclick="showDetail('euco')" data-type="monarchy"><span class="card-icon">⭐</span><span class="card-title">European Council</span><span class="card-role">27 Heads of Government · President António Costa</span><span class="card-preview">The real summit of power: prime ministers and presidents setting the Union&#x27;s direction, mostly by consensus.</span><span class="card-badge badge-gold">Apex</span></button></div>
+  </div>
+  <div class="tier-connector"></div>
+  <div class="tier-block" id="tier2">
+    <div class="tier-header" onclick="toggleTier('tier2')">
+      <span class="tier-number">Tier II</span>
+      <span class="tier-name">The Commission</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier2-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier2-body"><button class="card official" onclick="showDetail('vdl')" data-type="official"><span class="card-icon">🏛️</span><span class="card-title">Ursula von der Leyen</span><span class="card-role">Commission President · Second Term</span><span class="card-preview">Runs the EU&#x27;s executive — and has centralised it in her own office more than any predecessor.</span><span class="card-badge badge-blue">Executive</span></button><button class="card official" onclick="showDetail('kallas')" data-type="official"><span class="card-icon">🌍</span><span class="card-title">Kaja Kallas</span><span class="card-role">High Representative · Vice-President</span><span class="card-preview">Europe&#x27;s foreign-policy chief — with no army and needing 27 votes for most decisions.</span><span class="card-badge badge-blue">Executive</span></button><button class="card official" onclick="showDetail('dgs')" data-type="official"><span class="card-icon">🗂️</span><span class="card-title">The Directorates-General</span><span class="card-role">DG COMP · DG TRADE · DG FISMA · Legal Service</span><span class="card-preview">The Commission&#x27;s permanent machine — where rules on mergers, trade and Big Tech are actually written.</span><span class="card-badge badge-teal">Bureaucracy</span></button></div>
+  </div>
+  <div class="tier-connector"></div>
+  <div class="tier-block" id="tier3">
+    <div class="tier-header" onclick="toggleTier('tier3')">
+      <span class="tier-number">Tier III</span>
+      <span class="tier-name">The Legislators</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier3-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier3-body"><button class="card official" onclick="showDetail('council')" data-type="official"><span class="card-icon">🧩</span><span class="card-title">Council of the EU</span><span class="card-role">National Ministers · Rotating Presidency (Ireland, H2 2026)</span><span class="card-preview">National ministers co-legislate with Parliament, mostly by qualified majority: 55% of states, 65% of population.</span><span class="card-badge badge-green">Legislative</span></button><button class="card official" onclick="showDetail('ep')" data-type="official"><span class="card-icon">🏠</span><span class="card-title">European Parliament</span><span class="card-role">720 MEPs · President Roberta Metsola</span><span class="card-preview">The only directly elected EU institution. Equal co-legislator on most laws — and it can sack the whole Commission.</span><span class="card-badge badge-green">Legislative</span></button><button class="card influence" onclick="showDetail('coreper')" data-type="shadow"><span class="card-icon">🤫</span><span class="card-title">COREPER</span><span class="card-role">The Ambassadors&#x27; Committee</span><span class="card-preview">27 permanent representatives settle most legislation before ministers ever meet.</span><span class="card-badge badge-red">Diplomatic Engine</span></button></div>
+  </div>
+  <div class="tier-connector"></div>
+  <div class="tier-block" id="tier4">
+    <div class="tier-header" onclick="toggleTier('tier4')">
+      <span class="tier-number">Tier IV</span>
+      <span class="tier-name">Judges &amp; the Euro</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier4-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier4-body"><button class="card official" onclick="showDetail('cjeu')" data-type="official"><span class="card-icon">⚖️</span><span class="card-title">Court of Justice of the EU</span><span class="card-role">Luxembourg · 27 Judges</span><span class="card-preview">Invented EU law&#x27;s supremacy over national law — and still decides where Brussels&#x27; power ends.</span><span class="card-badge badge-purple">Judicial</span></button><button class="card official" onclick="showDetail('ecb')" data-type="official"><span class="card-icon">💶</span><span class="card-title">European Central Bank</span><span class="card-role">Frankfurt · President Christine Lagarde</span><span class="card-preview">Sets interest rates for 20 countries. &#x27;Whatever it takes&#x27; saved the euro in 2012.</span><span class="card-badge badge-teal">Monetary</span></button></div>
+  </div>
+  <div class="tier-connector"></div>
+  <div class="tier-block" id="tier5">
+    <div class="tier-header" onclick="toggleTier('tier5')">
+      <span class="tier-number">Tier V</span>
+      <span class="tier-name">Influence in the Bubble</span><span class="tier-side">Shadow</span>
+      <div class="tier-line"></div>
+      <span class="tier-toggle" id="tier5-toggle">▾</span>
+    </div>
+    <div class="tier-body" id="tier5-body"><button class="card influence" onclick="showDetail('bigcapitals')" data-type="shadow"><span class="card-icon">🏛️</span><span class="card-title">Berlin–Paris (and now Rome &amp; Warsaw)</span><span class="card-role">The Directorate Behind the Table</span><span class="card-preview">Little moves without a Franco-German deal. Italy and Poland increasingly decide what follows.</span><span class="card-badge badge-red">Power Bloc</span></button><button class="card influence" onclick="showDetail('lobbies')" data-type="shadow"><span class="card-icon">💼</span><span class="card-title">The Lobby Industry</span><span class="card-role">~12,000 Registered Organisations</span><span class="card-preview">Brussels rivals Washington as a lobbying capital — Big Tech now outspends almost everyone.</span><span class="card-badge badge-orange">Lobbying</span></button><button class="card influence" onclick="showDetail('farmers')" data-type="shadow"><span class="card-icon">🚜</span><span class="card-title">Farmers &amp; the CAP</span><span class="card-role">Copa-Cogeca · Tractor Protests</span><span class="card-preview">About a third of the EU budget goes to farming. Tractors on the streets have rolled back green rules.</span><span class="card-badge badge-orange">Sector Lobby</span></button><button class="card influence" onclick="showDetail('bondmarkets')" data-type="shadow"><span class="card-icon">📉</span><span class="card-title">Bond Markets &amp; Ratings</span><span class="card-role">Spreads · Rating Agencies</span><span class="card-preview">When spreads on Italian or French debt jump, Brussels and Frankfurt listen.</span><span class="card-badge badge-orange">Markets</span></button><button class="card influence" onclick="showDetail('usapower')" data-type="shadow"><span class="card-icon">🦅</span><span class="card-title">Washington</span><span class="card-role">NATO · Tariffs · Tech</span><span class="card-preview">US security guarantees, tariffs and Big Tech set the outer limits of European choices.</span><span class="card-badge badge-red">External</span></button></div>
+  </div>
+  <footer class="page-foot">
+    Goverlicious · European Union · data as of October 2026. Power scores (0–100) are editorial judgements, not measurements.
+    Maps: Natural Earth (public domain). Part of <a href="../goverlicious.html">the Goverlicious power atlas</a> on <a href="https://www.digidrifters.com">Digidrifters</a>.
+  </footer>
+</main>
+</div>
+</div>
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
+<aside class="detail-panel" id="detailPanel" aria-live="polite">
+  <button class="detail-close" onclick="closeDetail()" aria-label="Close">✕</button>
+  <div id="detailContent"></div>
+</aside>
+<script>
+const details = {"euco": {"icon": "⭐", "type": "The Leaders' Table", "title": "European Council", "role": "27 Heads of Government · President António Costa", "body": "The European Council brings together the 27 heads of state or government. It does not legislate, but it sets the EU's political direction, nominates the Commission president and handles the crises — euro, migration, Ukraine — that the treaties never anticipated. Decisions are usually by consensus, which means any single leader can block, and the biggest capitals carry the most weight.\n\nAntónio Costa, former Portuguese prime minister, has chaired it since December 2024. His job is to broker deals; his power is the pen on the summit conclusions.", "facts": [{"l": "Members", "v": "27 leaders"}, {"l": "President", "v": "António Costa"}, {"l": "Since", "v": "Dec 2024"}, {"l": "Decides By", "v": "Consensus"}], "powers": [["Formal", 75, "fill-gold"], ["Real Power", 90, "fill-gold"], ["Transparency", 25, "fill-gold"]], "titleClass": "gold"}, "vdl": {"icon": "🏛️", "type": "The Commission", "title": "Ursula von der Leyen", "role": "Commission President · Second Term", "body": "The Commission president leads 27 commissioners and around 32,000 staff. The Commission alone can propose EU laws, enforces competition and trade rules, negotiates trade deals and manages the budget. Von der Leyen, a former German defence minister, began her second five-year term in December 2024.\n\nShe is widely seen as the most presidential Commission chief yet: key decisions run through her cabinet in the Berlaymont's 13th floor, often bypassing commissioners. Her second term is defined by competitiveness, defence (the SAFE loan instrument and 'ReArm Europe') and managing trade conflict with Trump's Washington.", "facts": [{"l": "In Office", "v": "Since Dec 2019"}, {"l": "Term Ends", "v": "2029"}, {"l": "Staff", "v": "~32,000"}, {"l": "Monopoly", "v": "Legislative initiative"}], "powers": [["Formal", 85, "fill-blue"], ["Agenda", 85, "fill-blue"], ["Accountability", 40, "fill-blue"]], "titleClass": ""}, "kallas": {"icon": "🌍", "type": "The Commission", "title": "Kaja Kallas", "role": "High Representative · Vice-President", "body": "The High Representative chairs foreign ministers' meetings and runs the European External Action Service. Kallas, former Estonian prime minister, is among the most hawkish voices on Russia. But foreign policy still needs unanimity, so her power is to propose and persuade.", "facts": [{"l": "Holder", "v": "Kaja Kallas"}, {"l": "Since", "v": "Dec 2024"}, {"l": "Service", "v": "EEAS"}, {"l": "Voting", "v": "Unanimity"}], "powers": [["Formal", 60, "fill-blue"], ["Real Power", 40, "fill-blue"], ["Visibility", 60, "fill-blue"]], "titleClass": ""}, "dgs": {"icon": "🗂️", "type": "The Commission", "title": "The Directorates-General", "role": "DG COMP · DG TRADE · DG FISMA · Legal Service", "body": "Commission departments draft legislation, investigate cartels and enforce rules. DG Competition can block mergers worldwide and has fined Google, Apple and Meta billions; DG Trade negotiates on behalf of 450 million people; DG CONNECT enforces the Digital Services and Digital Markets Acts. Their directors-general outlast commissioners and shape what is politically possible.", "facts": [{"l": "Staff", "v": "~32,000 total"}, {"l": "Strongest", "v": "DG COMP · DG TRADE"}, {"l": "Big Tech Fines", "v": "Billions"}, {"l": "Tenure", "v": "Outlasts commissioners"}], "powers": [["Formal", 65, "fill-blue"], ["Real Power", 75, "fill-blue"], ["Visibility", 25, "fill-blue"]], "titleClass": ""}, "council": {"icon": "🧩", "type": "The Legislators", "title": "Council of the EU", "role": "National Ministers · Rotating Presidency (Ireland, H2 2026)", "body": "The Council of the European Union is where national governments amend and adopt laws. Most decisions use qualified majority voting — 15 of 27 states representing 65% of the EU's population — which gives Germany, France, Italy, Spain and Poland heavy weight. Tax, foreign policy and enlargement still require unanimity. The six-month rotating presidency, held by Ireland from July to December 2026, sets the meeting agenda.", "facts": [{"l": "QMV", "v": "55% states + 65% pop."}, {"l": "Unanimity", "v": "Tax, foreign policy"}, {"l": "Presidency", "v": "Ireland, Jul–Dec 2026"}, {"l": "Next", "v": "Lithuania, 2027"}], "powers": [["Formal", 85, "fill-blue"], ["Real Power", 85, "fill-blue"], ["Transparency", 30, "fill-blue"]], "titleClass": ""}, "ep": {"icon": "🏠", "type": "The Legislators", "title": "European Parliament", "role": "720 MEPs · President Roberta Metsola", "body": "Elected every five years, the Parliament co-decides most EU laws and the budget, approves (or rejects) each commissioner after hearings, and can censure the Commission. The centre-right EPP is the largest group; since 2024 the nationalist Patriots for Europe and other right-wing groups have grown, letting the EPP form majorities to its right as well as its left. Roberta Metsola was re-elected president in July 2024; the mid-term handover of top posts falls in January 2027.", "facts": [{"l": "MEPs", "v": "720"}, {"l": "Largest", "v": "EPP"}, {"l": "President", "v": "Roberta Metsola"}, {"l": "Next Election", "v": "2029"}], "powers": [["Formal", 70, "fill-blue"], ["Real Power", 55, "fill-blue"], ["Visibility", 50, "fill-blue"]], "titleClass": ""}, "coreper": {"icon": "🤫", "type": "The Legislators", "title": "COREPER", "role": "The Ambassadors' Committee", "body": "COREPER — the committee of member states' ambassadors to the EU — prepares every Council meeting. Files agreed here go to ministers as 'A items' and are adopted without debate. Combined with 'trilogues', the closed-door negotiations between Council, Parliament and Commission that settle most legislation, it is where the EU really legislates.", "facts": [{"l": "Members", "v": "27 ambassadors"}, {"l": "Agreed Files", "v": "'A items'"}, {"l": "Partner Process", "v": "Trilogues"}, {"l": "Visibility", "v": "Minimal"}], "powers": [["Formal", 40, "fill-red"], ["Real Power", 85, "fill-red"], ["Transparency", 10, "fill-red"]], "titleClass": "amber"}, "cjeu": {"icon": "⚖️", "type": "Judges & the Euro", "title": "Court of Justice of the EU", "role": "Luxembourg · 27 Judges", "body": "The Court of Justice established in the 1960s that EU law has direct effect and overrides national law. It rules on disputes between institutions, infringement cases against member states and questions from national courts. Its rulings have frozen funds to governments over rule-of-law breaches and struck down data-transfer deals with the US.", "facts": [{"l": "Seat", "v": "Luxembourg"}, {"l": "Judges", "v": "1 per state"}, {"l": "Doctrine", "v": "Supremacy"}, {"l": "Landmark", "v": "Schrems I & II"}], "powers": [["Formal", 85, "fill-blue"], ["Real Power", 80, "fill-blue"], ["Visibility", 35, "fill-blue"]], "titleClass": ""}, "ecb": {"icon": "💶", "type": "Judges & the Euro", "title": "European Central Bank", "role": "Frankfurt · President Christine Lagarde", "body": "The ECB conducts monetary policy for the 20 euro states and supervises the biggest banks. Its independence is treaty-protected. Mario Draghi's 2012 pledge to do 'whatever it takes' arguably did more to save the euro than any summit. Lagarde's term formally runs to October 2027, but she is widely expected to leave early, and the race to succeed her — and replace board member Isabel Schnabel — is under way.", "facts": [{"l": "Members", "v": "20 euro states"}, {"l": "President", "v": "Christine Lagarde"}, {"l": "Term To", "v": "Oct 2027"}, {"l": "Succession", "v": "Race under way"}], "powers": [["Formal", 80, "fill-blue"], ["Market Power", 95, "fill-blue"], ["Accountability", 35, "fill-blue"]], "titleClass": ""}, "bigcapitals": {"icon": "🏛️", "type": "Influence in the Bubble", "title": "Berlin–Paris (and now Rome & Warsaw)", "role": "The Directorate Behind the Table", "body": "Formally all 27 states are equal; in practice, Franco-German agreement has historically been the precondition for big moves, from the euro to the 2020 recovery fund. With Germany's Merz weakened at home and France politically gridlocked, Italy's Meloni and Poland's Donald Tusk have gained weight — and coalitions of the 'frugal' north or the eastern flank form around specific files.", "facts": [{"l": "Old Engine", "v": "Paris–Berlin"}, {"l": "Rising", "v": "Rome · Warsaw"}, {"l": "Blocs", "v": "Frugals · Eastern flank"}, {"l": "Tool", "v": "Pre-summit deals"}], "powers": [["Formal", 30, "fill-red"], ["Real Power", 85, "fill-red"], ["Visibility", 45, "fill-red"]], "titleClass": "amber"}, "lobbies": {"icon": "💼", "type": "Influence in the Bubble", "title": "The Lobby Industry", "role": "~12,000 Registered Organisations", "body": "The EU Transparency Register lists around 12,000 lobbying organisations. Tech companies spend the most of any sector, fighting the Digital Markets Act, Digital Services Act and AI Act; chemicals, finance, energy and agriculture are close behind. The 'Qatargate' bribery scandal in the Parliament in 2022 exposed how foreign interests buy influence too.", "facts": [{"l": "Registered", "v": "~12,000"}, {"l": "Top Spender", "v": "Big Tech"}, {"l": "Battles", "v": "DMA · DSA · AI Act"}, {"l": "Scandal", "v": "Qatargate 2022"}], "powers": [["Formal", 15, "fill-red"], ["Influence", 70, "fill-red"], ["Visibility", 35, "fill-red"]], "titleClass": "amber"}, "farmers": {"icon": "🚜", "type": "Influence in the Bubble", "title": "Farmers & the CAP", "role": "Copa-Cogeca · Tractor Protests", "body": "The Common Agricultural Policy still absorbs roughly a third of the EU budget. Farm lobby Copa-Cogeca is one of Brussels' most effective, and the 2024 tractor protests across Europe forced the Commission to scrap or soften parts of the Green Deal. Farmers also fought the EU–Mercosur trade deal — a fight that spilled into (failed) censure motions against the French government in January 2026.", "facts": [{"l": "Budget Share", "v": "~1/3"}, {"l": "Lobby", "v": "Copa-Cogeca"}, {"l": "Win", "v": "Green Deal rollback"}, {"l": "Fight", "v": "Mercosur"}], "powers": [["Formal", 20, "fill-red"], ["Influence", 70, "fill-red"], ["Visibility", 60, "fill-red"]], "titleClass": "amber"}, "bondmarkets": {"icon": "📉", "type": "Influence in the Bubble", "title": "Bond Markets & Ratings", "role": "Spreads · Rating Agencies", "body": "The euro has no single treasury, so markets discipline each government's borrowing. The gap — spread — between a country's bond yields and Germany's is a real-time verdict on its politics. Spreads forced out governments in the 2010–12 euro crisis; in 2025–26 rising French spreads constrained Paris's budget choices.", "facts": [{"l": "Benchmark", "v": "German Bund"}, {"l": "Watched", "v": "Italy · France"}, {"l": "History", "v": "2010–12 crisis"}, {"l": "Backstop", "v": "ECB TPI"}], "powers": [["Formal", 0, "fill-red"], ["Structural Power", 80, "fill-red"], ["Visibility", 40, "fill-red"]], "titleClass": "amber"}, "usapower": {"icon": "🦅", "type": "Influence in the Bubble", "title": "Washington", "role": "NATO · Tariffs · Tech", "body": "Most EU members rely on NATO and the US nuclear umbrella. The Trump administration's tariffs and pressure over EU digital rules have pushed Brussels to build 'strategic autonomy' — joint defence procurement through SAFE, critical-minerals deals and new trade partners — while avoiding an open rupture.", "facts": [{"l": "Security", "v": "NATO"}, {"l": "Trade", "v": "Tariff fights"}, {"l": "Tech", "v": "DMA/DSA clash"}, {"l": "Response", "v": "Strategic autonomy"}], "powers": [["Formal", 0, "fill-red"], ["Structural Power", 80, "fill-red"], ["Hostility", 55, "fill-red"]], "titleClass": "amber"}};
+const regions = {"de": {"icon": "🇩🇪", "name": "Germany", "city": "Friedrich Merz", "desc": "The largest economy and population (~83M) — the biggest weight in Council votes, and the paymaster of the budget. A weakened Merz means a less decisive Berlin.", "facts": [{"l": "Population", "v": "~83M"}, {"l": "Council Weight", "v": "Largest"}, {"l": "Leader", "v": "Merz (CDU)"}, {"l": "Status", "v": "Weakened"}]}, "fr": {"icon": "🇫🇷", "name": "France", "city": "Emmanuel Macron", "desc": "The EU's only nuclear power and its loudest voice for 'strategic autonomy'. Macron dominates summits even as his domestic position erodes.", "facts": [{"l": "Population", "v": "~68M"}, {"l": "Nuclear", "v": "Yes"}, {"l": "Leader", "v": "Macron"}, {"l": "Theme", "v": "Autonomy"}]}, "it": {"icon": "🇮🇹", "name": "Italy", "city": "Giorgia Meloni", "desc": "Meloni's longevity and ties to both the EPP and Washington have made Rome a pivotal broker.", "facts": [{"l": "Population", "v": "~59M"}, {"l": "Leader", "v": "Meloni"}, {"l": "Group", "v": "ECR"}, {"l": "Role", "v": "Broker"}]}, "pl": {"icon": "🇵🇱", "name": "Poland", "city": "Donald Tusk", "desc": "The eastern flank's heavyweight, spending more on defence as a share of GDP than any other NATO member. Tusk, a former European Council president, knows every lever.", "facts": [{"l": "Population", "v": "~37M"}, {"l": "Leader", "v": "Donald Tusk"}, {"l": "Defence", "v": "Highest % in NATO"}, {"l": "Role", "v": "Eastern anchor"}]}, "hu": {"icon": "🇭🇺", "name": "Hungary", "city": "Péter Magyar", "desc": "Péter Magyar's Tisza party ended Viktor Orbán's 16-year rule in April 2026, removing the EU's most frequent veto-wielder on Ukraine and sanctions.", "facts": [{"l": "Election", "v": "12 April 2026"}, {"l": "New PM", "v": "Péter Magyar"}, {"l": "Ended", "v": "Orbán era"}, {"l": "Effect", "v": "Fewer vetoes"}]}};
+const N_TIERS = 5;
+function esc(s) { return s; }
+function setFilter(f) {
+  ['all','official','shadow'].forEach(id => {
+    const btn = document.getElementById('filter-' + id);
+    btn.className = 'filter-btn' + (id === f ? ' active-' + id : '');
+  });
+  document.querySelectorAll('.card, .ministry-card').forEach(card => {
+    const t = card.dataset.type;
+    if (f === 'all') card.classList.remove('filtered-out');
+    else if (f === 'official') card.classList.toggle('filtered-out', t === 'shadow');
+    else card.classList.toggle('filtered-out', t === 'official' || t === 'monarchy');
+  });
+}
+let allCollapsed = false;
+function toggleTier(id) {
+  const c = document.getElementById(id + '-body').classList.toggle('collapsed');
+  document.getElementById(id + '-toggle').classList.toggle('collapsed', c);
+}
+function toggleAllTiers() {
+  allCollapsed = !allCollapsed;
+  for (let i = 1; i <= N_TIERS; i++) {
+    document.getElementById('tier' + i + '-body').classList.toggle('collapsed', allCollapsed);
+    document.getElementById('tier' + i + '-toggle').classList.toggle('collapsed', allCollapsed);
+  }
+  document.getElementById('collapseBtn').textContent = allCollapsed ? 'Expand All' : 'Collapse All';
+}
+function factsHTML(facts) {
+  return `<div><div class="detail-section-title">Key Facts</div><div class="detail-fact-grid">${facts.map(f => `<div class="detail-fact"><div class="detail-fact-label">${f.l}</div><div class="detail-fact-value">${f.v}</div></div>`).join('')}</div></div>`;
+}
+function open_(html) {
+  document.getElementById('detailContent').innerHTML = html;
+  document.getElementById('detailPanel').classList.add('open');
+  document.getElementById('detailOverlay').classList.add('open');
+  document.querySelector('.detail-close').focus();
+}
+function showDetail(key) {
+  const d = details[key]; if (!d) return;
+  open_(`<div class="detail-type-tag">${d.type}</div><div class="detail-icon">${d.icon}</div>
+    <div class="detail-title ${d.titleClass}">${d.title}</div><div class="detail-role">${d.role}</div>
+    <div class="detail-divider"></div><div class="detail-body">${d.body.replace(/\n\n/g,'<br><br>')}</div>
+    ${factsHTML(d.facts)}
+    <div><div class="detail-section-title">Power Assessment</div>${d.powers.map(p => `<div class="power-meter"><div class="power-label">${p[0]}</div><div class="power-bar-wrap"><div class="power-bar-fill ${p[2]}" style="width:${p[1]}%"></div></div><div class="power-val">${p[1]}</div></div>`).join('')}</div>`);
+}
+function showMayor(key) {
+  const m = regions[key]; if (!m) return;
+  open_(`<div class="detail-type-tag">Member-State Power</div><div class="detail-icon">${m.icon}</div>
+    <div class="detail-title amber">${m.name}</div><div class="detail-role">${m.city}</div>
+    <div class="detail-divider"></div><div class="detail-body">${m.desc}</div>${factsHTML(m.facts)}`);
+}
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('detailOverlay').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+</script>
+</body>
+</html>
