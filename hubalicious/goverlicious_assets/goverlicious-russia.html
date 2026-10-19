@@ -4,739 +4,214 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Goverlicious — Russian Federation</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<meta name="description" content="Who actually runs Russia? Formal structure and the real vertical of power, mapped tier by tier. Updated October 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Fira+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --void: #080a0e;
-  --concrete: #11151c;
-  --concrete2: #181d26;
-  --red: #c0281a;
-  --red-dim: #7a1810;
-  --red-faint: rgba(192,40,26,0.1);
-  --red-glow: rgba(192,40,26,0.2);
-  --steel: #2a3547;
-  --steel-light: #3d4f6a;
-  --gold: #c8a84a;
-  --gold-faint: rgba(200,168,74,0.1);
-  --frost: #d0d8e8;
-  --frost-dim: #7a8aa0;
-  --border-hard: rgba(192,40,26,0.3);
-  --border-soft: rgba(42,53,71,0.8);
-  --official: #1a2d4a;
-  --shadow-col: #1a0a08;
+  --bg: #080a0e; --panel: #151a24; --text: #d0d8e8; --muted: #7a8aa0;
+  --gold: #c8a84a; --gold-light: #e0c478; --gold-faint: color-mix(in srgb, #c8a84a 12%, transparent);
+  --official: #1a2d4a; --official-light: #6a9ae0;
+  --shadow-col: #7a1810; --shadow-light: #c0281a; --accent2: #c0281a;
+  --border: rgba(192,40,26,0.22);
+  --f-display: 'PT Serif', serif; --f-body: 'Fira Mono', monospace; --f-serif: 'IBM Plex Sans', sans-serif;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: var(--void);
-  color: var(--frost);
-  font-family: 'IBM Plex Mono', monospace;
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-}
-
-/* Constructivist grid overlay */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(192,40,26,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(192,40,26,0.025) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Diagonal red accent bar */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0; left: 0;
-  width: 4px;
-  height: 100vh;
-  background: linear-gradient(to bottom, var(--red), var(--red-dim), transparent);
-  z-index: 1000;
-  pointer-events: none;
-}
-
-/* ── APP SHELL ── */
-.app {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  min-height: 100vh;
-  position: relative;
-  z-index: 1;
-}
-
-/* ── MASTHEAD ── */
-.masthead {
-  background: var(--concrete);
-  border-bottom: 1px solid var(--border-hard);
-  padding: 0 2rem;
-  height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.masthead-left { display: flex; align-items: center; gap: 1.2rem; }
-
-.logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.7rem;
-  letter-spacing: 0.08em;
-  color: var(--frost);
-}
-
-.logo-accent { color: var(--red); }
-
-.country-tag {
-  font-size: 0.55rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--frost-dim);
-  border-left: 2px solid var(--red);
-  padding-left: 0.8rem;
-  line-height: 1.4;
-}
-
-.warning-tag {
-  font-size: 0.5rem;
-  letter-spacing: 0.1em;
-  color: var(--red);
-  background: var(--red-faint);
-  border: 1px solid var(--border-hard);
-  padding: 0.25rem 0.6rem;
-  border-radius: 1px;
-  text-transform: uppercase;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.5rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 0.35rem 0.8rem;
-  border: 1px solid var(--border-soft);
-  background: transparent;
-  color: var(--frost-dim);
-  cursor: pointer;
-  transition: all 0.15s;
-  border-radius: 1px;
-}
-.filter-btn:hover { color: var(--frost); border-color: var(--steel-light); }
-.filter-btn.active-all { background: var(--red-faint); color: var(--red); border-color: var(--border-hard); }
-.filter-btn.active-official { background: rgba(26,45,74,0.4); color: #7aace8; border-color: rgba(42,90,138,0.5); }
-.filter-btn.active-shadow { background: var(--red-faint); color: #e8806a; border-color: rgba(192,40,26,0.5); }
-.collapse-all-btn {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 0.35rem 0.8rem; border: 1px solid rgba(42,53,71,0.5);
-  background: transparent; color: var(--frost-dim); cursor: pointer; transition: all 0.15s; border-radius: 1px;
-}
-.collapse-all-btn:hover { color: var(--frost); }
-
-/* ── LAYOUT ── */
-.main-layout {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  min-height: calc(100vh - 58px);
-}
-
-/* ── MAP PANEL ── */
-.map-panel {
-  background: var(--concrete);
-  border-right: 1px solid var(--border-hard);
-  padding: 1.8rem 1.5rem;
-  position: sticky;
-  top: 58px;
-  height: calc(100vh - 58px);
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-}
-
-.map-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2.4rem;
-  letter-spacing: 0.05em;
-  line-height: 0.95;
-  color: var(--frost);
-}
-
-.map-title .accent { color: var(--red); }
-
-.vlast-label {
-  font-size: 0.55rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--red);
-  opacity: 0.7;
-  margin-top: 0.3rem;
-}
-
-.map-meta {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-}
-
-.meta-item {
-  background: rgba(192,40,26,0.05);
-  border: 1px solid var(--border-hard);
-  border-radius: 1px;
-  padding: 0.5rem 0.6rem;
-}
-
-.meta-label {
-  font-size: 0.45rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--frost-dim);
-  margin-bottom: 0.2rem;
-}
-
-.meta-value {
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 400;
-  color: var(--frost);
-  line-height: 1.2;
-}
-
-.map-svg-wrap {
-  background: rgba(26,45,74,0.1);
-  border: 1px solid var(--border-soft);
-  border-radius: 1px;
-  padding: 0.8rem;
-  display: flex;
-  justify-content: center;
-}
-
-/* Federal subjects */
-.fed-section-title {
-  font-size: 0.5rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--red);
-  opacity: 0.5;
-  margin-bottom: 0.5rem;
-}
-
-.fed-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.fed-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.45rem 0.6rem;
-  background: rgba(26,45,74,0.12);
-  border: 1px solid var(--border-soft);
-  border-radius: 1px;
-  cursor: pointer;
-  transition: all 0.12s;
-  font-size: 0.55rem;
-}
-.fed-item:hover { background: rgba(26,45,74,0.3); border-color: var(--steel-light); }
-
-.fed-dot { width: 5px; height: 5px; background: var(--red); flex-shrink: 0; }
-.fed-name { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.75rem; color: var(--frost); }
-.fed-type { font-size: 0.48rem; color: var(--frost-dim); margin-left: auto; letter-spacing: 0.1em; text-transform: uppercase; }
-
-.legend {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-.legend-title { font-size: 0.48rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--frost-dim); margin-bottom: 0.15rem; }
-.legend-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.55rem; color: var(--frost-dim); }
-.legend-swatch { width: 16px; height: 6px; border-radius: 0; flex-shrink: 0; }
-
-/* ── CHART PANEL ── */
-.chart-panel {
-  padding: 2rem 2.5rem 4rem;
-  overflow-y: auto;
-}
-
-/* Putin banner — special treatment */
-.putin-banner {
-  background: linear-gradient(135deg, #1a0606, #2d0a0a);
-  border: 1px solid var(--red);
-  border-left: 4px solid var(--red);
-  border-radius: 1px;
-  padding: 1.4rem 1.6rem;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  transition: all 0.15s;
-  position: relative;
-  overflow: hidden;
-  animation: cardIn 0.4s ease both;
-}
-
-.putin-banner::before {
-  content: '';
-  position: absolute;
-  top: 0; right: 0;
-  width: 200px; height: 100%;
-  background: radial-gradient(ellipse at right, rgba(192,40,26,0.08), transparent);
-  pointer-events: none;
-}
-
-.putin-banner:hover { box-shadow: 0 0 40px rgba(192,40,26,0.15); transform: translateY(-1px); }
-
-.pb-eyebrow {
-  font-size: 0.5rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--red);
-  opacity: 0.7;
-  margin-bottom: 0.4rem;
-}
-
-.pb-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2rem;
-  letter-spacing: 0.08em;
-  color: var(--frost);
-  line-height: 1;
-  margin-bottom: 0.2rem;
-}
-
-.pb-role {
-  font-size: 0.55rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--frost-dim);
-  margin-bottom: 0.7rem;
-}
-
-.pb-note {
-  font-size: 0.62rem;
-  line-height: 1.7;
-  color: rgba(208,216,232,0.55);
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-style: italic;
-}
-
-.pb-badge {
-  display: inline-block;
-  margin-top: 0.6rem;
-  font-size: 0.48rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.6rem;
-  background: var(--red-faint);
-  border: 1px solid var(--border-hard);
-  color: var(--red);
-}
-
-/* ── TIERS ── */
-.tier-connector {
-  display: flex;
-  justify-content: center;
-  height: 28px;
-  position: relative;
-}
-.tier-connector::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 50%;
-  width: 1px; height: 100%;
-  background: linear-gradient(to bottom, var(--red-dim), rgba(192,40,26,0.08));
-}
-
-.tier-block { margin-bottom: 0; }
-
-.tier-header {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-bottom: 0.6rem;
-  cursor: pointer;
-  user-select: none;
-}
-
-.tier-number { font-size: 0.48rem; letter-spacing: 0.2em; color: var(--red); opacity: 0.5; text-transform: uppercase; white-space: nowrap; }
-.tier-name { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--frost-dim); white-space: nowrap; }
-.tier-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border-hard), transparent); }
-.tier-toggle { font-size: 0.6rem; color: var(--red); opacity: 0.4; margin-left: auto; transition: transform 0.2s; flex-shrink: 0; }
+html { background: var(--bg); }
+body { background: var(--bg); background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 14px); background-size: auto; color: var(--text); font-family: var(--f-body); min-height: 100vh; overflow-x: hidden; }
+button { font: inherit; color: inherit; text-align: left; }
+.app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+.masthead { background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; }
+.masthead-left { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+.back { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; border: 1px solid var(--border); padding: 0.35rem 0.7rem; border-radius: 2px; }
+.back:hover { color: var(--text); border-color: var(--gold); }
+.logo { font-family: var(--f-display); font-size: 1.5rem; letter-spacing: -0.01em; color: var(--gold-light); }
+.logo sup { font-size: 0.5rem; letter-spacing: 0.2em; color: var(--muted); font-family: var(--f-body); vertical-align: super; text-transform: uppercase; }
+.country-tag { font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); border-left: 1px solid var(--border); padding-left: 1rem; }
+.controls { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.filter-btn, .collapse-all-btn { font-family: var(--f-body); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.45rem 0.9rem; border-radius: 2px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+.filter-btn:hover, .collapse-all-btn:hover { color: var(--text); border-color: var(--gold); }
+.filter-btn.active-all { background: var(--gold-faint); color: var(--gold-light); border-color: var(--gold); }
+.filter-btn.active-official { background: color-mix(in srgb, var(--official-light) 12%, transparent); color: var(--official-light); border-color: var(--official-light); }
+.filter-btn.active-shadow { background: color-mix(in srgb, var(--shadow-light) 12%, transparent); color: var(--shadow-light); border-color: var(--shadow-light); }
+.main-layout { display: grid; grid-template-columns: 330px 1fr; min-height: calc(100vh - 60px); }
+.map-panel { background: color-mix(in srgb, var(--panel) 85%, transparent); border-right: 1px solid var(--border); padding: 2rem 1.5rem; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; display: flex; flex-direction: column; gap: 1.4rem; }
+.map-title { font-family: var(--f-display); font-size: 2.1rem; line-height: 1.02; color: var(--text); }
+.map-title em { color: var(--gold-light); font-style: normal; }
+.map-sub { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: 0.5rem; }
+.thesis { font-family: var(--f-serif); font-size: 0.82rem; line-height: 1.65; color: color-mix(in srgb, var(--text) 75%, transparent); border-left: 2px solid var(--gold); padding-left: 0.8rem; }
+.map-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.meta-item { background: var(--gold-faint); border: 1px solid var(--border); border-radius: 2px; padding: 0.55rem 0.65rem; }
+.meta-label { font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
+.meta-value { font-family: var(--f-serif); font-size: 0.8rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+.map-svg-wrap { background: color-mix(in srgb, var(--official) 18%, transparent); border: 1px solid var(--border); border-radius: 3px; padding: 0.6rem; }
+.map-svg-wrap svg { width: 100%; height: auto; display: block; }
+.map-svg-wrap .ctx { fill: color-mix(in srgb, var(--text) 6%, transparent); }
+.map-svg-wrap .land { fill: color-mix(in srgb, var(--official-light) 30%, var(--bg)); stroke: var(--official-light); stroke-width: 0.6; stroke-opacity: 0.7; }
+.map-svg-wrap .cap { fill: var(--gold-light); }
+.map-svg-wrap .cap-ring { fill: none; stroke: var(--gold); stroke-width: 0.8; opacity: 0.5; }
+.map-svg-wrap .city { fill: var(--accent2); opacity: 0.85; }
+.map-svg-wrap .cap-label { font: 600 8px var(--f-body); fill: var(--gold-light); }
+.map-svg-wrap .city-label { font: 6.5px var(--f-body); fill: var(--accent2); opacity: 0.85; }
+.gauge { border: 1px solid var(--border); border-radius: 3px; padding: 0.8rem; }
+.gauge-title { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; display: flex; justify-content: space-between; }
+.gauge-bar { height: 8px; border-radius: 4px; background: linear-gradient(to right, var(--shadow-light), var(--gold), var(--official-light)); position: relative; }
+.gauge-pin { position: absolute; top: -4px; width: 3px; height: 16px; background: var(--text); border-radius: 2px; }
+.gauge-ends { display: flex; justify-content: space-between; font-size: 0.5rem; color: var(--muted); margin-top: 0.4rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.mayor-section-title, .legend-title { font-size: 0.55rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); opacity: 0.75; margin-bottom: 0.5rem; }
+.mayor-list { display: flex; flex-direction: column; gap: 0.35rem; }
+.mayor-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.7rem; background: color-mix(in srgb, var(--shadow-col) 18%, transparent); border: 1px solid var(--border); border-radius: 2px; cursor: pointer; transition: all 0.15s; width: 100%; }
+.mayor-item:hover { border-color: var(--accent2); }
+.mayor-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); flex-shrink: 0; }
+.mayor-name { font-family: var(--f-serif); font-size: 0.8rem; font-weight: 600; color: var(--text); }
+.mayor-city { font-size: 0.52rem; color: var(--muted); margin-left: auto; letter-spacing: 0.1em; text-transform: uppercase; text-align: right; }
+.legend { display: flex; flex-direction: column; gap: 0.4rem; }
+.legend-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.6rem; color: var(--muted); }
+.legend-swatch { width: 18px; height: 8px; border-radius: 1px; flex-shrink: 0; }
+.chart-panel { padding: 2rem 2.5rem 4rem; overflow-y: auto; }
+.tier-connector { height: 30px; position: relative; }
+.tier-connector::after { content: ''; position: absolute; top: 0; left: 50%; width: 1px; height: 100%; background: linear-gradient(to bottom, var(--gold), transparent); }
+.tier-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.7rem; cursor: pointer; user-select: none; }
+.tier-number { font-size: 0.52rem; letter-spacing: 0.2em; color: var(--gold); opacity: 0.7; text-transform: uppercase; white-space: nowrap; }
+.tier-name { font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text); opacity: 0.8; white-space: nowrap; }
+.tier-side { font-size: 0.48rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--shadow-light); border: 1px solid color-mix(in srgb, var(--shadow-light) 40%, transparent); padding: 0.1rem 0.4rem; border-radius: 1px; }
+.tier-toggle { font-size: 0.65rem; color: var(--gold); opacity: 0.6; transition: transform 0.25s; }
 .tier-toggle.collapsed { transform: rotate(-90deg); }
-
-.tier-body {
-  display: flex;
-  gap: 0.65rem;
-  flex-wrap: wrap;
-  overflow: hidden;
-  transition: max-height 0.35s ease, opacity 0.25s ease;
-  max-height: 2000px;
-  opacity: 1;
-}
+.tier-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+.tier-body { display: flex; gap: 0.75rem; flex-wrap: wrap; overflow: hidden; transition: max-height 0.35s ease, opacity 0.25s ease; max-height: 3000px; opacity: 1; }
 .tier-body.collapsed { max-height: 0; opacity: 0; }
-
-/* ── CARDS ── */
-.card {
-  border-radius: 1px;
-  padding: 0.9rem 1rem;
-  cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.2s;
-  flex: 1 1 185px;
-  min-width: 170px;
-  max-width: 260px;
-  animation: cardIn 0.4s ease both;
-  position: relative;
-}
-
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.card:hover { transform: translateY(-2px); }
-.card.filtered-out { opacity: 0.06; pointer-events: none; }
-
-.card.official {
-  background: linear-gradient(145deg, #0c1520, #111e30);
-  border: 1px solid rgba(42,53,71,0.8);
-  border-top: 2px solid rgba(42,90,138,0.4);
-}
-
-.card.shadow {
-  background: linear-gradient(145deg, #120404, #1a0606);
-  border: 1px solid rgba(192,40,26,0.25);
-  border-top: 2px solid var(--red-dim);
-}
-
-.card.fsb {
-  background: linear-gradient(145deg, #0a0a12, #101018);
-  border: 1px solid rgba(80,80,160,0.3);
-  border-top: 2px solid rgba(80,80,160,0.6);
-}
-
-.card.selected { box-shadow: 0 0 0 1px var(--red), 0 8px 24px rgba(0,0,0,0.5) !important; }
-
-.card-icon { font-size: 1.1rem; margin-bottom: 0.35rem; display: block; }
-
-.card-title {
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 400;
-  color: var(--frost);
-  line-height: 1.25;
-  margin-bottom: 0.12rem;
-}
-.card.shadow .card-title { color: #e89080; }
-.card.fsb .card-title { color: #a0a0e0; }
-
-.card-role {
-  font-size: 0.48rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--frost-dim);
-  margin-bottom: 0.4rem;
-}
-
-.card-preview {
-  font-size: 0.58rem;
-  line-height: 1.6;
-  color: rgba(208,216,232,0.38);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  font-family: 'IBM Plex Sans', sans-serif;
-}
-
-.card-badge {
-  display: inline-block;
-  font-size: 0.44rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 0.1rem 0.4rem;
-  margin-top: 0.4rem;
-}
-
-.badge-red { background: var(--red-faint); color: var(--red); border: 1px solid rgba(192,40,26,0.3); }
-.badge-blue { background: rgba(26,45,74,0.4); color: #7aace8; border: 1px solid rgba(42,90,138,0.3); }
-.badge-grey { background: rgba(42,53,71,0.3); color: var(--frost-dim); border: 1px solid var(--border-soft); }
-.badge-gold { background: var(--gold-faint); color: var(--gold); border: 1px solid rgba(200,168,74,0.3); }
-.badge-purple { background: rgba(80,40,120,0.2); color: #b090e0; border: 1px solid rgba(80,40,120,0.4); }
-
-/* Ministry grid */
-.ministries-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 0.4rem;
-  width: 100%;
-}
-
-.ministry-card {
-  background: linear-gradient(145deg, #0c1520, #0e1828);
-  border: 1px solid rgba(42,53,71,0.6);
-  border-radius: 1px;
-  padding: 0.55rem 0.7rem;
-  cursor: pointer;
-  transition: all 0.12s;
-  animation: cardIn 0.4s ease both;
-}
-.ministry-card:hover { border-color: var(--steel-light); transform: translateY(-1px); }
-.ministry-icon { font-size: 0.85rem; margin-bottom: 0.2rem; display: block; }
-.ministry-name { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.75rem; font-weight: 400; color: var(--frost); line-height: 1.2; margin-bottom: 0.12rem; }
-.ministry-abbr { font-size: 0.44rem; letter-spacing: 0.12em; color: var(--frost-dim); text-transform: uppercase; }
-
-/* Shadow divider */
-.shadow-divider {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin: 2.5rem 0 1.5rem;
-}
-.shadow-divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--border-hard)); }
-.shadow-divider-line.rev { background: linear-gradient(to left, transparent, var(--border-hard)); }
-.shadow-divider-text { font-size: 0.5rem; letter-spacing: 0.3em; color: var(--red); opacity: 0.5; text-transform: uppercase; white-space: nowrap; }
-
-/* "Reality check" banner */
-.reality-banner {
-  background: rgba(192,40,26,0.06);
-  border: 1px solid var(--border-hard);
-  border-left: 3px solid var(--red);
-  padding: 0.8rem 1rem;
-  margin: 1.5rem 0;
-  font-size: 0.6rem;
-  line-height: 1.7;
-  color: rgba(208,216,232,0.5);
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-style: italic;
-}
-
-/* ── DETAIL PANEL ── */
-.detail-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.65);
-  z-index: 200;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.2s;
-}
+.card { display: block; border-radius: 3px; padding: 1rem 1.1rem; cursor: pointer; transition: transform 0.15s ease, opacity 0.2s, border-color 0.2s; flex: 1 1 220px; min-width: 200px; max-width: 320px; animation: cardIn 0.4s ease both; }
+.card > span { display: block; }
+.card.filtered-out, .ministry-card.filtered-out { opacity: 0.07; pointer-events: none; }
+@keyframes cardIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.card:hover { transform: translateY(-3px); }
+.card:focus-visible, .ministry-card:focus-visible, .mayor-item:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+.card.monarchy { background: linear-gradient(145deg, color-mix(in srgb, var(--gold) 14%, var(--bg)), color-mix(in srgb, var(--gold) 6%, var(--bg))); border: 1px solid var(--gold); }
+.card.official { background: linear-gradient(145deg, color-mix(in srgb, var(--official) 55%, var(--bg)), color-mix(in srgb, var(--official) 25%, var(--bg))); border: 1px solid color-mix(in srgb, var(--official-light) 35%, transparent); }
+.card.influence { background: linear-gradient(145deg, color-mix(in srgb, var(--shadow-col) 40%, var(--bg)), color-mix(in srgb, var(--shadow-col) 15%, var(--bg))); border: 1px solid color-mix(in srgb, var(--shadow-light) 35%, transparent); }
+.card-icon { font-size: 1.2rem; margin-bottom: 0.4rem; }
+.card-title { font-family: var(--f-display); font-size: 1.02rem; color: var(--text); line-height: 1.2; margin-bottom: 0.2rem; }
+.card.monarchy .card-title { color: var(--gold-light); }
+.card.influence .card-title { color: var(--shadow-light); }
+.card-role { font-size: 0.54rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+.card-preview { font-size: 0.64rem; line-height: 1.6; color: color-mix(in srgb, var(--text) 62%, transparent); }
+.card-badge { display: inline-block !important; font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.12rem 0.45rem; border-radius: 1px; margin-top: 0.6rem; }
+.badge-gold { background:rgba(242,194,48,0.15); color:var(--gold-light); }
+.badge-blue { background:rgba(90,140,210,0.18); color:#9cc0f0; }
+.badge-green { background:rgba(60,170,110,0.16); color:#86e0b0; }
+.badge-purple { background:rgba(140,90,210,0.16); color:#c3a0f0; }
+.badge-red { background:rgba(210,70,60,0.16); color:#f09a8a; }
+.badge-orange { background:rgba(210,140,60,0.16); color:#f0c08a; }
+.badge-teal { background:rgba(60,170,170,0.16); color:#8ae0e0; }
+.ministries-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.5rem; width: 100%; }
+.ministry-card { display: block; background: linear-gradient(145deg, color-mix(in srgb, var(--official) 45%, var(--bg)), color-mix(in srgb, var(--official) 20%, var(--bg))); border: 1px solid color-mix(in srgb, var(--official-light) 25%, transparent); border-radius: 2px; padding: 0.7rem 0.8rem; cursor: pointer; transition: all 0.15s; animation: cardIn 0.4s ease both; }
+.ministry-card > span { display: block; }
+.ministry-card:hover { border-color: var(--official-light); transform: translateY(-1px); }
+.ministry-icon { font-size: 0.95rem; margin-bottom: 0.25rem; }
+.ministry-name { font-family: var(--f-serif); font-size: 0.82rem; font-weight: 600; color: var(--text); line-height: 1.25; margin-bottom: 0.2rem; }
+.ministry-abbr { font-size: 0.52rem; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; line-height: 1.4; }
+.detail-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
 .detail-overlay.open { opacity: 1; pointer-events: all; }
-
-.detail-panel {
-  position: fixed;
-  top: 0; right: 0;
-  width: min(500px, 100vw);
-  height: 100vh;
-  background: var(--concrete);
-  border-left: 1px solid var(--border-hard);
-  z-index: 201;
-  transform: translateX(100%);
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-  overflow-y: auto;
-  padding: 2rem 1.8rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-}
-.detail-panel.open { transform: translateX(0); }
-
-.detail-close {
-  position: absolute; top: 1.1rem; right: 1.4rem;
-  background: none; border: 1px solid var(--border-hard);
-  color: var(--frost-dim); font-size: 0.85rem;
-  width: 26px; height: 26px; border-radius: 1px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: all 0.12s;
-}
-.detail-close:hover { color: var(--frost); border-color: var(--red); }
-
-.detail-type-tag { font-size: 0.45rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--red); opacity: 0.6; }
-.detail-icon { font-size: 2.2rem; }
-.detail-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.06em; line-height: 1; color: var(--frost); }
-.detail-title.red { color: #e87060; }
-.detail-title.blue { color: #a0c0e8; }
-.detail-role { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--frost-dim); }
-.detail-divider { height: 1px; background: linear-gradient(to right, var(--border-hard), transparent); }
-.detail-body { font-size: 0.68rem; line-height: 1.85; color: rgba(208,216,232,0.65); font-family: 'IBM Plex Sans', sans-serif; }
-
-.detail-section-title { font-size: 0.44rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--red); opacity: 0.45; margin-bottom: 0.45rem; }
-
-.detail-fact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
-.detail-fact { background: rgba(192,40,26,0.05); border: 1px solid var(--border-hard); border-radius: 1px; padding: 0.45rem 0.6rem; }
-.detail-fact-label { font-size: 0.44rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--frost-dim); margin-bottom: 0.15rem; }
-.detail-fact-value { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.8rem; color: var(--frost); }
-
-.power-meter { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.45rem; }
-.power-label { font-size: 0.48rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--frost-dim); width: 65px; flex-shrink: 0; }
-.power-bar-wrap { flex: 1; height: 3px; background: rgba(192,40,26,0.08); border-radius: 0; overflow: hidden; }
-.power-bar-fill { height: 100%; transition: width 0.7s cubic-bezier(0.22,1,0.36,1); }
-.fill-red { background: linear-gradient(to right, var(--red-dim), var(--red)); }
-.fill-blue { background: linear-gradient(to right, #1a4a8a, #5a9ae0); }
-.fill-grey { background: linear-gradient(to right, #3a4a5a, #6a8aa0); }
-.fill-purple { background: linear-gradient(to right, #4a2a8a, #8a60d0); }
-
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--void); }
-::-webkit-scrollbar-thumb { background: var(--red-dim); }
-
-@media (max-width: 800px) {
+.detail-panel { position: fixed; top: 0; right: 0; width: min(500px, 100vw); height: 100vh; background: var(--panel); border-left: 1px solid var(--border); z-index: 201; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); overflow-y: auto; padding: 2rem 1.8rem; }
+.detail-panel.open { transform: none; }
+#detailContent { display: flex; flex-direction: column; gap: 1.1rem; }
+.detail-close { position: absolute; top: 1.2rem; right: 1.5rem; background: none; border: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; width: 30px; height: 30px; border-radius: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.detail-close:hover { color: var(--text); border-color: var(--gold); }
+.detail-type-tag { font-size: 0.52rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); opacity: 0.75; }
+.detail-icon { font-size: 2.4rem; }
+.detail-title { font-family: var(--f-display); font-size: 1.8rem; line-height: 1.1; color: var(--text); }
+.detail-title.gold { color: var(--gold-light); }
+.detail-title.amber { color: var(--shadow-light); }
+.detail-role { font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.detail-divider { height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+.detail-body { font-family: var(--f-serif); font-size: 0.86rem; line-height: 1.75; color: color-mix(in srgb, var(--text) 82%, transparent); }
+.detail-section-title { font-size: 0.52rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); opacity: 0.7; margin-bottom: 0.5rem; }
+.detail-fact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.detail-fact { background: var(--gold-faint); border: 1px solid var(--border); border-radius: 2px; padding: 0.5rem 0.7rem; }
+.detail-fact-label { font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+.detail-fact-value { font-family: var(--f-serif); font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.power-meter { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+.power-label { font-size: 0.54rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); width: 92px; flex-shrink: 0; }
+.power-bar-wrap { flex: 1; height: 5px; background: var(--gold-faint); border-radius: 3px; overflow: hidden; }
+.power-bar-fill { height: 100%; border-radius: 3px; }
+.power-val { font-size: 0.6rem; color: var(--muted); width: 26px; text-align: right; }
+.fill-gold { background: linear-gradient(to right, var(--gold), var(--gold-light)); }
+.fill-blue { background: linear-gradient(to right, var(--official), var(--official-light)); }
+.fill-red { background: linear-gradient(to right, var(--shadow-col), var(--shadow-light)); }
+.page-foot { margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid var(--border); font-size: 0.58rem; line-height: 1.8; color: var(--muted); letter-spacing: 0.04em; }
+.page-foot a { color: var(--gold-light); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+@media (max-width: 900px) {
   .main-layout { grid-template-columns: 1fr; }
-  .map-panel { position: static; height: auto; }
-  .card { min-width: 100%; max-width: 100%; }
+  .map-panel { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+  .chart-panel { padding: 1.5rem 1rem 3rem; }
+  .masthead { padding: 0.8rem 1rem; position: static; }
+  .card { max-width: none; }
 }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
 <div class="app">
-
 <header class="masthead">
   <div class="masthead-left">
-    <a href="../goverlicious.html" style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:inherit;opacity:0.65;text-decoration:none;border:1px solid currentColor;padding:0.35rem 0.7rem;border-radius:2px;align-self:center">← Atlas</a>
-    <div class="logo">Gover<span class="logo-accent">licious</span></div>
-    <div class="country-tag">🇷🇺 Russian Federation · 2026<br>Вертикаль власти</div>
+    <a class="back" href="../goverlicious.html">← Atlas</a>
+    <div class="logo">Goverlicious<sup>vol. 1</sup></div>
+    <div class="country-tag">🇷🇺&nbsp; Russian Federation · 2026</div>
   </div>
   <div class="controls">
-    <span class="warning-tag">⚠ Formal ≠ Real</span>
     <button class="filter-btn active-all" id="filter-all" onclick="setFilter('all')">All Power</button>
-    <button class="filter-btn" id="filter-official" onclick="setFilter('official')">Formal Only</button>
-    <button class="filter-btn" id="filter-shadow" onclick="setFilter('shadow')">Real Power</button>
+    <button class="filter-btn" id="filter-official" onclick="setFilter('official')">Official Only</button>
+    <button class="filter-btn" id="filter-shadow" onclick="setFilter('shadow')">Shadow Only</button>
     <button class="collapse-all-btn" id="collapseBtn" onclick="toggleAllTiers()">Collapse All</button>
   </div>
 </header>
-
 <div class="main-layout">
-
-<!-- MAP PANEL -->
 <aside class="map-panel">
   <div>
-    <div class="map-title">Russian<br><span class="accent">Federation</span></div>
-    <div class="vlast-label">Вертикаль власти · Power Vertical</div>
+    <div class="map-title">Russian<br><em>Federation</em></div>
+    <div class="map-sub">Вертикаль власти · Power Vertical · Updated October 2026</div>
   </div>
-
-  <div class="map-meta">
-    <div class="meta-item"><div class="meta-label">System</div><div class="meta-value">Federal Presidential Republic (de facto autocracy)</div></div>
-    <div class="meta-item"><div class="meta-label">Population</div><div class="meta-value">144M</div></div>
-    <div class="meta-item"><div class="meta-label">Legislature</div><div class="meta-value">Federal Assembly (bicameral)</div></div>
-    <div class="meta-item"><div class="meta-label">President</div><div class="meta-value">Vladimir Putin (since 2000)</div></div>
-    <div class="meta-item"><div class="meta-label">GDP</div><div class="meta-value">~$2.2T (war economy)</div></div>
-    <div class="meta-item"><div class="meta-label">Elections</div><div class="meta-value">Managed democracy</div></div>
+  <p class="thesis">Russia's formal constitutional structure mirrors a conventional presidential republic, with elections, a bicameral legislature and a constitutional court. It isn't one in practice. Power runs through the 'vertical of power' (вертикаль власти) — personal loyalty to Vladimir Putin, enforced by the security services and rewarded through patronage, not through the institutions printed in the constitution. This atlas maps both layers: the legal architecture, which is largely decorative, and the real chain of command running through the Security Council, the siloviki clans and a managed political system that delivered a record 349-seat supermajority for the ruling party in September 2026's wartime election.</p>
+  <div class="map-meta"><div class="meta-item"><div class="meta-label">System</div><div class="meta-value">Federal Presidential Republic (de facto autocracy)</div></div><div class="meta-item"><div class="meta-label">Population</div><div class="meta-value">144M</div></div><div class="meta-item"><div class="meta-label">Legislature</div><div class="meta-value">Federal Assembly (bicameral)</div></div><div class="meta-item"><div class="meta-label">President</div><div class="meta-value">Vladimir Putin (since 2000)</div></div><div class="meta-item"><div class="meta-label">GDP</div><div class="meta-value">~$2.2T (war economy)</div></div><div class="meta-item"><div class="meta-label">Elections</div><div class="meta-value">Managed democracy</div></div></div>
+  <div class="map-svg-wrap"><svg viewBox="0 0 240 240" role="img" aria-label="Map of Russia" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 124.97 68.49 L 125.37 69.94 L 126.73 69.23 L 131.1 69.27 L 134.46 70.7 L 135.66 71.8 L 135.29 73.32 L 133.64 74.19 L 129.72 75.82 L 128.59 76.69 L 130.44 77.1 L 132.65 77.84 L 134 77.29 L 134.76 79.17 L 135.41 78.41 L 137.8 77.95 L 142.59 78.43 L 142.96 79.8 L 149.2 80.24 L 149.28 78 L 152.45 78.51 L 154.84 78.5 L 157.25 80.04 L 157.93 81.92 L 157.05 83.15 L 158.93 85.46 L 161.27 86.65 L 162.71 83.57 L 165.11 84.89 L 167.65 84.1 L 170.54 85 L 171.64 84.18 L 174.09 84.59 L 173.01 81.87 L 174.98 80.6 L 188.46 82.5 L 189.73 84.25 L 193.64 86.49 L 199.67 85.93 L 202.64 86.42 L 203.89 87.63 L 203.7 89.78 L 205.54 90.61 L 207.54 90.01 L 210.19 89.93 L 213.01 90.51 L 215.84 90.19 L 218.44 92.79 L 220.29 91.86 L 219.08 89.98 L 219.75 88.68 L 224.51 89.5 L 227.62 89.32 L 231.91 90.72 L 234 92 L 234 103.7 L 233.99 103.71 L 232.07 105 L 230.14 104.79 L 231.48 106.35 L 232.37 108.77 L 233.06 109.56 L 233.23 110.77 L 232.85 111.55 L 230.06 110.91 L 225.89 113.12 L 224.56 113.46 L 222.28 115.52 L 220.11 117.32 L 219.56 118.66 L 217.43 116.63 L 213.54 118.93 L 212.86 117.84 L 211.42 119.1 L 209.42 118.7 L 208.94 120.63 L 207.15 123.47 L 207.2 124.65 L 208.91 125.31 L 208.71 129.58 L 207.32 129.69 L 206.68 132.15 L 207.3 133.41 L 204.69 134.91 L 204.17 138.26 L 201.95 138.98 L 201.5 141.96 L 199.35 144.69 L 198.79 142.67 L 198.16 138.39 L 197.32 131.87 L 198.04 127.8 L 199.3 126.05 L 199.38 124.67 L 201.7 124.02 L 204.36 120.32 L 206.93 117.3 L 209.62 114.96 L 210.82 110.82 L 209 111.07 L 208.11 113.49 L 204.32 116.71 L 203.1 113.1 L 199.24 114.1 L 195.51 119.02 L 196.74 120.82 L 193.41 121.59 L 191.1 121.89 L 191.21 119.77 L 188.89 119.32 L 187.04 120.76 L 182.47 120.26 L 177.56 121.13 L 172.72 126.86 L 167 133.78 L 169.36 134.15 L 170.09 135.99 L 171.54 136.64 L 172.49 135.17 L 174.13 135.37 L 176.29 138.59 L 176.34 141.09 L 175.17 144.02 L 175.05 147.53 L 174.37 152.22 L 172.12 156.47 L 171.62 158.5 L 169.6 161.92 L 167.58 165.31 L 166.62 167.04 L 164.63 168.76 L 163.69 168.8 L 162.75 167.37 L 160.75 169.52 L 160.51 170.5 L 160.31 169.98 L 160.3 168.49 L 161.06 168.41 L 161.27 164.95 L 160.88 162.43 L 162.16 161.4 L 163.97 161.92 L 164.98 159.06 L 165.49 155.84 L 166.07 154.77 L 166.85 152.13 L 164.39 152.99 L 163.09 154.15 L 160.82 154.15 L 160.22 151.39 L 158.45 149.3 L 155.85 148.37 L 155.3 145.49 L 154.78 143.69 L 154.22 142.43 L 153.3 139.47 L 151.99 138.38 L 149.75 137.51 L 147.77 137.59 L 145.92 138.12 L 144.68 139.58 L 145.5 140.28 L 145.52 141.9 L 144.69 142.84 L 143.34 145.95 L 143.36 147.24 L 141.25 149.1 L 139.46 147.99 L 137.68 148.23 L 136.9 147.25 L 136 146.93 L 133.82 149 L 131.85 149.49 L 130.48 150.22 L 128.6 149.74 L 127.21 149.77 L 126.31 148.27 L 124.84 146.86 L 123.35 146.47 L 121.46 146.85 L 120.05 147.4 L 117.93 146.16 L 117.64 143.96 L 115.89 143.21 L 114.53 142.87 L 112.86 141.65 L 111.31 144.7 L 111.92 146.42 L 110.47 148.47 L 108.31 147.73 L 106.82 147.62 L 105.82 146.25 L 104.26 146.21 L 102.97 145.31 L 100.69 146.69 L 97.85 149.22 L 96.27 149.73 L 95.69 149.97 L 94.9 148.17 L 92.97 148.56 L 92.34 147.32 L 91.29 146.75 L 90.57 145.05 L 89.75 144.52 L 87.6 145.28 L 85.55 143.59 L 84.75 145.12 L 81.42 137.67 L 79.51 135.4 L 80.06 134.48 L 76.32 137.25 L 74.88 137.42 L 75.01 135.82 L 73.09 134.82 L 71.53 135.53 L 71.06 132.49 L 68.38 131.86 L 67.04 133.07 L 63.3 134.16 L 62.57 134.88 L 56.98 135.9 L 56.3 136.91 L 57.38 138.92 L 55.94 139.68 L 56.22 140.48 L 54.79 141.91 L 57.21 143.93 L 56.84 145.32 L 54.74 145.19 L 54.3 146.06 L 52.4 144.54 L 50.03 144.6 L 48.44 145.84 L 46.68 144.65 L 43.39 142.62 L 41.05 142.69 L 37.97 145.89 L 37.79 148.03 L 36.25 146.33 L 35.06 149.55 L 35.5 150.15 L 34.63 152.38 L 35.9 154.37 L 37.01 154.28 L 37.96 156.25 L 37.81 157.76 L 38.57 158.23 L 37.89 159.97 L 36.44 160.46 L 34.96 163.49 L 36.31 166.27 L 36.17 168.25 L 37.8 171.7 L 36.9 172.89 L 36.65 173.63 L 35.99 173.43 L 34.96 171.65 L 34.54 171.55 L 33.6 170.87 L 33.15 169.67 L 31.75 169.05 L 30.85 169.51 L 30.59 168.97 L 28.55 167.56 L 26.36 167.09 L 25.09 166.58 L 24.91 166.93 L 23.01 164.45 L 21.3 163.34 L 20.02 161.62 L 21.1 161.15 L 22.34 158.7 L 21.51 157.53 L 23.71 156.34 L 23.67 155.69 L 22.33 156.17 L 22.37 154.86 L 23.14 154.04 L 24.59 153.83 L 24.82 152.85 L 24.49 151.23 L 25.1 149.7 L 25.08 148.83 L 22.88 147.88 L 22.01 147.91 L 21.09 146.54 L 19.94 147 L 18.05 145.97 L 18.08 145.39 L 17.55 144.12 L 16.36 143.98 L 16.23 143.06 L 16.61 142.47 L 15.65 140.81 L 14.1 141.09 L 13.65 140.94 L 13.27 141.61 L 12.72 141.49 L 12.35 139.61 L 12 138.64 L 12.28 138.37 L 13.49 138.47 L 14.07 137.83 L 13.64 137.04 L 12.63 136.53 L 12.72 136 L 12.12 135.46 L 11.18 133.54 L 11.5 132.75 L 11.35 131.37 L 9.89 130.67 L 9.11 131.02 L 8.9 130.29 L 7.33 129.56 L 6.85 127.82 L 6.72 126.4 L 6 125.72 L 6.64 124.79 L 6.2 122.05 L 7.26 120.36 L 7.03 119.85 L 8.73 118.23 L 7.17 116.83 L 10.36 113.09 L 11.75 111.39 L 12.31 109.89 L 10.1 107.88 L 10.71 105.97 L 9.37 103.79 L 10.37 101.27 L 8.64 97.93 L 10.02 95.72 L 7.73 93.76 L 7.95 91.71 L 9.15 91.43 L 11.69 90.26 L 13.23 89.24 L 15.69 91.01 L 19.77 91.71 L 25.42 95.03 L 26.56 96.42 L 26.66 98.38 L 25 99.92 L 22.56 100.7 L 15.9 98.47 L 14.8 98.84 L 17.24 100.99 L 17.33 102.36 L 17.43 105.35 L 19.35 106.25 L 20.52 107.01 L 20.71 105.59 L 19.81 104.33 L 20.76 103.22 L 24.37 105.04 L 25.63 104.33 L 24.62 102.18 L 28.1 99.3 L 29.48 99.47 L 30.88 100.5 L 31.75 98.48 L 30.5 96.73 L 31.23 94.98 L 30.13 93.16 L 34.31 94.1 L 35.16 95.74 L 33.27 96.1 L 33.28 97.74 L 34.46 98.74 L 36.76 98.1 L 37.13 96.23 L 40.25 94.83 L 45.46 92.31 L 46.59 92.46 L 45.11 94.24 L 46.97 94.55 L 48.03 93.54 L 50.83 93.46 L 53.05 92.25 L 54.75 94.01 L 56.45 92.07 L 54.88 90.37 L 55.66 89.4 L 60.07 90.29 L 62.14 91.21 L 67.55 94.56 L 68.55 93.02 L 67.03 91.47 L 66.98 90.85 L 65.19 90.56 L 65.68 89.17 L 64.88 86.88 L 64.83 85.94 L 67.59 83.28 L 68.57 80.61 L 69.68 80.04 L 73.63 80.81 L 73.94 82.44 L 72.53 84.82 L 73.46 85.76 L 73.94 87.81 L 73.6 91.83 L 75.25 93.63 L 74.6 95.59 L 71.68 99.76 L 73.39 100.19 L 73.98 99.14 L 75.62 98.38 L 76.02 96.93 L 77.31 95.53 L 76.44 93.86 L 77.14 91.93 L 75.51 91.69 L 75.15 90.05 L 76.34 87.11 L 74.4 84.71 L 77.07 82.73 L 76.73 80.65 L 77.47 80.58 L 78.25 82.21 L 77.67 85.04 L 79.26 85.58 L 78.58 83.46 L 81.08 82.31 L 84.18 82.15 L 86.94 83.82 L 85.61 81.38 L 85.46 78.25 L 88.06 77.66 L 91.65 77.79 L 94.88 77.4 L 93.67 75.87 L 95.4 73.94 L 97.11 73.86 L 100.02 72.41 L 103.96 72.01 L 104.46 71.21 L 108.38 70.94 L 109.6 71.6 L 112.95 70.04 L 115.69 70.09 L 116.11 68.82 L 117.53 67.57 L 121.06 66.37 L 123.62 67.32 L 121.58 68.04 L 124.97 68.49 Z" class="land"/>
+    <circle cx="21.4" cy="130.8" r="4.2" class="cap"/>
+    <circle cx="21.4" cy="130.8" r="8" class="cap-ring"/>
+    <text x="15.4" y="133.8" text-anchor="end" class="cap-label">Moscow</text>
+    <circle cx="10.6" cy="118.5" r="2.6" class="city"/>
+    <text x="16.6" y="121.5" text-anchor="start" class="city-label">St. Petersburg</text>
+    <circle cx="89.1" cy="133.0" r="2.6" class="city"/>
+    <text x="95.1" y="136.0" text-anchor="start" class="city-label">Novosibirsk</text>
+    <circle cx="162.2" cy="167.9" r="2.6" class="city"/>
+    <text x="168.2" y="170.9" text-anchor="start" class="city-label">Vladivostok</text>
+  </svg></div>
+  <div class="gauge">
+    <div class="gauge-title"><span>Does the org chart tell the truth?</span><span>8/100</span></div>
+    <div class="gauge-bar"><div class="gauge-pin" style="left:calc(8% - 1px)"></div></div>
+    <div class="gauge-ends"><span>Shadow rules</span><span>Formal rules</span></div>
   </div>
-
-  <!-- SVG Map Russia (simplified) -->
-  <div class="map-svg-wrap">
-    <svg viewBox="0 0 280 160" width="260" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="rusGlow" cx="40%" cy="50%" r="60%">
-          <stop offset="0%" stop-color="rgba(192,40,26,0.12)"/>
-          <stop offset="100%" stop-color="rgba(192,40,26,0)"/>
-        </radialGradient>
-      </defs>
-      <!-- Russia main body (very simplified) -->
-      <path d="M 18 55 L 25 45 L 35 38 L 50 32 L 68 28 L 88 25 L 110 24 L 135 25 L 158 27 L 180 28 L 200 30 L 218 33 L 232 36 L 244 40 L 252 46 L 258 54 L 260 63 L 258 72 L 252 80 L 244 86 L 235 90 L 225 93 L 215 97 L 205 103 L 196 108 L 188 112 L 178 115 L 168 118 L 158 120 L 148 121 L 138 120 L 128 118 L 118 115 L 108 110 L 98 105 L 88 100 L 78 95 L 68 88 L 58 82 L 48 76 L 38 70 L 28 64 Z"
-        fill="#1a2d4a" fill-opacity="0.7" stroke="#2a5a8a" stroke-width="1"/>
-      <!-- Kaliningrad exclave -->
-      <ellipse cx="22" cy="78" rx="7" ry="5" fill="#1a2d4a" fill-opacity="0.6" stroke="#2a5a8a" stroke-width="0.8"/>
-      <!-- Urals rough divide -->
-      <line x1="148" y1="25" x2="145" y2="120" stroke="rgba(192,40,26,0.15)" stroke-width="0.5" stroke-dasharray="3,3"/>
-      <!-- Siberia label area indicator -->
-      <text x="175" y="70" font-size="6" fill="rgba(208,216,232,0.25)" font-family="IBM Plex Mono">SIBERIA</text>
-      <!-- European Russia label -->
-      <text x="60" y="70" font-size="5.5" fill="rgba(208,216,232,0.2)" font-family="IBM Plex Mono">EUR.</text>
-      <!-- City dots -->
-      <!-- Moscow -->
-      <circle cx="110" cy="68" r="5" fill="var(--red)" opacity="0.9"/>
-      <circle cx="110" cy="68" r="9" fill="none" stroke="var(--red)" stroke-width="0.7" opacity="0.3"/>
-      <text x="118" y="72" font-size="6.5" fill="#e87060" font-family="IBM Plex Mono" font-weight="500">Moscow</text>
-      <!-- St Petersburg -->
-      <circle cx="82" cy="45" r="3" fill="#7aace8" opacity="0.8"/>
-      <text x="74" y="40" font-size="5.5" fill="#7aace8" font-family="IBM Plex Mono" opacity="0.7">SPb</text>
-      <!-- Novosibirsk -->
-      <circle cx="185" cy="62" r="2.5" fill="#7aace8" opacity="0.6"/>
-      <text x="190" y="66" font-size="5" fill="#7aace8" font-family="IBM Plex Mono" opacity="0.6">Novosib</text>
-      <!-- Yekaterinburg -->
-      <circle cx="155" cy="60" r="2.5" fill="#7aace8" opacity="0.6"/>
-      <!-- Vladivostok -->
-      <circle cx="248" cy="80" r="2" fill="#7aace8" opacity="0.5"/>
-      <text x="242" y="94" font-size="5" fill="#7aace8" font-family="IBM Plex Mono" opacity="0.5">Vlad.</text>
-      <!-- Glow -->
-      <rect x="0" y="0" width="280" height="160" fill="url(#rusGlow)" pointer-events="none"/>
-    </svg>
+  <div class="mayor-section">
+    <div class="mayor-section-title">Federal Districts</div>
+    <div class="mayor-list"><button class="mayor-item" onclick="showMayor('cfd')"><span class="mayor-dot"></span><span class="mayor-name">Central FD</span><span class="mayor-city">Moscow</span></button><button class="mayor-item" onclick="showMayor('nwfd')"><span class="mayor-dot"></span><span class="mayor-name">Northwestern FD</span><span class="mayor-city">St Petersburg</span></button><button class="mayor-item" onclick="showMayor('sfd')"><span class="mayor-dot"></span><span class="mayor-name">Southern FD</span><span class="mayor-city">Rostov-on-Don</span></button><button class="mayor-item" onclick="showMayor('urals')"><span class="mayor-dot"></span><span class="mayor-name">Urals FD</span><span class="mayor-city">Yekaterinburg</span></button><button class="mayor-item" onclick="showMayor('siberia')"><span class="mayor-dot"></span><span class="mayor-name">Siberian FD</span><span class="mayor-city">Novosibirsk</span></button></div>
   </div>
-
-  <!-- Federal Districts -->
-  <div>
-    <div class="fed-section-title">Federal Districts (Tier VII)</div>
-    <div class="fed-list">
-      <div class="fed-item" onclick="showFed('cfd')"><div class="fed-dot"></div><div class="fed-name">Central FD</div><div class="fed-type">Moscow</div></div>
-      <div class="fed-item" onclick="showFed('nwfd')"><div class="fed-dot"></div><div class="fed-name">Northwestern FD</div><div class="fed-type">St Petersburg</div></div>
-      <div class="fed-item" onclick="showFed('sfd')"><div class="fed-dot"></div><div class="fed-name">Southern FD</div><div class="fed-type">Rostov-on-Don</div></div>
-      <div class="fed-item" onclick="showFed('urals')"><div class="fed-dot"></div><div class="fed-name">Urals FD</div><div class="fed-type">Yekaterinburg</div></div>
-      <div class="fed-item" onclick="showFed('siberia')"><div class="fed-dot"></div><div class="fed-name">Siberian FD</div><div class="fed-type">Novosibirsk</div></div>
-    </div>
-  </div>
-
-  <div class="legend">
-    <div class="legend-title">Legend</div>
-    <div class="legend-row"><div class="legend-swatch" style="background:var(--red);"></div>Putin / Presidential</div>
-    <div class="legend-row"><div class="legend-swatch" style="background:#2a5a8a;"></div>Formal / Official State</div>
-    <div class="legend-row"><div class="legend-swatch" style="background:#7a1810;"></div>Siloviki / Real Power</div>
-    <div class="legend-row"><div class="legend-swatch" style="background:#3a3060;"></div>FSB / Intelligence</div>
-    <div class="legend-row"><div class="legend-swatch" style="background:#5a4010;"></div>Oligarchs / Elite Networks</div>
-  </div>
+  <div class="legend"><div class="legend-title">Legend</div><div class="legend-row"><div class="legend-swatch" style="background:var(--gold)"></div>Putin / Supreme Authority</div><div class="legend-row"><div class="legend-swatch" style="background:var(--official-light)"></div>Formal / Official State</div><div class="legend-row"><div class="legend-swatch" style="background:var(--shadow-light)"></div>Siloviki &amp; Shadow Power</div><div class="legend-row"><div class="legend-swatch" style="background:var(--accent2)"></div>Federal Districts</div></div>
 </aside>
+<main class="chart-panel" id="chartPanel">
 
-<!-- CHART PANEL -->
-<section class="chart-panel">
-
-  <div class="reality-banner">
-    ⚠ Russia's formal constitutional structure mirrors a conventional presidential republic. It is not. The chart below shows both the legal architecture (largely decorative) and the actual power structure — the "vertical of power" (вертикаль власти) — which operates through personal loyalty, coercion, and patronage rather than institutions.
-  </div>
-
-  <!-- PUTIN — special banner card -->
-  <div class="tier-block" id="tier0">
-    <div class="tier-header" onclick="toggleTier('tier0')">
+  <div class="tier-block" id="tier1">
+    <div class="tier-header" onclick="toggleTier('tier1')">
       <span class="tier-number">Tier I</span>
       <span class="tier-name">The Tsar — Supreme Authority</span>
       <div class="tier-line"></div>
-      <span class="tier-toggle" id="tier0-toggle">▾</span>
+      <span class="tier-toggle" id="tier1-toggle">▾</span>
     </div>
-    <div class="tier-body" id="tier0-body">
-      <div class="putin-banner" onclick="showDetail('putin')" style="flex:1; min-width:300px;" data-type="shadow">
-        <div class="pb-eyebrow">President of the Russian Federation · In Power Since 2000</div>
-        <div class="pb-name">VLADIMIR PUTIN</div>
-        <div class="pb-role">Formerly FSB Director · KGB Officer · Autocrat</div>
-        <div class="pb-note">"There is no Putin without Russia, and no Russia without Putin." The formal constitution places him as head of state and commander-in-chief. The reality is that all meaningful power in the Russian Federation flows from and through this one man. Every institution below is subordinate not to law, but to him personally.</div>
-        <span class="pb-badge">Click for full profile</span>
-      </div>
-      <div class="card shadow" onclick="showDetail('seccouncil')" data-type="shadow" style="flex:1 1 200px;">
-        <span class="card-icon">🛡️</span>
-        <div class="card-title">Security Council</div>
-        <div class="card-role">Putin's Inner Circle · Real Decision Body</div>
-        <div class="card-preview">The permanent members — Patrushev, Bortnikov, Shoigu — are where actual strategic decisions are made. Not the Cabinet.</div>
-        <span class="card-badge badge-red">Real Power Hub</span>
-      </div>
-    </div>
+    <div class="tier-body" id="tier1-body"><button class="card monarchy" onclick="showDetail('putin')" data-type="monarchy"><span class="card-icon">🇷🇺</span><span class="card-title">Vladimir Putin</span><span class="card-role">President of the Russian Federation · In Power Since 2000</span><span class="card-preview">The formal constitution places him as head of state and commander-in-chief. The reality is that all meaningful power in Russia flows from and through this one man.</span><span class="card-badge badge-gold">Click for full profile</span></button><button class="card influence" onclick="showDetail('seccouncil')" data-type="shadow"><span class="card-icon">🛡️</span><span class="card-title">Security Council</span><span class="card-role">Putin's Inner Circle · Real Decision Body</span><span class="card-preview">The permanent members — Patrushev, Bortnikov, Shoigu — are where actual strategic decisions are made. Not the Cabinet.</span><span class="card-badge badge-red">Real Power Hub</span></button></div>
   </div>
-
   <div class="tier-connector"></div>
 
-  <!-- TIER II: Formal Executive -->
   <div class="tier-block" id="tier2">
     <div class="tier-header" onclick="toggleTier('tier2')">
       <span class="tier-number">Tier II</span>
@@ -744,58 +219,21 @@ body::after {
       <div class="tier-line"></div>
       <span class="tier-toggle" id="tier2-toggle">▾</span>
     </div>
-    <div class="tier-body" id="tier2-body">
-      <div class="card official" onclick="showDetail('presadmin')" data-type="official">
-        <span class="card-icon">🏛️</span>
-        <div class="card-title">Presidential Administration</div>
-        <div class="card-role">Kremlin Staff · Policy Apparatus</div>
-        <div class="card-preview">More powerful than the government itself. Controls political appointments, domestic policy, media, and regional governors.</div>
-        <span class="card-badge badge-blue">De Facto Government</span>
-      </div>
-      <div class="card official" onclick="showDetail('pm')" data-type="official">
-        <span class="card-icon">🏢</span>
-        <div class="card-title">Prime Minister</div>
-        <div class="card-role">Head of Government · White House</div>
-        <div class="card-preview">Mikhail Mishustin. Manages day-to-day economic administration. Has no independent political base. Entirely subordinate to Putin.</div>
-        <span class="card-badge badge-grey">Technocratic Manager</span>
-      </div>
-      <div class="card official" onclick="showDetail('cabinet_rus')" data-type="official">
-        <span class="card-icon">📋</span>
-        <div class="card-title">Council of Ministers</div>
-        <div class="card-role">~30 Ministers · Formal Government</div>
-        <div class="card-preview">Implements policy but does not make it. Ministers serve at presidential pleasure. Technical administration, not political authority.</div>
-        <span class="card-badge badge-grey">Administrative</span>
-      </div>
-    </div>
+    <div class="tier-body" id="tier2-body"><button class="card official" onclick="showDetail('presadmin')" data-type="official"><span class="card-icon">🏛️</span><span class="card-title">Presidential Administration</span><span class="card-role">Kremlin Staff · Policy Apparatus</span><span class="card-preview">More powerful than the government itself. Controls political appointments, domestic policy, media, and regional governors.</span><span class="card-badge badge-blue">De Facto Government</span></button><button class="card official" onclick="showDetail('pm')" data-type="official"><span class="card-icon">🏢</span><span class="card-title">Prime Minister</span><span class="card-role">Head of Government · White House</span><span class="card-preview">Mikhail Mishustin. Manages day-to-day economic administration. Has no independent political base. Entirely subordinate to Putin.</span><span class="card-badge badge-teal">Technocratic Manager</span></button><button class="card official" onclick="showDetail('cabinet_rus')" data-type="official"><span class="card-icon">📋</span><span class="card-title">Council of Ministers</span><span class="card-role">~30 Ministers · Formal Government</span><span class="card-preview">Implements policy but does not make it. Ministers serve at presidential pleasure. Technical administration, not political authority.</span><span class="card-badge badge-teal">Administrative</span></button></div>
   </div>
-
   <div class="tier-connector"></div>
 
-  <!-- TIER III: Ministries -->
   <div class="tier-block" id="tier3">
     <div class="tier-header" onclick="toggleTier('tier3')">
       <span class="tier-number">Tier III</span>
-      <span class="tier-name">Key Ministries & Agencies</span>
+      <span class="tier-name">Key Ministries &amp; Agencies</span>
       <div class="tier-line"></div>
       <span class="tier-toggle" id="tier3-toggle">▾</span>
     </div>
-    <div class="tier-body" id="tier3-body">
-      <div class="ministries-grid">
-        <div class="ministry-card" onclick="showDetail('minoboron')" data-type="official"><span class="ministry-icon">⚔️</span><div class="ministry-name">Ministry of Defence</div><div class="ministry-abbr">Minoboron · Belousov</div></div>
-        <div class="ministry-card" onclick="showDetail('mid')" data-type="official"><span class="ministry-icon">🌍</span><div class="ministry-name">Ministry of Foreign Affairs</div><div class="ministry-abbr">MID · Lavrov</div></div>
-        <div class="ministry-card" onclick="showDetail('minfin')" data-type="official"><span class="ministry-icon">💰</span><div class="ministry-name">Ministry of Finance</div><div class="ministry-abbr">Minfin · Siluanov</div></div>
-        <div class="ministry-card" onclick="showDetail('minek')" data-type="official"><span class="ministry-icon">📈</span><div class="ministry-name">Ministry of Economic Dev.</div><div class="ministry-abbr">MER</div></div>
-        <div class="ministry-card" onclick="showDetail('minvd')" data-type="official"><span class="ministry-icon">🚔</span><div class="ministry-name">Ministry of Internal Affairs</div><div class="ministry-abbr">MVD · Police</div></div>
-        <div class="ministry-card" onclick="showDetail('rosatom')" data-type="official"><span class="ministry-icon">☢️</span><div class="ministry-name">Rosatom</div><div class="ministry-abbr">Nuclear State Corp</div></div>
-        <div class="ministry-card" onclick="showDetail('rosneft')" data-type="shadow"><span class="ministry-icon">🛢️</span><div class="ministry-name">Rosneft / Gazprom</div><div class="ministry-abbr">State Energy Corps</div></div>
-        <div class="ministry-card" onclick="showDetail('cbank')" data-type="official"><span class="ministry-icon">🏦</span><div class="ministry-name">Central Bank</div><div class="ministry-abbr">Nabiullina</div></div>
-      </div>
-    </div>
+    <div class="tier-body" id="tier3-body"><div class="ministries-grid"><button class="ministry-card" onclick="showDetail('minoboron')" data-type="official"><span class="ministry-icon">⚔️</span><span class="ministry-name">Ministry of Defence</span><span class="ministry-abbr">Minoboron · Belousov</span></button><button class="ministry-card" onclick="showDetail('mid')" data-type="official"><span class="ministry-icon">🌍</span><span class="ministry-name">Ministry of Foreign Affairs</span><span class="ministry-abbr">MID · Lavrov</span></button><button class="ministry-card" onclick="showDetail('minfin')" data-type="official"><span class="ministry-icon">💰</span><span class="ministry-name">Ministry of Finance</span><span class="ministry-abbr">Minfin · Siluanov</span></button><button class="ministry-card" onclick="showDetail('minek')" data-type="official"><span class="ministry-icon">📈</span><span class="ministry-name">Ministry of Economic Dev.</span><span class="ministry-abbr">MER</span></button><button class="ministry-card" onclick="showDetail('minvd')" data-type="official"><span class="ministry-icon">🚔</span><span class="ministry-name">Ministry of Internal Affairs</span><span class="ministry-abbr">MVD · Police</span></button><button class="ministry-card" onclick="showDetail('rosatom')" data-type="official"><span class="ministry-icon">☢️</span><span class="ministry-name">Rosatom</span><span class="ministry-abbr">Nuclear State Corp</span></button><button class="ministry-card" onclick="showDetail('rosneft')" data-type="shadow"><span class="ministry-icon">🛢️</span><span class="ministry-name">Rosneft / Gazprom</span><span class="ministry-abbr">State Energy Corps</span></button><button class="ministry-card" onclick="showDetail('cbank')" data-type="official"><span class="ministry-icon">🏦</span><span class="ministry-name">Central Bank</span><span class="ministry-abbr">Nabiullina</span></button></div></div>
   </div>
-
   <div class="tier-connector"></div>
 
-  <!-- TIER IV: Legislature — Decorative -->
   <div class="tier-block" id="tier4">
     <div class="tier-header" onclick="toggleTier('tier4')">
       <span class="tier-number">Tier IV</span>
@@ -803,34 +241,10 @@ body::after {
       <div class="tier-line"></div>
       <span class="tier-toggle" id="tier4-toggle">▾</span>
     </div>
-    <div class="tier-body" id="tier4-body">
-      <div class="card official" onclick="showDetail('duma')" data-type="official">
-        <span class="card-icon">🏛️</span>
-        <div class="card-title">State Duma</div>
-        <div class="card-role">450 Deputies · Elected Sept 2026</div>
-        <div class="card-preview">United Russia won a record 349 of 450 seats in September 2026. Opposition parties are managed or marginal. Described by analysts as a "notary chamber" — it ratifies rather than legislates.</div>
-        <span class="card-badge badge-grey">Rubber Stamp</span>
-      </div>
-      <div class="card official" onclick="showDetail('federation_council')" data-type="official">
-        <span class="card-icon">🏢</span>
-        <div class="card-title">Federation Council</div>
-        <div class="card-role">170 Senators · Upper Chamber</div>
-        <div class="card-preview">Members effectively appointed by regional governors (themselves Kremlin-approved). Approved the use of force in Ukraine within minutes of Putin's request.</div>
-        <span class="card-badge badge-grey">Approval Body</span>
-      </div>
-      <div class="card official" onclick="showDetail('constcourt')" data-type="official">
-        <span class="card-icon">⚖️</span>
-        <div class="card-title">Constitutional Court</div>
-        <div class="card-role">Formally Independent · Practically Compliant</div>
-        <div class="card-preview">Approved the 2020 constitutional amendments allowing Putin to remain until 2036. Judicial independence effectively eliminated under managed system.</div>
-        <span class="card-badge badge-grey">Compliant Judiciary</span>
-      </div>
-    </div>
+    <div class="tier-body" id="tier4-body"><button class="card official" onclick="showDetail('duma')" data-type="official"><span class="card-icon">🏛️</span><span class="card-title">State Duma</span><span class="card-role">450 Deputies · Elected Sept 2026</span><span class="card-preview">United Russia won a record 349 of 450 seats in September 2026. Described by analysts as a 'notary chamber' — it ratifies rather than legislates.</span><span class="card-badge badge-teal">Rubber Stamp</span></button><button class="card official" onclick="showDetail('federation_council')" data-type="official"><span class="card-icon">🏢</span><span class="card-title">Federation Council</span><span class="card-role">170 Senators · Upper Chamber</span><span class="card-preview">Members effectively appointed by regional governors (themselves Kremlin-approved). Approved the use of force in Ukraine within minutes of Putin's request.</span><span class="card-badge badge-teal">Approval Body</span></button><button class="card official" onclick="showDetail('constcourt')" data-type="official"><span class="card-icon">⚖️</span><span class="card-title">Constitutional Court</span><span class="card-role">Formally Independent · Practically Compliant</span><span class="card-preview">Approved the 2020 constitutional amendments allowing Putin to remain until 2036. Judicial independence effectively eliminated.</span><span class="card-badge badge-teal">Compliant Judiciary</span></button></div>
   </div>
-
   <div class="tier-connector"></div>
 
-  <!-- TIER V: Regional -->
   <div class="tier-block" id="tier5">
     <div class="tier-header" onclick="toggleTier('tier5')">
       <span class="tier-number">Tier V</span>
@@ -838,426 +252,107 @@ body::after {
       <div class="tier-line"></div>
       <span class="tier-toggle" id="tier5-toggle">▾</span>
     </div>
-    <div class="tier-body" id="tier5-body">
-      <div class="card official" onclick="showDetail('governors')" data-type="official">
-        <span class="card-icon">🗺️</span>
-        <div class="card-title">85 Regional Governors</div>
-        <div class="card-role">Presidential Appointees · Federal Subjects</div>
-        <div class="card-preview">Since 2004 reform, governors are effectively appointed by and accountable to the President. The facade of elections remains; outcomes are managed.</div>
-        <span class="card-badge badge-grey">Presidential Clients</span>
-      </div>
-      <div class="card official" onclick="showDetail('plenipo')" data-type="official">
-        <span class="card-icon">👁️</span>
-        <div class="card-title">Presidential Plenipotentiaries</div>
-        <div class="card-role">8 Federal District Envoys · Kremlin Eyes</div>
-        <div class="card-preview">Putin's personal representatives in each federal district, created in 2000 to reassert central control over regions. Often siloviki backgrounds.</div>
-        <span class="card-badge badge-red">Kremlin Oversight</span>
-      </div>
-    </div>
+    <div class="tier-body" id="tier5-body"><button class="card official" onclick="showDetail('governors')" data-type="official"><span class="card-icon">🗺️</span><span class="card-title">85 Regional Governors</span><span class="card-role">Presidential Appointees · Federal Subjects</span><span class="card-preview">Since the 2004 reform, governors are effectively appointed by and accountable to the President. The facade of elections remains; outcomes are managed.</span><span class="card-badge badge-teal">Presidential Clients</span></button><button class="card influence" onclick="showDetail('plenipo')" data-type="shadow"><span class="card-icon">👁️</span><span class="card-title">Presidential Plenipotentiaries</span><span class="card-role">8 Federal District Envoys · Kremlin Eyes</span><span class="card-preview">Putin's personal representatives in each federal district, created in 2000 to reassert central control over regions. Often siloviki backgrounds.</span><span class="card-badge badge-red">Kremlin Oversight</span></button></div>
   </div>
+  <div class="tier-connector"></div>
 
-  <!-- SHADOW DIVIDER -->
-  <div class="shadow-divider">
-    <div class="shadow-divider-line"></div>
-    <div class="shadow-divider-text">⚡ Real Power Architecture — Below the Constitutional Surface</div>
-    <div class="shadow-divider-line rev"></div>
-  </div>
-
-  <!-- TIER VI: Siloviki -->
   <div class="tier-block" id="tier6">
     <div class="tier-header" onclick="toggleTier('tier6')">
       <span class="tier-number">Tier VI</span>
-      <span class="tier-name">Siloviki — The Security Clan</span>
+      <span class="tier-name">Siloviki — The Security Clan</span><span class="tier-side">Shadow</span>
       <div class="tier-line"></div>
       <span class="tier-toggle" id="tier6-toggle">▾</span>
     </div>
-    <div class="tier-body" id="tier6-body">
-      <div class="card fsb" onclick="showDetail('fsb')" data-type="shadow">
-        <span class="card-icon">🕵️</span>
-        <div class="card-title">FSB</div>
-        <div class="card-role">Federal Security Service · Domestic Intelligence</div>
-        <div class="card-preview">The KGB's successor. Bortnikov leads it; Putin ran it 1998-99. Controls domestic surveillance, counter-intelligence, and political enforcement.</div>
-        <span class="card-badge badge-purple">Domestic Control</span>
-      </div>
-      <div class="card fsb" onclick="showDetail('svr')" data-type="shadow">
-        <span class="card-icon">🌐</span>
-        <div class="card-title">SVR</div>
-        <div class="card-role">Foreign Intelligence Service</div>
-        <div class="card-preview">External intelligence. Ran influence operations across the West, election interference, and assassinations abroad including Salisbury 2018.</div>
-        <span class="card-badge badge-purple">Foreign Intel</span>
-      </div>
-      <div class="card fsb" onclick="showDetail('gru')" data-type="shadow">
-        <span class="card-icon">⭐</span>
-        <div class="card-title">GRU</div>
-        <div class="card-role">Military Intelligence · Unit 29155</div>
-        <div class="card-preview">Military intelligence with its own special forces (Spetsnaz GRU). Ran Salisbury poisoning operation. Reports directly to military command and President.</div>
-        <span class="card-badge badge-purple">Military Intel</span>
-      </div>
-      <div class="card shadow" onclick="showDetail('rosgvardiya')" data-type="shadow">
-        <span class="card-icon">🪖</span>
-        <div class="card-title">Rosgvardia</div>
-        <div class="card-role">National Guard · 340,000 Troops</div>
-        <div class="card-preview">Created 2016, reporting directly to Putin — not the Defence Ministry. Designed for internal repression. Crushed Prigozhin mutiny response.</div>
-        <span class="card-badge badge-red">Internal Security Force</span>
-      </div>
-    </div>
+    <div class="tier-body" id="tier6-body"><button class="card influence" onclick="showDetail('fsb')" data-type="shadow"><span class="card-icon">🕵️</span><span class="card-title">FSB</span><span class="card-role">Federal Security Service · Domestic Intelligence</span><span class="card-preview">The KGB's successor. Bortnikov leads it; Putin ran it 1998-99. Controls domestic surveillance, counter-intelligence, and political enforcement.</span><span class="card-badge badge-purple">Domestic Control</span></button><button class="card influence" onclick="showDetail('svr')" data-type="shadow"><span class="card-icon">🌐</span><span class="card-title">SVR</span><span class="card-role">Foreign Intelligence Service</span><span class="card-preview">External intelligence. Ran influence operations across the West, election interference, and assassinations abroad including Salisbury 2018.</span><span class="card-badge badge-purple">Foreign Intel</span></button><button class="card influence" onclick="showDetail('gru')" data-type="shadow"><span class="card-icon">⭐</span><span class="card-title">GRU</span><span class="card-role">Military Intelligence · Unit 29155</span><span class="card-preview">Military intelligence with its own special forces (Spetsnaz GRU). Ran the Salisbury poisoning operation.</span><span class="card-badge badge-purple">Military Intel</span></button><button class="card influence" onclick="showDetail('rosgvardiya')" data-type="shadow"><span class="card-icon">🪖</span><span class="card-title">Rosgvardia</span><span class="card-role">National Guard · 340,000 Troops</span><span class="card-preview">Created 2016, reporting directly to Putin — not the Defence Ministry. Designed for internal repression. Crushed the Prigozhin mutiny response.</span><span class="card-badge badge-red">Internal Security Force</span></button></div>
   </div>
-
   <div class="tier-connector"></div>
 
-  <!-- TIER VII: Oligarchs / Informal -->
   <div class="tier-block" id="tier7">
     <div class="tier-header" onclick="toggleTier('tier7')">
       <span class="tier-number">Tier VII</span>
-      <span class="tier-name">Oligarchs & Patronage Networks</span>
+      <span class="tier-name">Oligarchs &amp; Patronage Networks</span><span class="tier-side">Shadow</span>
       <div class="tier-line"></div>
       <span class="tier-toggle" id="tier7-toggle">▾</span>
     </div>
-    <div class="tier-body" id="tier7-body">
-      <div class="card shadow" onclick="showDetail('oligarchs')" data-type="shadow">
-        <span class="card-icon">💎</span>
-        <div class="card-title">The Oligarchs</div>
-        <div class="card-role">Permitted Wealth · Conditional Loyalty</div>
-        <div class="card-preview">Post-2000, oligarchs exist at Putin's sufferance. Wealth is a reward for loyalty, not a source of independent power. The 2022 yacht seizures accelerated a new dependency.</div>
-        <span class="card-badge badge-gold">Conditional Elite</span>
-      </div>
-      <div class="card shadow" onclick="showDetail('statecos')" data-type="shadow">
-        <span class="card-icon">🏭</span>
-        <div class="card-title">State Corporations</div>
-        <div class="card-role">Gazprom · Rosneft · Rostec · Sberbank</div>
-        <div class="card-preview">Russia's economy is dominated by state-controlled corporations run by siloviki-connected figures. They function as political patronage instruments as much as economic entities.</div>
-        <span class="card-badge badge-gold">Political Economy</span>
-      </div>
-      <div class="card shadow" onclick="showDetail('chechen')" data-type="shadow">
-        <span class="card-icon">🏔️</span>
-        <div class="card-title">Kadyrov / Chechnya</div>
-        <div class="card-role">Ramzan Kadyrov · Semi-Autonomous Fief</div>
-        <div class="card-preview">Kadyrov runs Chechnya as a personal fiefdom. Receives massive federal subsidies in exchange for loyalty and provision of fighters. A state within a state with its own armed units.</div>
-        <span class="card-badge badge-red">Warlord Client</span>
-      </div>
-    </div>
+    <div class="tier-body" id="tier7-body"><button class="card influence" onclick="showDetail('oligarchs')" data-type="shadow"><span class="card-icon">💎</span><span class="card-title">The Oligarchs</span><span class="card-role">Permitted Wealth · Conditional Loyalty</span><span class="card-preview">Post-2000, oligarchs exist at Putin's sufferance. Wealth is a reward for loyalty, not a source of independent power.</span><span class="card-badge badge-gold">Conditional Elite</span></button><button class="card influence" onclick="showDetail('statecos')" data-type="shadow"><span class="card-icon">🏭</span><span class="card-title">State Corporations</span><span class="card-role">Gazprom · Rosneft · Rostec · Sberbank</span><span class="card-preview">Russia's economy is dominated by state-controlled corporations run by siloviki-connected figures — political patronage instruments as much as economic entities.</span><span class="card-badge badge-gold">Political Economy</span></button><button class="card influence" onclick="showDetail('chechen')" data-type="shadow"><span class="card-icon">🏔️</span><span class="card-title">Kadyrov / Chechnya</span><span class="card-role">Ramzan Kadyrov · Semi-Autonomous Fief</span><span class="card-preview">Kadyrov runs Chechnya as a personal fiefdom. Receives massive federal subsidies in exchange for loyalty and fighters.</span><span class="card-badge badge-red">Warlord Client</span></button></div>
   </div>
-
   <div class="tier-connector"></div>
 
-  <!-- TIER VIII: Propaganda / Church -->
   <div class="tier-block" id="tier8">
     <div class="tier-header" onclick="toggleTier('tier8')">
       <span class="tier-number">Tier VIII</span>
-      <span class="tier-name">Legitimacy Infrastructure</span>
+      <span class="tier-name">Legitimacy Infrastructure</span><span class="tier-side">Shadow</span>
       <div class="tier-line"></div>
       <span class="tier-toggle" id="tier8-toggle">▾</span>
     </div>
-    <div class="tier-body" id="tier8-body">
-      <div class="card shadow" onclick="showDetail('media_rus')" data-type="shadow">
-        <span class="card-icon">📺</span>
-        <div class="card-title">State Media</div>
-        <div class="card-role">RT · Rossiya 1 · Channel One · VGTRK</div>
-        <div class="card-preview">All major TV channels are state-controlled. Television remains the primary news source for most Russians. Independent media (Novaya Gazeta, Meduza) destroyed or exiled after 2022.</div>
-        <span class="card-badge badge-red">Propaganda Apparatus</span>
-      </div>
-      <div class="card shadow" onclick="showDetail('church')" data-type="shadow">
-        <span class="card-icon">⛪</span>
-        <div class="card-title">Russian Orthodox Church</div>
-        <div class="card-role">Patriarch Kirill · Spiritual Legitimacy</div>
-        <div class="card-preview">Patriarch Kirill has described the Ukraine war as a "metaphysical struggle." The Church provides ideological and spiritual legitimacy for the regime — an alliance of state and religion.</div>
-        <span class="card-badge badge-red">Ideological Pillar</span>
-      </div>
-      <div class="card shadow" onclick="showDetail('unitedrussia')" data-type="shadow">
-        <span class="card-icon">🐻</span>
-        <div class="card-title">United Russia</div>
-        <div class="card-role">Dominant Party · Administrative Resource</div>
-        <div class="card-preview">Called "the party of crooks and thieves" by Navalny. Functions as an administrative coordination network for regional elites, not an ideological party. Putin is not formally a member.</div>
-        <span class="card-badge badge-red">Managed Politics</span>
-      </div>
-    </div>
+    <div class="tier-body" id="tier8-body"><button class="card influence" onclick="showDetail('media_rus')" data-type="shadow"><span class="card-icon">📺</span><span class="card-title">State Media</span><span class="card-role">RT · Rossiya 1 · Channel One · VGTRK</span><span class="card-preview">All major TV channels are state-controlled. Independent media (Novaya Gazeta, Meduza) destroyed or exiled after 2022.</span><span class="card-badge badge-red">Propaganda Apparatus</span></button><button class="card influence" onclick="showDetail('church')" data-type="shadow"><span class="card-icon">⛪</span><span class="card-title">Russian Orthodox Church</span><span class="card-role">Patriarch Kirill · Spiritual Legitimacy</span><span class="card-preview">Patriarch Kirill has described the Ukraine war as a 'metaphysical struggle.' The Church provides ideological legitimacy for the regime.</span><span class="card-badge badge-red">Ideological Pillar</span></button><button class="card influence" onclick="showDetail('unitedrussia')" data-type="shadow"><span class="card-icon">🐻</span><span class="card-title">United Russia</span><span class="card-role">Dominant Party · Administrative Resource</span><span class="card-preview">Called 'the party of crooks and thieves' by Navalny. Functions as an administrative coordination network for regional elites, not an ideological party.</span><span class="card-badge badge-red">Managed Politics</span></button></div>
   </div>
 
-</section>
+  <footer class="page-foot">
+    Goverlicious · Russian Federation · data as of October 2026. Power scores (0–100) are editorial judgements, not measurements.
+    Maps: simplified schematic, not surveyed geography. Part of <a href="../goverlicious.html">the Goverlicious power atlas</a> on <a href="https://www.digidrifters.com">Digidrifters</a>.
+  </footer>
+</main>
 </div>
 </div>
-
-<!-- DETAIL OVERLAY + PANEL -->
 <div class="detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
-<div class="detail-panel" id="detailPanel">
-  <button class="detail-close" onclick="closeDetail()">✕</button>
+<aside class="detail-panel" id="detailPanel" aria-live="polite">
+  <button class="detail-close" onclick="closeDetail()" aria-label="Close">✕</button>
   <div id="detailContent"></div>
-</div>
-
+</aside>
 <script>
-const details = {
-  putin: {
-    icon: '🇷🇺', type: 'Supreme Authority', title: 'VLADIMIR PUTIN', role: 'President · Born 1952 · KGB / FSB Officer',
-    titleClass: 'red',
-    body: `Vladimir Putin is the defining political figure of 21st century Russia — and arguably one of the most consequential leaders in global politics since 1945.
-
-He grew up in Leningrad in grinding poverty, joined the KGB in 1975, served in Dresden during the Cold War, and returned to St Petersburg after the Soviet collapse to enter municipal politics. He became FSB Director in 1998 and acting President on New Year's Eve 1999 when Yeltsin resigned.
-
-His consolidation of power was systematic: co-opting the oligarchs (or destroying those who wouldn't comply — Khodorkovsky jailed in 2003), bringing regional governors under presidential control, nationalising key media assets, and building the siloviki (security services personnel) into the backbone of the state.
-
-The "managed democracy" — elections with predetermined outcomes, managed opposition, legal frameworks weaponised against dissent — was refined across his first two terms. His 2022 decision to launch a full-scale invasion of Ukraine represented a decisive break from the previous era.
-
-The 2020 constitutional amendments, approved by a Constitutional Court that was never going to say no, reset his term count and allow him to remain president until 2036 — when he will be 83.`,
-    facts: [{'l':'In Power','v':'Since 2000 (with 2008-12 gap)'},{'l':'Background','v':'KGB / FSB Director'},{'l':'2036 Term','v':'Amendments allow until 2036'},{'l':'Net Worth (est.)','v':'$200B+ (unofficial)'}],
-    powers: [['Personal Authority', 98, 'fill-red'],['Constitutional Power', 85, 'fill-blue'],['Accountability', 2, 'fill-grey'],['International Standing', 35, 'fill-grey']]
-  },
-  seccouncil: {
-    icon: '🛡️', type: 'Real Power Body', title: 'Security Council', role: 'Putin\'s Inner Circle · Permanent Members',
-    titleClass: 'red',
-    body: `The Security Council of Russia is where real strategic decisions are made. Its permanent members are drawn almost entirely from the siloviki world.
-
-Key figures have included Nikolai Patrushev (former FSB Director, architect of the ideological framing of the Ukraine war), Alexander Bortnikov (current FSB Director), and Sergei Shoigu (former Defence Minister, close Putin ally for decades).
-
-It was the Security Council meeting on 21 February 2022 — broadcast live in an extraordinary piece of political theatre — where Putin humiliated his intelligence and security chiefs one by one before announcing recognition of the Donbas "republics." Three days later came the full invasion.
-
-Unlike the Cabinet, the Security Council's proceedings are not publicly accountable. It is the closest thing to the actual decision-making core of the Russian state.`,
-    facts: [{'l':'Formal Status','v':'Presidential advisory body'},{'l':'Real Status','v':'Primary decision body'},{'l':'Membership','v':'Siloviki-dominated'},{'l':'Transparency','v':'Extremely low'}],
-    powers: [['Decision Authority', 88, 'fill-red'],['War Powers', 92, 'fill-red'],['Democratic Legitimacy', 2, 'fill-grey']]
-  },
-  fsb: {
-    icon: '🕵️', type: 'Intelligence / Coercive Power', title: 'FSB', role: 'Federal Security Service — Domestic',
-    titleClass: 'blue',
-    body: `The FSB (Federalnaya Sluzhba Bezopasnosti) is the primary successor to the KGB, retaining its domestic functions: counter-intelligence, internal security, surveillance, border control, and — critically — political enforcement.
-
-Under Putin, the FSB has expanded far beyond its formal remit. It monitors political opposition, oversees the persecution of journalists and activists, runs informant networks across Russian society, and enforces the loyalty of regional elites.
-
-Director Alexander Bortnikov is a Putin loyalist since the St Petersburg years. The FSB's role in the 2022 invasion was reportedly to provide intelligence assessments (widely believed to have been falsified to tell Putin what he wanted to hear about Ukrainian resistance).
-
-The FSB's Special Purpose Centre runs direct action operations including assassinations. The 2006 polonium poisoning of Alexander Litvinenko in London is attributed to FSB operatives.`,
-    facts: [{'l':'Director','v':'Alexander Bortnikov'},{'l':'Predecessor','v':'KGB (1995 successor)'},{'l':'Putin\'s role','v':'Director 1998-99'},{'l':'Speciality','v':'Domestic enforcement'}],
-    powers: [['Domestic Surveillance', 92, 'fill-purple'],['Political Enforcement', 88, 'fill-purple'],['Accountability', 1, 'fill-grey']]
-  },
-  svr: {
-    icon: '🌐', type: 'Foreign Intelligence', title: 'SVR', role: 'Foreign Intelligence Service',
-    titleClass: 'blue',
-    body: `The SVR (Sluzhba Vneshnei Razvedki) handles foreign intelligence gathering and covert operations abroad. It inherited the KGB's First Chief Directorate functions.
-
-The SVR runs intelligence networks in Western governments and institutions, influence operations targeting Western political processes, and disinformation campaigns. It is assessed to have run active measures in multiple European elections and to maintain networks within Western political parties.
-
-Director Sergei Naryshkin is a longtime Putin confidant — and was visibly humiliated at the February 2022 Security Council meeting when Putin forced him to correctly state support for recognising the Donbas republics.`,
-    facts: [{'l':'Director','v':'Sergei Naryshkin'},{'l':'Focus','v':'Foreign intelligence'},{'l':'Notable Ops','v':'Election interference'},{'l':'Status','v':'Sanctioned entity globally'}],
-    powers: [['Foreign Intel', 82, 'fill-purple'],['Influence Ops', 78, 'fill-purple'],['Covert Action', 70, 'fill-purple']]
-  },
-  gru: {
-    icon: '⭐', type: 'Military Intelligence', title: 'GRU', role: 'Main Intelligence Directorate',
-    titleClass: 'blue',
-    body: `The GRU (Glavnoye Razvedyvatelnoye Upravleniye) is Russia's military intelligence agency — older than the KGB, and in many respects more dangerous. It runs Spetsnaz special forces units, conducts human intelligence operations globally, and carries out "active measures" including assassinations.
-
-Unit 29155 — a GRU special unit — was responsible for the Salisbury novichok poisoning of Sergei Skripal in 2018. GRU officers ("Petrov and Boshirov") appeared on Russian state TV claiming to have been visiting Salisbury Cathedral.
-
-The GRU also ran the 2016 DNC hack (Unit 26165 / "Fancy Bear") and the NotPetya cyberattack of 2017.`,
-    facts: [{'l':'Reports To','v':'Minister of Defence / President'},{'l':'Special Forces','v':'Spetsnaz GRU'},{'l':'Salisbury Op','v':'Unit 29155'},{'l':'Cyber','v':'Unit 26165 (Fancy Bear)'}],
-    powers: [['Military Ops', 85, 'fill-purple'],['Cyber Operations', 82, 'fill-purple'],['Covert Assassination', 75, 'fill-purple']]
-  },
-  oligarchs: {
-    icon: '💎', type: 'Conditional Elite', title: 'The Oligarchs', role: 'Permitted Wealth · Kremlin Clients',
-    titleClass: 'red',
-    body: `Russia's oligarchs are a fundamentally different phenomenon from Western billionaires. Their wealth exists at the pleasure of the Kremlin — they are not an independent power base but a patronage network.
-
-Putin's 2003 message was delivered clearly when Mikhail Khodorkovsky — Russia's richest man and a potential political rival — was arrested, his company (Yukos) seized and renationalised, and he spent 10 years in prison. No major oligarch has tested that boundary since.
-
-Post-2022, the relationship tightened further. Several oligarchs who made mildly critical public statements died in unusual circumstances ("fell from windows," etc.). The wave of Western sanctions and yacht seizures deepened oligarch dependency on Kremlin protection.
-
-Some oligarchs, particularly those with Western assets and exposure, occupy an uncomfortable middle zone — politically neutralised but economically at risk from both sides.`,
-    facts: [{'l':'Khodorkovsky lesson','v':'2003 — power ceiling enforced'},{'l':'2022 deaths','v':'Multiple unexplained fatalities'},{'l':'Western sanctions','v':'~1000+ individuals sanctioned'},{'l':'Dependency','v':'On Kremlin for protection'}],
-    powers: [['Economic Power', 65, 'fill-grey'],['Political Independence', 12, 'fill-grey'],['Kremlin Exposure', 88, 'fill-red']]
-  },
-  duma: {
-    icon: '🏛️', type: 'Legislature', title: 'State Duma', role: '450 Deputies · Managed Lower Chamber',
-    body: `The State Duma is the lower house of Russia's Federal Assembly. United Russia holds a constitutional supermajority, having won a record 349 of 450 seats in the September 2026 elections — Russia's first wartime parliamentary vote, which independent experts called the least competitive in the country's modern history. The only registered peace party, Yabloko, was struck off the party-list ballot by the Supreme Court in August. Official turnout was 59.8%, including voting in occupied Ukrainian territory. Forty-six seats went to veterans of the war in Ukraine, whom Putin has called Russia's 'new elite'. The new Duma opened on 30 September and re-elected Vyacheslav Volodin as speaker.
-
-The Duma passes laws presented to it by the Presidential Administration. It cannot initiate major legislation independently. Opposition parties — the LDPR (now post-Zhirinovsky), Just Russia, and CPRF — are tolerated as "systemic opposition," providing the appearance of pluralism while posing no real challenge.
-
-Real opposition (Navalny's party, liberal parties) is banned from registration or participation. Navalny was poisoned with novichok in 2020, survived, returned to Russia, and died in a penal colony in February 2024.`,
-    facts: [{'l':'Seats','v':'450'},{'l':'United Russia','v':'349 (Sept 2026, record)'},{'l':'Speaker','v':'Vyacheslav Volodin'},{'l':'War Veterans','v':'46 seats'},{'l':'System','v':'Mixed (party list + SMD)'},{'l':'Navalny','v':'Died February 2024'}],
-    powers: [['Legislative Authority', 25, 'fill-grey'],['Presidential Veto Risk', 2, 'fill-grey'],['Democratic Legitimacy', 10, 'fill-grey']]
-  },
-  media_rus: {
-    icon: '📺', type: 'Propaganda System', title: 'State Media', role: 'Television · RT · VGTRK',
-    titleClass: 'red',
-    body: `Russian state television is the primary tool of mass political management. Channel One, Rossiya 1, and NTV reach virtually the entire Russian population. Their coverage of the Ukraine war presents a reality entirely divorced from observable facts.
-
-The mechanism is not simple censorship but something more sophisticated: flooding the information space, creating exhaustion and cynicism, and making factual truth seem like just another narrative among many — what analysts call the "firehose of falsehood."
-
-Independent media was systematically destroyed. Novaya Gazeta suspended operations in Russia in 2022. Echo Moskvy was shut down. TV Rain went into exile. Meduza operates from Latvia, designated as a "foreign agent." The few remaining independent voices face criminal charges.
-
-RT (formerly Russia Today) is the international arm — designated a foreign agent or banned outright in the UK, EU, and US.`,
-    facts: [{'l':'Channel One','v':'State-controlled, ~90M viewers'},{'l':'RT','v':'Banned in EU/UK post-2022'},{'l':'Novaya Gazeta','v':'Suspended in Russia 2022'},{'l':'Meduza','v':'Exiled to Latvia'}],
-    powers: [['Domestic Narrative Control', 88, 'fill-red'],['International Influence', 45, 'fill-red'],['Credibility (external)', 15, 'fill-grey']]
-  },
-  church: {
-    icon: '⛪', type: 'Ideological Power', title: 'Russian Orthodox Church', role: 'Patriarch Kirill · Spiritual Legitimacy',
-    titleClass: 'red',
-    body: `The Russian Orthodox Church under Patriarch Kirill has become a pillar of Putinist ideology — providing spiritual and civilisational legitimacy for both the regime and the Ukraine war.
-
-Kirill has described the conflict as a "metaphysical struggle" against the decadent West, against same-sex partnerships, against a godless liberalism. This framing aligns exactly with Putin's stated justifications. Kirill and Putin have appeared together at major state occasions; the Church blesses military operations.
-
-The post-Soviet Church revival was partly genuine — a reassertion of Russian cultural and religious identity — but under Putin it became instrumentalised as a state ideology. The concept of "Russkiy Mir" (Russian World) — a civilisational sphere of Russian language, culture, and Orthodoxy — provided the ideological underpinning for claims on Ukraine.
-
-Kirill was sanctioned by the UK and EU following the invasion.`,
-    facts: [{'l':'Patriarch','v':'Kirill (since 2009)'},{'l':'Members','v':'~100M nominal Orthodox'},{'l':'Kirill Sanctions','v':'UK, EU post-2022'},{'l':'State Role','v':'De facto state religion'}],
-    powers: [['Ideological Legitimacy', 72, 'fill-red'],['Political Independence', 8, 'fill-grey'],['Global Orthodox Reach', 55, 'fill-red']]
-  },
-  chechen: {
-    icon: '🏔️', type: 'Warlord Client', title: 'Ramzan Kadyrov / Chechnya', role: 'Head of Chechen Republic',
-    titleClass: 'red',
-    body: `Ramzan Kadyrov represents one of the most extraordinary political arrangements in the Russian Federation: an effectively autonomous warlord who runs his republic as a personal fiefdom, receives enormous federal subsidies, and in return provides absolute loyalty and military capacity to Moscow.
-
-Kadyrov commands his own personal armed units (Kadyrovtsy) numbering tens of thousands. He has deployed them to Ukraine, Syria, and previously suppressed domestic dissent with extreme brutality. He has publicly ordered the killing of Chechen diaspora members abroad.
-
-His relationship with Moscow is transactional: Chechnya receives more federal subsidy per capita than almost any other region; in return Kadyrov provides fighters, loyalty, and the spectacle of stability in a region that fought two devastating wars against Russia in the 1990s.
-
-He has called himself "Putin's infantry," and posts regular social media videos of himself working out, praying, and commanding forces.`,
-    facts: [{'l':'In Power','v':'Since 2007'},{'l':'Federal Subsidies','v':'~80% of Chechen budget'},{'l':'Kadyrovtsy','v':'Personal army ~40,000'},{'l':'Status','v':'Sanctioned by US, EU, UK'}],
-    powers: [['Regional Authority', 90, 'fill-red'],['Personal Military', 75, 'fill-red'],['Independence from Moscow', 20, 'fill-grey']]
-  },
-  rosgvardiya: {
-    icon: '🪖', type: 'Internal Security Force', title: 'Rosgvardia', role: 'National Guard · Internal Repression',
-    titleClass: 'red',
-    body: `The National Guard of Russia (Rosgvardia) was created by presidential decree in 2016 and reports directly to Putin — not through the Defence Ministry or Interior Ministry chain of command. This was a deliberate design choice: it is Putin's personal insurance against a military or police coup.
-
-With approximately 340,000 troops, it is larger than many countries' entire armed forces. It is equipped with armoured vehicles and heavy weapons. Its mandate includes: counter-terrorism, border security, organised crime — but primarily internal order maintenance.
-
-During the Prigozhin mutiny in June 2023 (when Wagner Group forces briefly seized Rostov-on-Don and began a march on Moscow), Rosgvardia was among the forces mobilised to stop them.`,
-    facts: [{'l':'Created','v':'2016 by presidential decree'},{'l':'Reports To','v':'Directly to Putin'},{'l':'Size','v':'~340,000 troops'},{'l':'Purpose','v':'Internal order / coup insurance'}],
-    powers: [['Internal Repression', 85, 'fill-red'],['Counter-Coup Role', 80, 'fill-red'],['External Military', 45, 'fill-grey']]
-  },
-  presadmin: {
-    icon: '🏛️', type: 'Presidential Administration', title: 'Presidential Administration', role: 'Kremlin Staff · De Facto Government',
-    body: `The Presidential Administration (based in the Kremlin) is the true governing apparatus of Russia — more powerful than the Council of Ministers or any elected body. It controls the appointment of regional governors, manages the Duma and party political system, oversees state media, coordinates the security services, and sets the political agenda.
-
-Its head (currently Anton Vaino) is arguably the second most powerful official in Russia. Deputy heads responsible for domestic politics effectively run the country's political system day-to-day.
-
-The Administration's "political technologists" — most famously Vladislav Surkov until his 2020 departure — designed the managed democracy architecture: creating fake opposition parties, scripting political theatre, and engineering public consent.`,
-    facts: [{'l':'Chief of Staff','v':'Anton Vaino'},{'l':'Real Power','v':'Exceeds Council of Ministers'},{'l':'Surkov legacy','v':'Managed democracy design'},{'l':'Controls','v':'Governors, Duma, media, security'}],
-    powers: [['Political Control', 90, 'fill-blue'],['Appointment Power', 88, 'fill-blue'],['Accountability', 3, 'fill-grey']]
-  },
-  governors: {
-    icon: '🗺️', type: 'Regional Administration', title: '85 Regional Governors', role: 'Presidential Appointees',
-    body: `Russia's 85 federal subjects (republics, oblasts, krais, federal cities, autonomous regions) are headed by governors who, since Putin's 2004 reforms, are effectively presidential appointees rather than independently elected leaders.
-
-The formal elections that occur are carefully managed. Candidates require "municipal filter" support — signatures from local councillors — which makes it impossible for non-regime candidates to qualify. Governors who displease Moscow are simply replaced.
-
-This system reversed the 1990s pattern where powerful regional leaders (Luzhkov in Moscow, Shaimiev in Tatarstan) operated with genuine autonomy and occasionally defied the federal centre.`,
-    facts: [{'l':'Federal Subjects','v':'85 (inc. occupied territories)'},{'l':'Direct Election','v':'Technically yes, practically managed'},{'l':'Municipal Filter','v':'Blocks independent candidates'},{'l':'2004 Reform','v':'Removed direct election initially'}],
-    powers: [['Regional Admin', 60, 'fill-blue'],['Political Independence', 8, 'fill-grey'],['Federal Accountability', 90, 'fill-red']]
-  },
-  statecos: {
-    icon: '🏭', type: 'Political Economy', title: 'State Corporations', role: 'Gazprom · Rosneft · Rostec',
-    titleClass: 'red',
-    body: `Russia's commanding heights economy is dominated by state corporations run by siloviki-connected figures. Gazprom (gas), Rosneft (oil), Rostec (defence manufacturing), Sberbank (banking), and others control the most profitable sectors.
-
-These corporations serve dual purposes: economic extraction and political patronage. Their boards and senior management are populated with Putin's associates — often without relevant industry experience. Compensation packages reward loyalty.
-
-Gazprom's role as Europe's primary gas supplier was wielded as geopolitical leverage for decades — the most explicit case of energy weaponisation in modern history, culminating in the 2022 supply cutoffs.
-
-Igor Sechin (Rosneft) is considered one of the most powerful figures in Russia — a hardline silovik and Putin confidant whose influence rivals cabinet members.`,
-    facts: [{'l':'Gazprom','v':'World\'s largest gas producer'},{'l':'Rosneft','v':'CEO Igor Sechin (silovik)'},{'l':'Rostec','v':'Defence industrial base'},{'l':'Revenue Role','v':'~50% of federal budget (energy)'}],
-    powers: [['Economic Control', 88, 'fill-red'],['Political Patronage', 82, 'fill-red'],['Market Independence', 10, 'fill-grey']]
-  },
-  mid: { icon: '🌍', type: 'Ministry', title: 'Ministry of Foreign Affairs', role: 'MID · Sergei Lavrov',
-    body: `Sergei Lavrov has been Foreign Minister since 2004 — an extraordinary tenure that spans the entire Putin era. He is the public face of Russian diplomacy but widely understood to have limited independent policy influence; he implements decisions made elsewhere.
-
-His press conferences and UN speeches have become a form of performance art — delivering positions with a kind of arch contempt for Western interlocutors that some regard as representing Putin's actual attitude more honestly than diplomatic language would allow.`,
-    facts: [{'l':'Minister','v':'Sergei Lavrov (since 2004)'},{'l':'Policy Authority','v':'Low — implements, not decides'},{'l':'UN Security Council','v':'P5 permanent member'},{'l':'Post-2022','v':'Sanctioned globally'}],
-    powers: [['Diplomatic Representation', 70, 'fill-blue'],['Policy Influence', 22, 'fill-grey'],['International Isolation', 75, 'fill-red']]
-  },
-  minoboron: { icon: '⚔️', type: 'Ministry', title: 'Ministry of Defence', role: 'Minoboron · Andrei Belousov',
-    body: `The Ministry of Defence is in an unusual position for a country at war: its minister since 2024 is Andrei Belousov, an economist — not a military officer. This appointment is widely read as Putin's attempt to bring economic management to the defence sector after the catastrophic logistics and procurement failures of the 2022 invasion.
-
-Previous minister Sergei Shoigu was moved aside after years as a Putin ally, partly in the fallout from the Prigozhin mutiny (Prigozhin's central accusation was that Shoigu and Chief of Staff Gerasimov had catastrophically mismanaged the war).`,
-    facts: [{'l':'Minister','v':'Andrei Belousov (economist)'},{'l':'Previous','v':'Sergei Shoigu (2012-2024)'},{'l':'Chief of Staff','v':'Valery Gerasimov'},{'l':'War Status','v':'Full invasion since Feb 2022'}],
-    powers: [['Military Command', 75, 'fill-blue'],['Budget (war)', 92, 'fill-blue'],['Strategic Autonomy', 30, 'fill-grey']]
-  },
-  unitedrussia: { icon: '🐻', type: 'Party', title: 'United Russia', role: '"Party of Power" — Administrative Resource',
-    titleClass: 'red',
-    body: `United Russia is not a political party in any meaningful ideological sense. It has no consistent ideology beyond loyalty to Putin and the current administration. It functions as an administrative coordination mechanism — regional elites join to signal loyalty and access patronage, not because they share any political vision.
-
-Putin himself is not formally a member. The party's mascot is a bear; its nickname among critics is the "party of crooks and thieves" — the phrase popularised by Navalny in 2011.
-
-In September 2026 it won 349 Duma seats, beating its 2016 record of 343, with the Communists (37), LDPR (23), New People (19) and A Just Russia (17) far behind. Its continued electoral dominance (despite no real enthusiasm even among its own members) is maintained through administrative resource: using state employees, state time, and state facilities to campaign; manipulating vote counts; and excluding real competition.`,
-    facts: [{'l':'Duma Seats','v':'349 / 450 (2026)'},{'l':'Founded','v':'2001'},{'l':'Putin Membership','v':'Not a formal member'},{'l':'Ideology','v':'Putinism / statism / loyalty'}],
-    powers: [['Electoral Dominance', 85, 'fill-red'],['Ideological Coherence', 15, 'fill-grey'],['Patronage Network', 78, 'fill-red']]
-  }
-};
-
-const feds = {
-  cfd: { name: 'Central Federal District', city: 'Moscow', desc: 'Home to ~40M people including Moscow and Moscow Oblast. The political and economic heart of Russia. The district head is a presidential envoy; Moscow city is governed by a separately appointed mayor (currently Sobyanin — a longtime Putin associate). Controls the overwhelming majority of foreign investment and federal budget expenditure.', facts: [{'l':'Population','v':'~40M'},{'l':'Capital','v':'Moscow'},{'l':'GDP Share','v':'~35% of national'},{'l':'Envoy','v':'Igor Shchegolev'}] },
-  nwfd: { name: 'Northwestern Federal District', city: 'St Petersburg', desc: 'Russia\'s second city and Putin\'s hometown. St Petersburg\'s political culture seeded much of the Putin system — Dmitry Medvedev, many FSB and security service figures, and early Kremlin advisors all came from the St Petersburg network. The district also encompasses Karelia (bordering Finland) and Kaliningrad (the exclave between Poland and Lithuania, strategically critical NATO flanking concern).', facts: [{'l':'Population','v':'~14M'},{'l':'Key City','v':'St Petersburg'},{'l':'NATO Flank','v':'Kaliningrad exclave'},{'l':'Putin origin','v':'St Petersburg network'}] },
-  sfd: { name: 'Southern Federal District', city: 'Rostov-on-Don', desc: 'Includes the strategically critical Krasnodar Krai (Sochi, Black Sea coast) and the occupied Ukrainian territories claimed since 2022. Rostov-on-Don became briefly famous as the city where Prigozhin\'s Wagner Group seized the Southern Military District HQ in June 2023 before their aborted march on Moscow.', facts: [{'l':'Population','v':'~17M'},{'l':'Strategic','v':'Black Sea access, Ukraine border'},{'l':'Prigozhin','v':'Wagner seized Rostov June 2023'},{'l':'Occupied','v':'Claims on Zaporizhzhia, Kherson'}] },
-  urals: { name: 'Urals Federal District', city: 'Yekaterinburg', desc: 'Russia\'s industrial heartland and the location of major defence manufacturing. Yekaterinburg is Russia\'s fourth-largest city and historically more liberal than Moscow — it elected opposition politicians and saw significant anti-war protests in 2022. The Urals region contains much of Russia\'s defence-industrial complex, running at wartime capacity since 2022.', facts: [{'l':'Population','v':'~12M'},{'l':'Key Industry','v':'Defence manufacturing'},{'l':'Political','v':'Historically more liberal'},{'l':'Rostec presence','v':'Major defence facilities'}] },
-  siberia: { name: 'Siberian Federal District', city: 'Novosibirsk', desc: 'Russia\'s vast interior containing enormous natural resources. Novosibirsk is Russia\'s third-largest city and a major scientific centre (Akademgorodok — the Soviet science city). The district faces chronic demographic decline as younger Russians leave for Moscow. Contains significant deposits of coal, metals, and is crossed by the Trans-Siberian Railway.', facts: [{'l':'Population','v':'~17M'},{'l':'Area','v':'Vast — resource-rich'},{'l':'Akademgorodok','v':'Major scientific centre'},{'l':'Trend','v':'Depopulation ongoing'}] }
-};
-
+const details = {"putin": {"icon": "🇷🇺", "type": "Supreme Authority", "title": "Vladimir Putin", "role": "President · Born 1952 · KGB / FSB Officer", "titleClass": "gold", "body": "Vladimir Putin is the defining political figure of 21st century Russia — and arguably one of the most consequential leaders in global politics since 1945.\n\nHe grew up in Leningrad in grinding poverty, joined the KGB in 1975, served in Dresden during the Cold War, and returned to St Petersburg after the Soviet collapse to enter municipal politics. He became FSB Director in 1998 and acting President on New Year's Eve 1999 when Yeltsin resigned.\n\nHis consolidation of power was systematic: co-opting the oligarchs (or destroying those who wouldn't comply — Khodorkovsky jailed in 2003), bringing regional governors under presidential control, nationalising key media assets, and building the siloviki into the backbone of the state.\n\nThe 'managed democracy' — elections with predetermined outcomes, managed opposition, legal frameworks weaponised against dissent — was refined across his first two terms. His 2022 decision to launch a full-scale invasion of Ukraine represented a decisive break from the previous era.\n\nThe 2020 constitutional amendments, approved by a Constitutional Court that was never going to say no, reset his term count and allow him to remain president until 2036 — when he will be 83.", "facts": [{"l": "In Power", "v": "Since 2000 (with 2008-12 gap)"}, {"l": "Background", "v": "KGB / FSB Director"}, {"l": "2036 Term", "v": "Amendments allow until 2036"}, {"l": "Net Worth (est.)", "v": "$200B+ (unofficial)"}], "powers": [["Personal Authority", 98, "fill-gold"], ["Constitutional Power", 85, "fill-blue"], ["Accountability", 2, "fill-blue"], ["International Standing", 35, "fill-blue"]]}, "seccouncil": {"icon": "🛡️", "type": "Real Power Body", "title": "Security Council", "role": "Putin's Inner Circle · Permanent Members", "titleClass": "amber", "body": "The Security Council of Russia is where real strategic decisions are made. Its permanent members are drawn almost entirely from the siloviki world.\n\nKey figures have included Nikolai Patrushev (former FSB Director, architect of the ideological framing of the Ukraine war), Alexander Bortnikov (current FSB Director), and Sergei Shoigu (former Defence Minister, close Putin ally for decades).\n\nIt was the Security Council meeting on 21 February 2022 — broadcast live in an extraordinary piece of political theatre — where Putin humiliated his intelligence and security chiefs one by one before announcing recognition of the Donbas 'republics.' Three days later came the full invasion.\n\nUnlike the Cabinet, the Security Council's proceedings are not publicly accountable. It is the closest thing to the actual decision-making core of the Russian state.", "facts": [{"l": "Formal Status", "v": "Presidential advisory body"}, {"l": "Real Status", "v": "Primary decision body"}, {"l": "Membership", "v": "Siloviki-dominated"}, {"l": "Transparency", "v": "Extremely low"}], "powers": [["Decision Authority", 88, "fill-red"], ["War Powers", 92, "fill-red"], ["Democratic Legitimacy", 2, "fill-blue"]]}, "presadmin": {"icon": "🏛️", "type": "Presidential Administration", "title": "Presidential Administration", "role": "Kremlin Staff · De Facto Government", "body": "The Presidential Administration (based in the Kremlin) is the true governing apparatus of Russia — more powerful than the Council of Ministers or any elected body. It controls the appointment of regional governors, manages the Duma and party political system, oversees state media, coordinates the security services, and sets the political agenda.\n\nIts head (currently Anton Vaino) is arguably the second most powerful official in Russia. Deputy heads responsible for domestic politics effectively run the country's political system day-to-day.\n\nThe Administration's 'political technologists' — most famously Vladislav Surkov until his 2020 departure — designed the managed democracy architecture: creating fake opposition parties, scripting political theatre, and engineering public consent.", "facts": [{"l": "Chief of Staff", "v": "Anton Vaino"}, {"l": "Real Power", "v": "Exceeds Council of Ministers"}, {"l": "Surkov legacy", "v": "Managed democracy design"}, {"l": "Controls", "v": "Governors, Duma, media, security"}], "powers": [["Political Control", 90, "fill-blue"], ["Appointment Power", 88, "fill-blue"], ["Accountability", 3, "fill-blue"]]}, "pm": {"icon": "🏢", "type": "Formal Executive", "title": "Prime Minister", "role": "Mikhail Mishustin · Head of Government · White House", "body": "Mikhail Mishustin manages day-to-day economic administration. He has no independent political base and is entirely subordinate to Putin — a technocratic manager rather than a political principal, a role that keeps the Prime Minister's office deliberately depoliticised.", "facts": [{"l": "PM", "v": "Mikhail Mishustin"}, {"l": "Base", "v": "No independent political base"}, {"l": "Role", "v": "Economic administration"}, {"l": "Status", "v": "Subordinate to Putin"}], "powers": [["Formal", 55, "fill-blue"], ["Real Power", 20, "fill-blue"], ["Autonomy", 10, "fill-blue"]]}, "cabinet_rus": {"icon": "📋", "type": "Formal Executive", "title": "Council of Ministers", "role": "~30 Ministers · Formal Government", "body": "The Council of Ministers implements policy but does not make it. Ministers serve at presidential pleasure. It is technical administration, not political authority — the executive layer that carries out decisions already made in the Presidential Administration and Security Council.", "facts": [{"l": "Size", "v": "~30 ministers"}, {"l": "Role", "v": "Implementation, not policymaking"}, {"l": "Tenure", "v": "At presidential pleasure"}, {"l": "Status", "v": "Technical administration"}], "powers": [["Formal", 45, "fill-blue"], ["Real Power", 15, "fill-blue"], ["Autonomy", 8, "fill-blue"]]}, "minoboron": {"icon": "⚔️", "type": "Ministry", "title": "Ministry of Defence", "role": "Minoboron · Andrei Belousov", "body": "The Ministry of Defence is in an unusual position for a country at war: its minister since 2024 is Andrei Belousov, an economist — not a military officer. This appointment is widely read as Putin's attempt to bring economic management to the defence sector after the catastrophic logistics and procurement failures of the 2022 invasion.\n\nPrevious minister Sergei Shoigu was moved aside after years as a Putin ally, partly in the fallout from the Prigozhin mutiny (Prigozhin's central accusation was that Shoigu and Chief of Staff Gerasimov had catastrophically mismanaged the war).", "facts": [{"l": "Minister", "v": "Andrei Belousov (economist)"}, {"l": "Previous", "v": "Sergei Shoigu (2012-2024)"}, {"l": "Chief of Staff", "v": "Valery Gerasimov"}, {"l": "War Status", "v": "Full invasion since Feb 2022"}], "powers": [["Military Command", 75, "fill-blue"], ["Budget (war)", 92, "fill-blue"], ["Strategic Autonomy", 30, "fill-blue"]]}, "mid": {"icon": "🌍", "type": "Ministry", "title": "Ministry of Foreign Affairs", "role": "MID · Sergei Lavrov", "body": "Sergei Lavrov has been Foreign Minister since 2004 — an extraordinary tenure that spans the entire Putin era. He is the public face of Russian diplomacy but widely understood to have limited independent policy influence; he implements decisions made elsewhere.\n\nHis press conferences and UN speeches have become a form of performance art — delivering positions with a kind of arch contempt for Western interlocutors that some regard as representing Putin's actual attitude more honestly than diplomatic language would allow.", "facts": [{"l": "Minister", "v": "Sergei Lavrov (since 2004)"}, {"l": "Policy Authority", "v": "Low — implements, not decides"}, {"l": "UN Security Council", "v": "P5 permanent member"}, {"l": "Post-2022", "v": "Sanctioned globally"}], "powers": [["Diplomatic Representation", 70, "fill-blue"], ["Policy Influence", 22, "fill-blue"], ["International Isolation", 75, "fill-red"]]}, "minfin": {"icon": "💰", "type": "Ministry", "title": "Ministry of Finance", "role": "Minfin · Anton Siluanov", "body": "Anton Siluanov has run the Finance Ministry since 2011, giving him one of the longest tenures in Putin's government. His ministry manages the federal budget, the National Wealth Fund built from oil and gas revenue, and the war-economy arithmetic of financing a multi-year invasion under Western sanctions.\n\nSiluanov is a technocrat, not a political figure — his job is to make the numbers work for whatever the Kremlin has already decided to do, not to set the direction.", "facts": [{"l": "Minister", "v": "Anton Siluanov (since 2011)"}, {"l": "Manages", "v": "Federal budget · National Wealth Fund"}, {"l": "Context", "v": "War-economy financing under sanctions"}, {"l": "Role", "v": "Technocratic implementer"}], "powers": [["Formal", 65, "fill-blue"], ["Budget Control", 80, "fill-blue"], ["Political Autonomy", 20, "fill-blue"]]}, "minek": {"icon": "📈", "type": "Ministry", "title": "Ministry of Economic Development", "role": "MER", "body": "MER handles economic forecasting, trade negotiations and regional development programmes, but sits well below Minfin and the Central Bank in real influence over the war economy. It is a planning and coordination body more than a lever of power.", "facts": [{"l": "Remit", "v": "Forecasting · trade · regional development"}, {"l": "Status", "v": "Below Finance Ministry in influence"}, {"l": "Role", "v": "Planning and coordination"}, {"l": "Context", "v": "War-economy adjustment"}], "powers": [["Formal", 45, "fill-blue"], ["Agenda", 30, "fill-blue"], ["Visibility", 20, "fill-blue"]]}, "minvd": {"icon": "🚔", "type": "Ministry", "title": "Ministry of Internal Affairs", "role": "MVD · Police", "body": "The MVD runs Russia's ordinary police force — distinct from the FSB's domestic-security remit and Rosgvardia's internal-repression role. It handles conventional crime, traffic enforcement and public order, and has absorbed a wave of new duties policing wartime dissent and draft evasion.", "facts": [{"l": "Remit", "v": "Civilian policing"}, {"l": "Distinct From", "v": "FSB (security) · Rosgvardia (repression)"}, {"l": "Wartime Role", "v": "Draft evasion enforcement"}, {"l": "Status", "v": "Subordinate to presidential priorities"}], "powers": [["Formal", 55, "fill-blue"], ["Coercive Reach", 60, "fill-blue"], ["Political Autonomy", 15, "fill-blue"]]}, "rosatom": {"icon": "☢️", "type": "State Corporation", "title": "Rosatom", "role": "Nuclear State Corp · Alexey Likhachev", "body": "Rosatom controls Russia's entire civil and military nuclear complex, from weapons-grade material to the world's largest fleet of nuclear icebreakers and a major export business building reactors abroad — from Turkey to Bangladesh to Egypt. Its leverage was on display after 2022 when Russian forces occupied Europe's largest nuclear plant, Zaporizhzhia, and Rosatom personnel took over its operation.", "facts": [{"l": "Head", "v": "Alexey Likhachev"}, {"l": "Scope", "v": "Civil + military nuclear complex"}, {"l": "Export Reach", "v": "Turkey · Bangladesh · Egypt reactors"}, {"l": "2022 Role", "v": "Zaporizhzhia plant occupation"}], "powers": [["Formal", 60, "fill-blue"], ["Strategic Leverage", 75, "fill-blue"], ["Global Reach", 55, "fill-blue"]]}, "rosneft": {"icon": "🛢️", "type": "State Corporation", "title": "Rosneft / Gazprom", "role": "State Energy Corps · Igor Sechin", "titleClass": "amber", "body": "Rosneft and Gazprom are Russia's commanding economic heights — state-controlled oil and gas giants that have historically funded close to half the federal budget. Rosneft's CEO, Igor Sechin, is a hardline silovik and one of Putin's closest confidants, with influence that rivals cabinet ministers. Gazprom's role as Europe's primary gas supplier was wielded as geopolitical leverage for decades, culminating in the 2022 supply cutoffs after the invasion.", "facts": [{"l": "Rosneft CEO", "v": "Igor Sechin (silovik)"}, {"l": "Gazprom Role", "v": "Former top EU gas supplier"}, {"l": "Budget Share", "v": "~50% of federal revenue (energy)"}, {"l": "2022 Event", "v": "European supply cutoffs"}], "powers": [["Formal", 40, "fill-blue"], ["Economic Control", 88, "fill-red"], ["Political Patronage", 80, "fill-red"]]}, "cbank": {"icon": "🏦", "type": "Monetary Authority", "title": "Central Bank", "role": "Elvira Nabiullina", "body": "Elvira Nabiullina has run the Central Bank since 2013 and is widely regarded as the most competent technocrat in the Russian government — credited with building the reserves and capital controls that kept the economy from collapsing after the 2022 sanctions shock. Her independence is real but bounded: she manages the consequences of war-economy decisions she has no say in making.", "facts": [{"l": "Governor", "v": "Elvira Nabiullina (since 2013)"}, {"l": "Reputation", "v": "Technocratic, internationally respected"}, {"l": "2022 Role", "v": "Managed sanctions shock response"}, {"l": "Independence", "v": "Real but bounded by war economy"}], "powers": [["Formal", 65, "fill-blue"], ["Technical Competence", 85, "fill-blue"], ["Political Autonomy", 30, "fill-blue"]]}, "duma": {"icon": "🏛️", "type": "Legislature", "title": "State Duma", "role": "450 Deputies · Managed Lower Chamber", "body": "The State Duma is the lower house of Russia's Federal Assembly. United Russia holds a constitutional supermajority, having won a record 349 of 450 seats in the September 2026 elections — Russia's first wartime parliamentary vote, which independent experts called the least competitive in the country's modern history. The only registered peace party, Yabloko, was struck off the party-list ballot by the Supreme Court in August. Official turnout was 59.8%, including voting in occupied Ukrainian territory. Forty-six seats went to veterans of the war in Ukraine, whom Putin has called Russia's 'new elite.' The new Duma opened on 30 September and re-elected Vyacheslav Volodin as speaker.\n\nThe Duma passes laws presented to it by the Presidential Administration. It cannot initiate major legislation independently. Opposition parties — the LDPR, Just Russia, and CPRF — are tolerated as 'systemic opposition,' providing the appearance of pluralism while posing no real challenge.\n\nReal opposition (Navalny's party, liberal parties) is banned from registration or participation. Navalny was poisoned with novichok in 2020, survived, returned to Russia, and died in a penal colony in February 2024.", "facts": [{"l": "Seats", "v": "450"}, {"l": "United Russia", "v": "349 (Sept 2026, record)"}, {"l": "Speaker", "v": "Vyacheslav Volodin"}, {"l": "War Veterans", "v": "46 seats"}, {"l": "System", "v": "Mixed (party list + SMD)"}, {"l": "Navalny", "v": "Died February 2024"}], "powers": [["Legislative Authority", 25, "fill-blue"], ["Presidential Veto Risk", 2, "fill-blue"], ["Democratic Legitimacy", 10, "fill-blue"]]}, "federation_council": {"icon": "🏢", "type": "Legislature", "title": "Federation Council", "role": "170 Senators · Upper Chamber", "body": "Members are effectively appointed by regional governors, themselves Kremlin-approved. The Federation Council approved the use of force in Ukraine within minutes of Putin's request — the clearest demonstration of how little independent deliberation happens in the chamber.", "facts": [{"l": "Senators", "v": "170"}, {"l": "Appointment", "v": "Via Kremlin-approved governors"}, {"l": "Landmark Vote", "v": "Approved Ukraine force within minutes"}, {"l": "Role", "v": "Ratification, not deliberation"}], "powers": [["Formal", 30, "fill-blue"], ["Real Power", 10, "fill-blue"], ["Deliberative Independence", 3, "fill-blue"]]}, "constcourt": {"icon": "⚖️", "type": "Judiciary", "title": "Constitutional Court", "role": "Formally Independent · Practically Compliant", "body": "The Constitutional Court approved the 2020 constitutional amendments allowing Putin to remain president until 2036. Judicial independence has been effectively eliminated under the managed system — the court has never meaningfully blocked a Kremlin priority.", "facts": [{"l": "Landmark Ruling", "v": "2020 — approved 2036 term reset"}, {"l": "Independence", "v": "Formal only"}, {"l": "Track Record", "v": "No major block of Kremlin priorities"}, {"l": "Role", "v": "Legal cover for executive decisions"}], "powers": [["Formal", 40, "fill-blue"], ["Real Independence", 5, "fill-blue"], ["Legitimising Function", 70, "fill-red"]]}, "governors": {"icon": "🗺️", "type": "Regional Administration", "title": "85 Regional Governors", "role": "Presidential Appointees", "body": "Russia's 85 federal subjects (republics, oblasts, krais, federal cities, autonomous regions) are headed by governors who, since Putin's 2004 reforms, are effectively presidential appointees rather than independently elected leaders.\n\nThe formal elections that occur are carefully managed. Candidates require a 'municipal filter' — signatures from local councillors — which makes it impossible for non-regime candidates to qualify. Governors who displease Moscow are simply replaced.\n\nThis system reversed the 1990s pattern where powerful regional leaders (Luzhkov in Moscow, Shaimiev in Tatarstan) operated with genuine autonomy and occasionally defied the federal centre.", "facts": [{"l": "Federal Subjects", "v": "85 (inc. occupied territories)"}, {"l": "Direct Election", "v": "Technically yes, practically managed"}, {"l": "Municipal Filter", "v": "Blocks independent candidates"}, {"l": "2004 Reform", "v": "Removed direct election initially"}], "powers": [["Regional Admin", 60, "fill-blue"], ["Political Independence", 8, "fill-blue"], ["Federal Accountability", 90, "fill-red"]]}, "plenipo": {"icon": "👁️", "type": "Kremlin Oversight", "title": "Presidential Plenipotentiaries", "role": "8 Federal District Envoys", "titleClass": "amber", "body": "Putin's personal representatives in each of the eight federal districts, created in 2000 specifically to reassert central control over regions that had drifted toward independent power in the 1990s. Often drawn from siloviki backgrounds, their job is to watch the governors on Putin's behalf and report directly to the Presidential Administration.", "facts": [{"l": "Created", "v": "2000"}, {"l": "Districts", "v": "8"}, {"l": "Background", "v": "Often siloviki"}, {"l": "Function", "v": "Watch governors for the Kremlin"}], "powers": [["Formal", 35, "fill-blue"], ["Oversight Power", 70, "fill-red"], ["Public Visibility", 15, "fill-blue"]]}, "fsb": {"icon": "🕵️", "type": "Intelligence / Coercive Power", "title": "FSB", "role": "Federal Security Service — Domestic", "titleClass": "amber", "body": "The FSB (Federalnaya Sluzhba Bezopasnosti) is the primary successor to the KGB, retaining its domestic functions: counter-intelligence, internal security, surveillance, border control, and — critically — political enforcement.\n\nUnder Putin, the FSB has expanded far beyond its formal remit. It monitors political opposition, oversees the persecution of journalists and activists, runs informant networks across Russian society, and enforces the loyalty of regional elites.\n\nDirector Alexander Bortnikov is a Putin loyalist since the St Petersburg years. The FSB's role in the 2022 invasion was reportedly to provide intelligence assessments (widely believed to have been falsified to tell Putin what he wanted to hear about Ukrainian resistance).\n\nThe FSB's Special Purpose Centre runs direct action operations including assassinations. The 2006 polonium poisoning of Alexander Litvinenko in London is attributed to FSB operatives.", "facts": [{"l": "Director", "v": "Alexander Bortnikov"}, {"l": "Predecessor", "v": "KGB (1995 successor)"}, {"l": "Putin's role", "v": "Director 1998-99"}, {"l": "Speciality", "v": "Domestic enforcement"}], "powers": [["Domestic Surveillance", 92, "fill-red"], ["Political Enforcement", 88, "fill-red"], ["Accountability", 1, "fill-blue"]]}, "svr": {"icon": "🌐", "type": "Foreign Intelligence", "title": "SVR", "role": "Foreign Intelligence Service", "titleClass": "amber", "body": "The SVR (Sluzhba Vneshnei Razvedki) handles foreign intelligence gathering and covert operations abroad. It inherited the KGB's First Chief Directorate functions.\n\nThe SVR runs intelligence networks in Western governments and institutions, influence operations targeting Western political processes, and disinformation campaigns. It is assessed to have run active measures in multiple European elections and to maintain networks within Western political parties.\n\nDirector Sergei Naryshkin is a longtime Putin confidant — and was visibly humiliated at the February 2022 Security Council meeting when Putin forced him to correctly state support for recognising the Donbas republics.", "facts": [{"l": "Director", "v": "Sergei Naryshkin"}, {"l": "Focus", "v": "Foreign intelligence"}, {"l": "Notable Ops", "v": "Election interference"}, {"l": "Status", "v": "Sanctioned entity globally"}], "powers": [["Foreign Intel", 82, "fill-red"], ["Influence Ops", 78, "fill-red"], ["Covert Action", 70, "fill-red"]]}, "gru": {"icon": "⭐", "type": "Military Intelligence", "title": "GRU", "role": "Main Intelligence Directorate", "titleClass": "amber", "body": "The GRU (Glavnoye Razvedyvatelnoye Upravleniye) is Russia's military intelligence agency — older than the KGB, and in many respects more dangerous. It runs Spetsnaz special forces units, conducts human intelligence operations globally, and carries out 'active measures' including assassinations.\n\nUnit 29155 — a GRU special unit — was responsible for the Salisbury novichok poisoning of Sergei Skripal in 2018. GRU officers ('Petrov and Boshirov') appeared on Russian state TV claiming to have been visiting Salisbury Cathedral.\n\nThe GRU also ran the 2016 DNC hack (Unit 26165 / 'Fancy Bear') and the NotPetya cyberattack of 2017.", "facts": [{"l": "Reports To", "v": "Minister of Defence / President"}, {"l": "Special Forces", "v": "Spetsnaz GRU"}, {"l": "Salisbury Op", "v": "Unit 29155"}, {"l": "Cyber", "v": "Unit 26165 (Fancy Bear)"}], "powers": [["Military Ops", 85, "fill-red"], ["Cyber Operations", 82, "fill-red"], ["Covert Assassination", 75, "fill-red"]]}, "rosgvardiya": {"icon": "🪖", "type": "Internal Security Force", "title": "Rosgvardia", "role": "National Guard · Internal Repression", "titleClass": "amber", "body": "The National Guard of Russia (Rosgvardia) was created by presidential decree in 2016 and reports directly to Putin — not through the Defence Ministry or Interior Ministry chain of command. This was a deliberate design choice: it is Putin's personal insurance against a military or police coup.\n\nWith approximately 340,000 troops, it is larger than many countries' entire armed forces. It is equipped with armoured vehicles and heavy weapons. Its mandate includes counter-terrorism, border security, organised crime — but primarily internal order maintenance.\n\nDuring the Prigozhin mutiny in June 2023 (when Wagner Group forces briefly seized Rostov-on-Don and began a march on Moscow), Rosgvardia was among the forces mobilised to stop them.", "facts": [{"l": "Created", "v": "2016 by presidential decree"}, {"l": "Reports To", "v": "Directly to Putin"}, {"l": "Size", "v": "~340,000 troops"}, {"l": "Purpose", "v": "Internal order / coup insurance"}], "powers": [["Internal Repression", 85, "fill-red"], ["Counter-Coup Role", 80, "fill-red"], ["External Military", 45, "fill-blue"]]}, "oligarchs": {"icon": "💎", "type": "Conditional Elite", "title": "The Oligarchs", "role": "Permitted Wealth · Kremlin Clients", "titleClass": "amber", "body": "Russia's oligarchs are a fundamentally different phenomenon from Western billionaires. Their wealth exists at the pleasure of the Kremlin — they are not an independent power base but a patronage network.\n\nPutin's 2003 message was delivered clearly when Mikhail Khodorkovsky — Russia's richest man and a potential political rival — was arrested, his company (Yukos) seized and renationalised, and he spent 10 years in prison. No major oligarch has tested that boundary since.\n\nPost-2022, the relationship tightened further. Several oligarchs who made mildly critical public statements died in unusual circumstances. The wave of Western sanctions and yacht seizures deepened oligarch dependency on Kremlin protection.\n\nSome oligarchs, particularly those with Western assets and exposure, occupy an uncomfortable middle zone — politically neutralised but economically at risk from both sides.", "facts": [{"l": "Khodorkovsky lesson", "v": "2003 — power ceiling enforced"}, {"l": "2022 deaths", "v": "Multiple unexplained fatalities"}, {"l": "Western sanctions", "v": "~1000+ individuals sanctioned"}, {"l": "Dependency", "v": "On Kremlin for protection"}], "powers": [["Economic Power", 65, "fill-blue"], ["Political Independence", 12, "fill-blue"], ["Kremlin Exposure", 88, "fill-red"]]}, "statecos": {"icon": "🏭", "type": "Political Economy", "title": "State Corporations", "role": "Gazprom · Rosneft · Rostec", "titleClass": "amber", "body": "Russia's commanding heights economy is dominated by state corporations run by siloviki-connected figures. Gazprom (gas), Rosneft (oil), Rostec (defence manufacturing), Sberbank (banking), and others control the most profitable sectors.\n\nThese corporations serve dual purposes: economic extraction and political patronage. Their boards and senior management are populated with Putin's associates — often without relevant industry experience. Compensation packages reward loyalty.\n\nGazprom's role as Europe's primary gas supplier was wielded as geopolitical leverage for decades — the most explicit case of energy weaponisation in modern history, culminating in the 2022 supply cutoffs.\n\nIgor Sechin (Rosneft) is considered one of the most powerful figures in Russia — a hardline silovik and Putin confidant whose influence rivals cabinet members.", "facts": [{"l": "Gazprom", "v": "World's largest gas producer"}, {"l": "Rosneft", "v": "CEO Igor Sechin (silovik)"}, {"l": "Rostec", "v": "Defence industrial base"}, {"l": "Revenue Role", "v": "~50% of federal budget (energy)"}], "powers": [["Economic Control", 88, "fill-red"], ["Political Patronage", 82, "fill-red"], ["Market Independence", 10, "fill-blue"]]}, "chechen": {"icon": "🏔️", "type": "Warlord Client", "title": "Ramzan Kadyrov / Chechnya", "role": "Head of Chechen Republic", "titleClass": "amber", "body": "Ramzan Kadyrov represents one of the most extraordinary political arrangements in the Russian Federation: an effectively autonomous warlord who runs his republic as a personal fiefdom, receives enormous federal subsidies, and in return provides absolute loyalty and military capacity to Moscow.\n\nKadyrov commands his own personal armed units (Kadyrovtsy) numbering tens of thousands. He has deployed them to Ukraine, Syria, and previously suppressed domestic dissent with extreme brutality. He has publicly ordered the killing of Chechen diaspora members abroad.\n\nHis relationship with Moscow is transactional: Chechnya receives more federal subsidy per capita than almost any other region; in return Kadyrov provides fighters, loyalty, and the spectacle of stability in a region that fought two devastating wars against Russia in the 1990s.\n\nHe has called himself 'Putin's infantry,' and posts regular social media videos of himself working out, praying, and commanding forces.", "facts": [{"l": "In Power", "v": "Since 2007"}, {"l": "Federal Subsidies", "v": "~80% of Chechen budget"}, {"l": "Kadyrovtsy", "v": "Personal army ~40,000"}, {"l": "Status", "v": "Sanctioned by US, EU, UK"}], "powers": [["Regional Authority", 90, "fill-red"], ["Personal Military", 75, "fill-red"], ["Independence from Moscow", 20, "fill-blue"]]}, "media_rus": {"icon": "📺", "type": "Propaganda System", "title": "State Media", "role": "Television · RT · VGTRK", "titleClass": "amber", "body": "Russian state television is the primary tool of mass political management. Channel One, Rossiya 1, and NTV reach virtually the entire Russian population. Their coverage of the Ukraine war presents a reality entirely divorced from observable facts.\n\nThe mechanism is not simple censorship but something more sophisticated: flooding the information space, creating exhaustion and cynicism, and making factual truth seem like just another narrative among many — what analysts call the 'firehose of falsehood.'\n\nIndependent media was systematically destroyed. Novaya Gazeta suspended operations in Russia in 2022. Echo Moskvy was shut down. TV Rain went into exile. Meduza operates from Latvia, designated as a 'foreign agent.'\n\nRT (formerly Russia Today) is the international arm — designated a foreign agent or banned outright in the UK, EU, and US.", "facts": [{"l": "Channel One", "v": "State-controlled, ~90M viewers"}, {"l": "RT", "v": "Banned in EU/UK post-2022"}, {"l": "Novaya Gazeta", "v": "Suspended in Russia 2022"}, {"l": "Meduza", "v": "Exiled to Latvia"}], "powers": [["Domestic Narrative Control", 88, "fill-red"], ["International Influence", 45, "fill-red"], ["Credibility (external)", 15, "fill-blue"]]}, "church": {"icon": "⛪", "type": "Ideological Power", "title": "Russian Orthodox Church", "role": "Patriarch Kirill · Spiritual Legitimacy", "titleClass": "amber", "body": "The Russian Orthodox Church under Patriarch Kirill has become a pillar of Putinist ideology — providing spiritual and civilisational legitimacy for both the regime and the Ukraine war.\n\nKirill has described the conflict as a 'metaphysical struggle' against the decadent West, against same-sex partnerships, against a godless liberalism. This framing aligns exactly with Putin's stated justifications. Kirill and Putin have appeared together at major state occasions; the Church blesses military operations.\n\nThe post-Soviet Church revival was partly genuine — a reassertion of Russian cultural and religious identity — but under Putin it became instrumentalised as a state ideology. The concept of 'Russkiy Mir' (Russian World) provided the ideological underpinning for claims on Ukraine.\n\nKirill was sanctioned by the UK and EU following the invasion.", "facts": [{"l": "Patriarch", "v": "Kirill (since 2009)"}, {"l": "Members", "v": "~100M nominal Orthodox"}, {"l": "Kirill Sanctions", "v": "UK, EU post-2022"}, {"l": "State Role", "v": "De facto state religion"}], "powers": [["Ideological Legitimacy", 72, "fill-red"], ["Political Independence", 8, "fill-blue"], ["Global Orthodox Reach", 55, "fill-red"]]}, "unitedrussia": {"icon": "🐻", "type": "Party", "title": "United Russia", "role": "'Party of Power' — Administrative Resource", "titleClass": "amber", "body": "United Russia is not a political party in any meaningful ideological sense. It has no consistent ideology beyond loyalty to Putin and the current administration. It functions as an administrative coordination mechanism — regional elites join to signal loyalty and access patronage, not because they share any political vision.\n\nPutin himself is not formally a member. The party's mascot is a bear; its nickname among critics is the 'party of crooks and thieves' — the phrase popularised by Navalny in 2011.\n\nIn September 2026 it won 349 Duma seats, beating its 2016 record of 343, with the Communists (37), LDPR (23), New People (19) and A Just Russia (17) far behind. Its continued electoral dominance (despite no real enthusiasm even among its own members) is maintained through administrative resource: using state employees, state time, and state facilities to campaign; manipulating vote counts; and excluding real competition.", "facts": [{"l": "Duma Seats", "v": "349 / 450 (2026)"}, {"l": "Founded", "v": "2001"}, {"l": "Putin Membership", "v": "Not a formal member"}, {"l": "Ideology", "v": "Putinism / statism / loyalty"}], "powers": [["Electoral Dominance", 85, "fill-red"], ["Ideological Coherence", 15, "fill-blue"], ["Patronage Network", 78, "fill-red"]]}};
+const regions = {"cfd": {"icon": "🏙️", "name": "Central Federal District", "city": "Moscow", "desc": "Home to ~40M people including Moscow and Moscow Oblast. The political and economic heart of Russia. The district head is a presidential envoy; Moscow city is governed by a separately appointed mayor (currently Sobyanin — a longtime Putin associate). Controls the overwhelming majority of foreign investment and federal budget expenditure.", "facts": [{"l": "Population", "v": "~40M"}, {"l": "Capital", "v": "Moscow"}, {"l": "GDP Share", "v": "~35% of national"}, {"l": "Envoy", "v": "Igor Shchegolev"}]}, "nwfd": {"icon": "⚓", "name": "Northwestern Federal District", "city": "St Petersburg", "desc": "Russia's second city and Putin's hometown. St Petersburg's political culture seeded much of the Putin system — Dmitry Medvedev, many FSB and security service figures, and early Kremlin advisors all came from the St Petersburg network. The district also encompasses Karelia (bordering Finland) and Kaliningrad (the exclave between Poland and Lithuania, a strategically critical NATO flanking concern).", "facts": [{"l": "Population", "v": "~14M"}, {"l": "Key City", "v": "St Petersburg"}, {"l": "NATO Flank", "v": "Kaliningrad exclave"}, {"l": "Putin origin", "v": "St Petersburg network"}]}, "sfd": {"icon": "🌊", "name": "Southern Federal District", "city": "Rostov-on-Don", "desc": "Includes the strategically critical Krasnodar Krai (Sochi, Black Sea coast) and the occupied Ukrainian territories claimed since 2022. Rostov-on-Don became briefly famous as the city where Prigozhin's Wagner Group seized the Southern Military District HQ in June 2023 before their aborted march on Moscow.", "facts": [{"l": "Population", "v": "~17M"}, {"l": "Strategic", "v": "Black Sea access, Ukraine border"}, {"l": "Prigozhin", "v": "Wagner seized Rostov June 2023"}, {"l": "Occupied", "v": "Claims on Zaporizhzhia, Kherson"}]}, "urals": {"icon": "🏭", "name": "Urals Federal District", "city": "Yekaterinburg", "desc": "Russia's industrial heartland and the location of major defence manufacturing. Yekaterinburg is Russia's fourth-largest city and historically more liberal than Moscow — it elected opposition politicians and saw significant anti-war protests in 2022. The Urals region contains much of Russia's defence-industrial complex, running at wartime capacity since 2022.", "facts": [{"l": "Population", "v": "~12M"}, {"l": "Key Industry", "v": "Defence manufacturing"}, {"l": "Political", "v": "Historically more liberal"}, {"l": "Rostec presence", "v": "Major defence facilities"}]}, "siberia": {"icon": "🌲", "name": "Siberian Federal District", "city": "Novosibirsk", "desc": "Russia's vast interior containing enormous natural resources. Novosibirsk is Russia's third-largest city and a major scientific centre (Akademgorodok — the Soviet science city). The district faces chronic demographic decline as younger Russians leave for Moscow. Contains significant deposits of coal and metals, and is crossed by the Trans-Siberian Railway.", "facts": [{"l": "Population", "v": "~17M"}, {"l": "Area", "v": "Vast — resource-rich"}, {"l": "Akademgorodok", "v": "Major scientific centre"}, {"l": "Trend", "v": "Depopulation ongoing"}]}};
+const N_TIERS = 8;
+function esc(s) { return s; }
 function setFilter(f) {
-  currentFilter = f;
   ['all','official','shadow'].forEach(id => {
     const btn = document.getElementById('filter-' + id);
-    btn.className = 'filter-btn' + (f === id ? ' active-' + f : '');
+    btn.className = 'filter-btn' + (id === f ? ' active-' + id : '');
   });
-  document.querySelectorAll('.card, .ministry-card, .putin-banner').forEach(card => {
+  document.querySelectorAll('.card, .ministry-card').forEach(card => {
     const t = card.dataset.type;
     if (f === 'all') card.classList.remove('filtered-out');
     else if (f === 'official') card.classList.toggle('filtered-out', t === 'shadow');
-    else if (f === 'shadow') card.classList.toggle('filtered-out', t === 'official');
+    else card.classList.toggle('filtered-out', t === 'official' || t === 'monarchy');
   });
 }
-let currentFilter = 'all';
-
 let allCollapsed = false;
+function toggleTier(id) {
+  const c = document.getElementById(id + '-body').classList.toggle('collapsed');
+  document.getElementById(id + '-toggle').classList.toggle('collapsed', c);
+}
 function toggleAllTiers() {
   allCollapsed = !allCollapsed;
-  ['tier0','tier2','tier3','tier4','tier5','tier6','tier7','tier8'].forEach(id => {
-    const body = document.getElementById(id + '-body');
-    const toggle = document.getElementById(id + '-toggle');
-    if (body) { body.classList.toggle('collapsed', allCollapsed); toggle.classList.toggle('collapsed', allCollapsed); }
-  });
+  for (let i = 1; i <= N_TIERS; i++) {
+    document.getElementById('tier' + i + '-body').classList.toggle('collapsed', allCollapsed);
+    document.getElementById('tier' + i + '-toggle').classList.toggle('collapsed', allCollapsed);
+  }
   document.getElementById('collapseBtn').textContent = allCollapsed ? 'Expand All' : 'Collapse All';
 }
-
-function toggleTier(id) {
-  const body = document.getElementById(id + '-body');
-  const toggle = document.getElementById(id + '-toggle');
-  body.classList.toggle('collapsed');
-  toggle.classList.toggle('collapsed', body.classList.contains('collapsed'));
+function factsHTML(facts) {
+  return `<div><div class="detail-section-title">Key Facts</div><div class="detail-fact-grid">${facts.map(f => `<div class="detail-fact"><div class="detail-fact-label">${f.l}</div><div class="detail-fact-value">${f.v}</div></div>`).join('')}</div></div>`;
 }
-
+function open_(html) {
+  document.getElementById('detailContent').innerHTML = html;
+  document.getElementById('detailPanel').classList.add('open');
+  document.getElementById('detailOverlay').classList.add('open');
+  document.querySelector('.detail-close').focus();
+}
 function showDetail(key) {
-  const d = details[key];
-  if (!d) return;
-  document.getElementById('detailContent').innerHTML = `
-    <div class="detail-type-tag">${d.type}</div>
-    <div class="detail-icon">${d.icon}</div>
-    <div class="detail-title ${d.titleClass||''}">${d.title}</div>
-    <div class="detail-role">${d.role}</div>
-    <div class="detail-divider"></div>
-    <div class="detail-body">${d.body.replace(/\n\n/g,'<br><br>')}</div>
-    <div><div class="detail-section-title">Key Facts</div>
-    <div class="detail-fact-grid">${d.facts.map(f=>`<div class="detail-fact"><div class="detail-fact-label">${f.l}</div><div class="detail-fact-value">${f.v}</div></div>`).join('')}</div></div>
-    <div><div class="detail-section-title">Power Assessment</div>
-    ${d.powers.map(p=>`<div class="power-meter"><div class="power-label">${p[0]}</div><div class="power-bar-wrap"><div class="power-bar-fill ${p[2]}" style="width:${p[1]}%"></div></div><div style="font-size:0.55rem;color:var(--frost-dim);width:26px;text-align:right;flex-shrink:0">${p[1]}</div></div>`).join('')}</div>
-  `;
-  document.getElementById('detailPanel').classList.add('open');
-  document.getElementById('detailOverlay').classList.add('open');
+  const d = details[key]; if (!d) return;
+  open_(`<div class="detail-type-tag">${d.type}</div><div class="detail-icon">${d.icon}</div>
+    <div class="detail-title ${d.titleClass}">${d.title}</div><div class="detail-role">${d.role}</div>
+    <div class="detail-divider"></div><div class="detail-body">${d.body.replace(/\n\n/g,'<br><br>')}</div>
+    ${factsHTML(d.facts)}
+    <div><div class="detail-section-title">Power Assessment</div>${d.powers.map(p => `<div class="power-meter"><div class="power-label">${p[0]}</div><div class="power-bar-wrap"><div class="power-bar-fill ${p[2]}" style="width:${p[1]}%"></div></div><div class="power-val">${p[1]}</div></div>`).join('')}</div>`);
 }
-
-function showFed(key) {
-  const f = feds[key];
-  if (!f) return;
-  document.getElementById('detailContent').innerHTML = `
-    <div class="detail-type-tag">Federal District</div>
-    <div class="detail-icon">🗺️</div>
-    <div class="detail-title">${f.name}</div>
-    <div class="detail-role">Administrative Centre: ${f.city}</div>
-    <div class="detail-divider"></div>
-    <div class="detail-body">${f.desc}</div>
-    <div><div class="detail-section-title">Key Facts</div>
-    <div class="detail-fact-grid">${f.facts.map(x=>`<div class="detail-fact"><div class="detail-fact-label">${x.l}</div><div class="detail-fact-value">${x.v}</div></div>`).join('')}</div></div>
-  `;
-  document.getElementById('detailPanel').classList.add('open');
-  document.getElementById('detailOverlay').classList.add('open');
+function showMayor(key) {
+  const m = regions[key]; if (!m) return;
+  open_(`<div class="detail-type-tag">Federal Districts</div><div class="detail-icon">${m.icon}</div>
+    <div class="detail-title amber">${m.name}</div><div class="detail-role">Administrative Centre: ${m.city}</div>
+    <div class="detail-divider"></div><div class="detail-body">${m.desc}</div>${factsHTML(m.facts)}`);
 }
-
 function closeDetail() {
   document.getElementById('detailPanel').classList.remove('open');
   document.getElementById('detailOverlay').classList.remove('open');
